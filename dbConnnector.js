@@ -7,7 +7,7 @@ const MKTG_URI = "mongodb://<dbuser>:<dbpassword>@<host1>:<port1>,<host2>:<port2
 
 
 MongoClient.connect(PROD_URI, {useNewUrlParser: true}).then(() => {
-    if(!err) {
-        console.log("We are connected");
-      }
+    console.log("MongoDB instance is conntected.");
+}).catch((err) => {
+    console.log(err.log)
 })
