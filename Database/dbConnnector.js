@@ -11,11 +11,11 @@ function connect(url) {
     }).catch((err) => {
         console.log(`Database connection faild.${err.log}`)
     })
-
 }
 
 module.exports = async function() {
-    let databases = await Promise.all([connect(PROD_URI)])
+    let databases = await Promise.all([connect(PROD_URI)]).catch(() => {})
+    // let databases = new Promise(connect(PROD_URI)).catch(() => {})
    
     return {
       production: databases[0]
