@@ -1,5 +1,3 @@
-var async = require('async');
-
 module.exports = function(app, dbs) {
 
     app.get('/testcase', (req, res) => {
