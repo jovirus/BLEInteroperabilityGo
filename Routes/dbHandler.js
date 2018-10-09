@@ -13,7 +13,7 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/createDB', (req, res) => {
-      dbs.createCollection("testNrf002", function(err, res) { 
+      db.createCollection("testNrf002", function(err, res) { 
         if (err) throw err;
         console.log("Collection created!");
       })
