@@ -7,6 +7,7 @@ module.exports = function(app, dbs) {
             if (err) throw err;
             console.log('Result found. See detail>')
             res.json(docs)
+            dbs.close()
         })
       });
 
