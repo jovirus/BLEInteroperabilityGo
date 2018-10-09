@@ -5,30 +5,41 @@ const MongoClient = require('mongodb').MongoClient
 const PROD_URI = "mongodb://root:Nordic@dds-n9eafa9e8c2661841.mongodb.rds.aliyuncs.com:3717"
 
 
-function connect(url) {
-    MongoClient.connect(PROD_URI, {useNewUrlParser: true}).then(client => {
-        console.log("Database instance is conntected.");
-        let db = client.db('tesNrf');
-        db.collection('testcase').find().toArray(function(err, result){
-            if(err) throw err;
-            console.log(result);
-            client.close();
-          });
-    }).catch((err) => {
-        console.log(`Database connection faild.${err.log}`)
+function open() {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(PROD_URI, {useNewUrlParser: true}).then(client => {
+            console.log("Succeed connect to database instance.")
+            resolve(client)
+            let db = client.db('tesNrf');
+            db.collection('testcase').find().toArray(function(err, result){
+                if(err) throw err;
+                console.log(result);
+              });
+        }).catch(function (err) {
+            reject(err)
+            console.log('Failed connect to database.')
+        })
     })
-    // return MongoClient.connect(url).then(client => {
-    //     client.db()
-    //     console.log("Database instance is conntected.")
-    // }).catch((err) => {
-    //         console.log(`Database connection faild.${err.log}`)
-    //     })
 }
 
-module.exports = async function() {
-    let databases = await Promise.all([connect(PROD_URI)]).catch(() => {})
-    // let databases = new Promise(connect(PROD_URI)).catch(() => {})
-    return {
-      production: databases[0]
+function close(db){
+    //Close connection
+    if(db){
+        db.close();
     }
 }
+
+let db = {
+    open : open,
+    close: close
+}
+
+module.exports = db;
+
+// module.exports = async function() {
+//     let databases = await Promise.all([connect(PROD_URI)]).catch(() => {})
+//     // let databases = new Promise(connect(PROD_URI)).catch(() => {})
+//     return {
+//       production: databases[0]
+//     }
+// }
