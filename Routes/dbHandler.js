@@ -8,12 +8,13 @@ module.exports = function(app, dbs) {
             if (err) throw err;
             console.log('Result found. See detail>')
             res.json(docs)
-            dbs.close()
+            // dbs.close()
         })
       });
 
       app.get('/createDB', (req, res) => {
-        dbs.createCollection("testNrf002", function(err, res) { 
+        let db = dbs.db('tesNrf');
+        db.createCollection("testNrf002", function(err, res) { 
             if (err) throw err;
             console.log("Collection created!");
         })
