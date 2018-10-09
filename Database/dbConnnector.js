@@ -14,7 +14,7 @@ function open() {
                 if(err) throw err;
                 console.log(result);
               });
-              resolve(db)
+              resolve(client)
         }).catch(function (err) {
             reject(err)
             console.log('Failed connect to database.')
