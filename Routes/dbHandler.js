@@ -1,8 +1,7 @@
 module.exports = function(app, dbs) {
 
     app.get('/testcase', (req, res) => {
-        var dbo = dbs.db("tesNrf")
-        dbo.production.collection('testcase').find({}).toArray((err, docs) => {
+        dbo.tesNrf.collection('testcase').find({}).toArray((err, docs) => {
           if (err) {
             console.log(err)
             res.error(err)
@@ -11,6 +10,13 @@ module.exports = function(app, dbs) {
             res.json(docs)
           }
         })
+      });
+
+      app.get('/createDB', (req, res) => {
+      dbo.createCollection("testNrf002", function(err, res) { 
+        if (err) throw err;
+        console.log("Collection created!");
       })
+    })
     return app;
 }
