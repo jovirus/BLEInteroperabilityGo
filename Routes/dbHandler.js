@@ -3,8 +3,7 @@ module.exports = function(app, dbs) {
 
     app.get('/testcase', (req, res) => {
         console.log(`dbs contents ${dbs}`)
-        console.log(`dbs contents ${dbs.tesNrf}`)
-        dbs.tesNrf.collection('testcase').find().toArray((err, docs) => {
+        dbs.collection('testcase').find().toArray((err, docs) => {
             if (err) throw err;
             console.log('Result found. See detail>')
             // res.json(docs)
