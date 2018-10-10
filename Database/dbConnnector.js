@@ -11,9 +11,6 @@ function open() {
     return mongoose.connect(PROD_URI, { useNewUrlParser: true }).then(client => {
          console.log("Succeed connect to database instance.")
               resolve(client)
-        }).catch(function (err) {
-            reject(err)
-            console.log('Failed connect to database.')
         })
     }
     // return new Promise((resolve, reject) => {
