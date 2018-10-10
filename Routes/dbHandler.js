@@ -2,9 +2,9 @@ const Joi = require("joi")
 const express = require('express')
 const DATABASE_NAME = "tesNrf"
 
-app.use(express.json());
 
 module.exports = function(app, dbs) {
+    app.use(express.json());
 
     app.get('/api/testcase', (req, res) => {
         console.log(`dbs contents ${dbs}`)
