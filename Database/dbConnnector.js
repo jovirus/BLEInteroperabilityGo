@@ -16,11 +16,6 @@ function open() {
     return new Promise((resolve, reject) => {
         MongoClient.connect(PROD_URI, {useNewUrlParser: true}).then(client => {
             console.log("Succeed connect to database instance.")
-            let db = client.db('tesNrf');
-            db.collection('testcase').find().toArray(function(err, result){
-                if(err) throw err;
-                console.log(result);
-              });
               resolve(client)
         }).catch(function (err) {
             reject(err)
