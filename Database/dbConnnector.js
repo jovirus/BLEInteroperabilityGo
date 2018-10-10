@@ -8,21 +8,29 @@ const PROD_URI = "mongodb://root:Nordic@dds-n9eafa9e8c2661841.mongodb.rds.aliyun
 
 
 function open() {
-    return new Promise((resolve, reject) => {
-        mongoose.connect(PROD_URI, {useNewUrlParser: true}).then(client => {
-            console.log("Succeed connect to database instance.")
-            let db = client.db('tesNrf');
-            db.collection('testcase').find().toArray(function(err, result){
-                if(err) throw err;
-                console.log(result);
-              });
+    return mongoose.connect(PROD_URI, { useNewUrlParser: true }).then(client => {
+         console.log("Succeed connect to database instance.")
               resolve(client)
         }).catch(function (err) {
             reject(err)
             console.log('Failed connect to database.')
         })
-    })
-}
+    }
+    // return new Promise((resolve, reject) => {
+    //     mongoose.connect(PROD_URI, {useNewUrlParser: true}).then(client => {
+    //         console.log("Succeed connect to database instance.")
+    //         let db = client.db('tesNrf');
+    //         db.collection('testcase').find().toArray(function(err, result){
+    //             if(err) throw err;
+    //             console.log(result);
+    //           });
+    //           resolve(client)
+    //     }).catch(function (err) {
+    //         reject(err)
+    //         console.log('Failed connect to database.')
+    //     })
+    // })
+// }
 
 function close(db){
     //Close connection
