@@ -22,7 +22,7 @@ module.exports = function(app, dbs) {
             brand: Joi.string().min(2).required()
         }
         const { error } = Joi.validate(req.body, schema)
-        if (!error) return res.status(400).send(error.details[0].message)
+        if (error) return res.status(400).send(error.details[0].message)
 
         const testcase = {
             brand: req.body.brand
