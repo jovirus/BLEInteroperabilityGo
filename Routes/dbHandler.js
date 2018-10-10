@@ -1,5 +1,8 @@
-const DATABASE_NAME = "tesNrf"
 const Joi = require("joi")
+const express = require('express')
+const DATABASE_NAME = "tesNrf"
+
+app.use(express.json());
 
 module.exports = function(app, dbs) {
 
@@ -21,7 +24,11 @@ module.exports = function(app, dbs) {
         const { error } = Joi.validate(req.body, schema)
         if (!error) return status(400).send(error.detail[0].message)
 
-         res.send(req.body) 
+        const testcase = {
+            brand: req.body.brand
+        }
+
+         res.send(testcase) 
       });
 
       app.get('/createDB', (req, res) => {
