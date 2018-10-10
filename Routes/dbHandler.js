@@ -1,9 +1,10 @@
+const DATABASE_NAME = "tesNrf"
 
 module.exports = function(app, dbs) {
 
     app.get('/testcase', (req, res) => {
         console.log(`dbs contents ${dbs}`)
-        let db = dbs.db('tesNrf');
+        let db = dbs.db(DATABASE_NAME);
         db.collection('testcase').find().toArray((err, docs) => {
             if (err) throw err;
             console.log('Result found. See detail>')
@@ -13,7 +14,7 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/createDB', (req, res) => {
-        let db = dbs.db('tesNrf');
+        let db = dbs.db(DATABASE_NAME);
         db.createCollection("testNrf002", function(err, res) { 
             if (err) throw err;
             console.log("Collection created!");
