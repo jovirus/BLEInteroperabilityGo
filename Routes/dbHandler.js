@@ -35,11 +35,11 @@ module.exports = function(app, dbs) {
 
         let db = dbs.db(DATABASE_NAME);
         const query = {
-            "brand": vari
+            brand: String(vari)
         }
-        const testcase = db.collection('testcase').find({}).toArray((err, docs) => {
+        const testcase = db.collection('testcase').find({query}).toArray((err, docs) => {
             if (err) throw err
-            res.json(docs)
+            res.send(docs)
         })
       });
 
