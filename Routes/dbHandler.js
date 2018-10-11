@@ -35,8 +35,8 @@ module.exports = function(app, dbs) {
 
         let db = dbs.db(DATABASE_NAME);
         var query = {
-            brand: "Xiaomi"
-        }
+            brand: vari 
+        };
         // res.send(query)
         db.collection('testcase').find(query).toArray((err, docs) => {
             if (err) throw err
