@@ -27,18 +27,19 @@ module.exports = function(app, dbs) {
 
       app.put('/api/testcase/:brand', (req, res) => {
         let vari = req.params.brand
-        let body = req.body
-        const { error } = validateBrandName(body)
+        // let body = req.body
+        // const { error } = validateBrandName(body)
         console.log(vari)
-        console.log(body)
-        if (error) return res.status(400).send(error.details[0].message)
+        // console.log(body)
+        // if (error) return res.status(400).send(error.details[0].message)
 
         let db = dbs.db(DATABASE_NAME);
-        const query = {
-            brand: String(vari)
+        var query = {
+            brand: vari
         }
-        const testcase = db.collection('testcase').find({query}).toArray((err, docs) => {
+        const testcase = db.collection('testcase').find({brand: req.params.brand}).toArray((err, docs) => {
             if (err) throw err
+            console.log(docs)
             res.send(docs)
         })
       });
