@@ -37,7 +37,7 @@ module.exports = function(app, dbs) {
         const query = {
             "brand": vari
         }
-        const testcase = db.collection('testcase').find({query}).toArray((err, docs) => {
+        const testcase = db.collection('testcase').find({}).toArray((err, docs) => {
             if (err) throw err
             res.json(docs)
         })
