@@ -37,11 +37,12 @@ module.exports = function(app, dbs) {
         var query = {
             brand: vari
         }
-        const testcase = db.collection('testcase').find({brand: "Xiaomi"}).toArray((err, docs) => {
-            if (err) throw err
-            console.log(docs)
-            res.send(docs)
-        })
+        res.send(query)
+        // db.collection('testcase').find({brand: "Xiaomi"}).toArray((err, docs) => {
+        //     if (err) throw err
+        //     console.log(docs)
+        //     res.send(docs)
+        // })
       });
 
       app.get('/createDB', (req, res) => {
