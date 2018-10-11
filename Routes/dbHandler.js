@@ -35,14 +35,14 @@ module.exports = function(app, dbs) {
 
         let db = dbs.db(DATABASE_NAME);
         var query = {
-            brand: vari
+            brand: "Xiaomi"
         }
-        res.send(query)
-        // db.collection('testcase').find({brand: "Xiaomi"}).toArray((err, docs) => {
-        //     if (err) throw err
-        //     console.log(docs)
-        //     res.send(docs)
-        // })
+        // res.send(query)
+        db.collection('testcase').find(query).toArray((err, docs) => {
+            if (err) throw err
+            console.log(docs)
+            res.send(docs)
+        })
       });
 
       app.get('/createDB', (req, res) => {
