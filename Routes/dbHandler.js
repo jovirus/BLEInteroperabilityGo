@@ -27,8 +27,10 @@ module.exports = function(app, dbs) {
 
       app.put('/api/testcase/:brand', (req, res) => {
         let vari = req.params.brand
-        console.log(`param ${vari}`)
-        const { error } = validateBrandName(vari)
+        let body = req.body
+        const { error } = validateBrandName(body)
+        console.log(vari)
+        console.log(body)
         if (error) return res.status(400).send(error.details[0].message)
 
         let db = dbs.db(DATABASE_NAME);
