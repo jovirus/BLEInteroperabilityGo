@@ -50,8 +50,13 @@ module.exports = function(app, dbs) {
 
       app.get('/api/initialize', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
-        db.createCollection("testReport", {capped: true, autoIndexId:true})
-        db.createCollection("mobileInfo", {capped: true, autoIndexId:true})
+        let resultTestReportdb = db.createCollection("testReport", {capped: true, autoIndexId:true}, function(err, res) {
+            if (err) return res.send(err)
+            let resultMobileInfodb = db.createCollection("mobileInfo", {capped: true, autoIndexId:true}, function(err, res) {
+                if (err) return res.send(err)
+            })
+        })
+        return res.send(`initial succeed ${resultTestReportdb} and ${resultMobileInfodb}`)
       })
 
     function validateBrandName(value){
