@@ -21,7 +21,7 @@ module.exports = function(app, dbs) {
         let db = dbs.db(DATABASE_NAME)
         let result = db.collection("TestReport").insertOne(report, function(err, object){
             if (err) return res.send(err)
-            res.send(object) 
+            res.send(object.insertedId) 
         }) 
       });
 
@@ -32,7 +32,7 @@ module.exports = function(app, dbs) {
         let db = dbs.db(DATABASE_NAME)
         db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
             if (err) return res.send(err)
-            res.send(object.ops)
+            res.send(object.insertedId)
         }) 
       });
 
