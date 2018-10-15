@@ -52,7 +52,7 @@ module.exports = function(app, dbs) {
         let db = dbs.db(DATABASE_NAME);
         let resultTestReportdb = db.createCollection("testReport", {capped: true, autoIndexId:true}, function(err, res) {
             if (err) return res.send(err)
-            return res.send(`initial succeed ${resultTestReportdb}`)
+            return res.send(`initial succeed`)
         })
         // let resultMobileInfodb = db.createCollection("mobileInfo", {capped: true, autoIndexId:true}, function(err, res) {
         //     if (err) return res.send(err)
