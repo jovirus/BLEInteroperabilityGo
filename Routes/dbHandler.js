@@ -15,15 +15,16 @@ module.exports = function(app, dbs) {
       });
 
       app.put('/api/find/mobileinfo/:brand&:model&:platform', (req, res) => {
-        let pbrand = req.params.brand
-        let pmodel = req.params.model
-        let pplatform = req.params.platform
-        let db = dbs.db(DATABASE_NAME);
+        const req = { pbrand, pmodel, pplatform } = req.query
+        console.log(req.query)
+        console.log("---------------------")
+        console.log(req.params)
+        let db = dbs.db(DATABASE_NAME)
         var query = {
             brand: pbrand,
             model: pmodel,
             platform: pplatform
-        };
+        }
         db.collection('MobileInfo').find(query).toArray((err, docs) => {
             if (err) return res.status(400).send(docs)
             res.send(docs)
