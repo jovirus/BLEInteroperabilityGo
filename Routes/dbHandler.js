@@ -52,11 +52,13 @@ module.exports = function(app, dbs) {
         let db = dbs.db(DATABASE_NAME);
         let resultTestReportdb = db.createCollection("testReport", {capped: true, autoIndexId:true}, function(err, res) {
             if (err) return res.send(err)
+            return res.send(`initial succeed ${resultTestReportdb}`)
         })
-        let resultMobileInfodb = db.createCollection("mobileInfo", {capped: true, autoIndexId:true}, function(err, res) {
-            if (err) return res.send(err)
-        })
-        return res.send(`initial succeed ${resultTestReportdb} and ${resultMobileInfodb}`)
+        // let resultMobileInfodb = db.createCollection("mobileInfo", {capped: true, autoIndexId:true}, function(err, res) {
+        //     if (err) return res.send(err)
+        //     res.send
+        // })
+        // return res.send(`initial succeed ${resultTestReportdb} and ${resultMobileInfodb}`)
       })
 
     function validateBrandName(value){
