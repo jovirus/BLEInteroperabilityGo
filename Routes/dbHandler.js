@@ -14,6 +14,22 @@ module.exports = function(app, dbs) {
         })
       });
 
+      app.put('/api/find/mobileinfo/:brand&:model&:platform', (req, res) => {
+        let pbrand = req.params.brand
+        let pmodel = req.params.model
+        let pplatform = req.params.platform
+        let db = dbs.db(DATABASE_NAME);
+        var query = {
+            brand: pbrand,
+            model: pmodel,
+            platform: pplatform
+        };
+        db.collection('MobileInfo').find(query).toArray((err, docs) => {
+            if (err) return res.status(400).send(docs)
+            res.send(docs)
+        })
+      });
+
       app.post('/api/insert/testreport', (req, res) => {
         let report = req.body
         const { error } = validateTestReport(report)
