@@ -19,7 +19,7 @@ module.exports = function(app, dbs) {
         const { error } = validateTestReport(report)
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
-        let result = db.collection("TestReport").insertOne(report, function(err, res){
+        let result = db.collection("TestReport").insertOne(report, function(err, object){
             if (err) return res.send(err)
         }) 
          res.send(result) 
@@ -27,10 +27,10 @@ module.exports = function(app, dbs) {
 
       app.post('/api/insert/mobileinfo', (req, res) => {
         let mobileinfo = req.body
-        const { error } = validateMobileInfo(req.body)
+        const { error } = validateMobileInfo(mobileinfo)
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
-        let result = db.collection("MobileInfo").insertOne(report, function(err, res){
+        let result = db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
             if (err) return res.send(err)
         }) 
          res.send(result)
