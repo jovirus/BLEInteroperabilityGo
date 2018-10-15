@@ -50,16 +50,14 @@ module.exports = function(app, dbs) {
 
       app.get('/api/initialize', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
-        let resultTestReportdb = db.createCollection("testReport", {capped: true, autoIndexId:true}, function(err, collection) {
-            if (err) return res.send(err)
-            return res.send(`initial succeed with collection ${collection}`)
+        let resultTestReportdb = db.createCollection("testReport", {autoIndexId:true}, function(err1, collection1) {
+            if (err1) return res.send(err1)
+            let resultMobileInfodb = db.createCollection("mobileInfo", {capped: true, autoIndexId:true}, function(err2, collection2) {
+                if (err2) return res.send(err2)
+                return res.send(`initial succeed with test report: ${collection1} and mobile info: ${collection2}`)
+            })
         })
-        // let resultMobileInfodb = db.createCollection("mobileInfo", {capped: true, autoIndexId:true}, function(err, res) {
-        //     if (err) return res.send(err)
-        //     res.send
-        // })
-        // return res.send(`initial succeed ${resultTestReportdb} and ${resultMobileInfodb}`)
-      })
+    })
 
     function validateBrandName(value){
         const schema = { 
