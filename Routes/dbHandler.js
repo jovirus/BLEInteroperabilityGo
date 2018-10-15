@@ -32,8 +32,9 @@ module.exports = function(app, dbs) {
         let db = dbs.db(DATABASE_NAME)
         let result = db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
             if (err) return res.send(err)
-            res.send(object)
+            res.send(object.ops)
         }) 
+        res.send(result)
       });
 
     //   app.put('/api/find/testreport/:brand', (req, res) => {
