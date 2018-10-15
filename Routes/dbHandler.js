@@ -30,11 +30,10 @@ module.exports = function(app, dbs) {
         const { error } = validateMobileInfo(mobileinfo)
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
-        let result = db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
+        db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
             if (err) return res.send(err)
             res.send(object.ops)
         }) 
-        res.send(result)
       });
 
     //   app.put('/api/find/testreport/:brand', (req, res) => {
