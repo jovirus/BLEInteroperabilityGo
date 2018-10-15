@@ -19,7 +19,7 @@ module.exports = function(app, dbs) {
         const { error } = validateTestReport(report)
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
-        let result = db.collection("testReport").insertOne(report, function(err, res){
+        let result = db.collection("TestReport").insertOne(report, function(err, res){
             if (err) return res.send(err)
         }) 
          res.send(result) 
@@ -30,7 +30,7 @@ module.exports = function(app, dbs) {
         const { error } = validateMobileInfo(req.body)
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
-        let result = db.collection("mobileInfo").insertOne(report, function(err, res){
+        let result = db.collection("MobileInfo").insertOne(report, function(err, res){
             if (err) return res.send(err)
         }) 
          res.send(result)
@@ -50,9 +50,9 @@ module.exports = function(app, dbs) {
 
       app.get('/api/initialize', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
-        let resultTestReportdb = db.createCollection("testReport", {autoIndexId:true}, function(err1, collection1) {
+        let resultTestReportdb = db.createCollection("TestReport", {autoIndexId:true}, function(err1, collection1) {
             if (err1) return res.send(err1)
-            let resultMobileInfodb = db.createCollection("mobileInfo", {autoIndexId:true}, function(err2, collection2) {
+            let resultMobileInfodb = db.createCollection("MobileInfo", {autoIndexId:true}, function(err2, collection2) {
                 if (err2) return res.send(err2)
                 return res.send(`initial succeed with test report: ${collection1} and mobile info: ${collection2}`)
             })
