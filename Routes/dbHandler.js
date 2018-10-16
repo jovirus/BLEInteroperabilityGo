@@ -15,15 +15,17 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/api/find/mobileinfo', (req, res) => {
-        const inqueries = { pbrand, pmodel, pplatform } = req.query
-        console.log(inqueries.pbrand)
+        console.log(req.query)
+	const inqueries = { brand, model, platform } = req.query
+        console.log(inqueries)
+	console.log(inqueries.brand)
         console.log("---------------------")
-        console.log(inqueries.pmodel)
+        console.log(inqueries.model)
         let db = dbs.db(DATABASE_NAME)
         var query = {
-            brand: pbrand,
-            model: pmodel,
-            platform: pplatform
+            brand: brand,
+            model: model,
+            platform: platform
         }
         db.collection('MobileInfo').find(query).toArray((err, docs) => {
             if (err) return res.status(400).send(docs)
