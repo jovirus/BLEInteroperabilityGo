@@ -15,12 +15,7 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/api/find/mobileinfo', (req, res) => {
-        console.log(req.query)
-	const inqueries = { brand, model, platform } = req.query
-        console.log(inqueries)
-	console.log(inqueries.brand)
-        console.log("---------------------")
-        console.log(inqueries.model)
+	    const inqueries = { brand, model, platform } = req.query
         let db = dbs.db(DATABASE_NAME)
         var query = {
             brand: brand,
@@ -32,6 +27,19 @@ module.exports = function(app, dbs) {
             res.send(docs)
         })
       });
+
+      app.get('/api/find/testerinfo/:unionid', (req, res) => {
+        let id = req.params.unionid
+        let db = dbs.db(DATABASE_NAME);
+        var query = {
+            unionid: id 
+        };
+        db.collection('TesterInfo').find(query).toArray((err, docs) => {
+            if (err) throw err
+            res.send(docs)
+        })
+      });
+
 
       app.post('/api/insert/testreport', (req, res) => {
         let report = req.body
@@ -55,17 +63,16 @@ module.exports = function(app, dbs) {
         }) 
       });
 
-    //   app.put('/api/find/testreport/:brand', (req, res) => {
-    //     let vari = req.params.brand
-    //     let db = dbs.db(DATABASE_NAME);
-    //     var query = {
-    //         brand: vari 
-    //     };
-    //     db.collection('testcase').find(query).toArray((err, docs) => {
-    //         if (err) throw err
-    //         res.send(docs)
-    //     })
-    //   });
+      app.post('/api/insert/testerinfo', (req, res) => {
+        let testerinfo = req.body
+        const { error } = validateTesterInfo(testerinfo)
+        if (error) return res.status(400).send(error.details[0].message)
+        let db = dbs.db(DATABASE_NAME)
+        db.collection("TesterInfo").insertOne(mobileinfo, function(err, object){
+            if (err) return res.send(err)
+            res.send(object.insertedId)
+        }) 
+      });
 
       app.get('/api/initialize', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
@@ -73,49 +80,64 @@ module.exports = function(app, dbs) {
             if (err1) return res.send(err1)
             let resultMobileInfodb = db.createCollection("MobileInfo", {autoIndexId:true}, function(err2, collection2) {
                 if (err2) return res.send(err2)
-                return res.send(`initial succeed with test report: ${collection1} and mobile info: ${collection2}`)
+                let resultTestInfodb = db.createCollection("TesterInfo", (err3, collection3) => {
+                    if (err3) return res.send(err3)
+                    return res.send(`initial succeed with TestReportDB: ${collection1} and MobileInfoDB: ${collection2} and TesterInfo${collection3}`)
+                })
             })
         })
     })
-
-    function validateBrandName(value){
-        const schema = { 
-            brand: Joi.string().min(2).required()
-        }
-        return Joi.validate(value, schema)
-    }
-
-    function validateTestReport(value) {
-        const schema = {
-            sessionID: Joi.string().required(),
-            weChatVersion: Joi.string().required(),
-            sdkVersion: Joi.string().required(),
-            timeStamp: Joi.date().required(),
-            testType: Joi.string().required(),
-            mobileInfoID: Joi.string().required(),
-            peripheralInfoID: Joi.string(),
-            isPassed: Joi.boolean().required()
-        }
-        return Joi.validate(value, schema)
-    }
-
-    function validateMobileInfo(value) {
-        const schema = {
-            brand: Joi.string().required(),
-            model: Joi.string().required(),
-            platform: Joi.string().required()
-        }
-        return Joi.validate(value, schema)
-    }
-
-    function validatePeripheralInfo(value) {
-        const schema = {
-            chipset: Joi.string().required(),
-            softdevice: Joi.string().required(),
-            application: Joi.string().required(),
-            bootloader: Joi.string().required()
-        }
-        return Joi.validate(value, schema)
-    } 
     return app;
 }
+
+
+function validateBrandName(value){
+    const schema = { 
+        brand: Joi.string().min(2).required()
+    }
+    return Joi.validate(value, schema)
+}
+
+function validateTestReport(value) {
+    const schema = {
+        sessionID: Joi.string().required(),
+        weChatVersion: Joi.string().required(),
+        sdkVersion: Joi.string().required(),
+        timeStamp: Joi.date().required(),
+        testType: Joi.string().required(),
+        mobileInfoID: Joi.string().required(),
+        peripheralInfoID: Joi.string(),
+        isPassed: Joi.boolean().required()
+    }
+    return Joi.validate(value, schema)
+}
+
+function validateMobileInfo(value) {
+    const schema = {
+        brand: Joi.string().required(),
+        model: Joi.string().required(),
+        platform: Joi.string().required()
+    }
+    return Joi.validate(value, schema)
+}
+
+function validateTesterInfo(value) {
+    const schema = {
+        nickName: Joi.string().required(),
+        city: Joi.string().required(),
+        province: Joi.string().required(),
+        contry: Joi.string().required(),
+        language: Joi.string().required()
+    }
+    return Joi.validate(value, schema)
+}
+
+function validatePeripheralInfo(value) {
+    const schema = {
+        chipset: Joi.string().required(),
+        softdevice: Joi.string().required(),
+        application: Joi.string().required(),
+        bootloader: Joi.string().required()
+    }
+    return Joi.validate(value, schema)
+} 
