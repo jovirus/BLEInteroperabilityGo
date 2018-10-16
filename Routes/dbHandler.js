@@ -87,58 +87,58 @@ module.exports = function(app, dbs) {
             })
         })
     })
+
+    function validateBrandName(value){
+        const schema = { 
+            brand: Joi.string().min(2).required()
+        }
+        return Joi.validate(value, schema)
+    }
+    
+    function validateTestReport(value) {
+        const schema = {
+            sessionID: Joi.string().required(),
+            weChatVersion: Joi.string().required(),
+            sdkVersion: Joi.string().required(),
+            timeStamp: Joi.date().required(),
+            testType: Joi.string().required(),
+            mobileInfoID: Joi.string().required(),
+            peripheralInfoID: Joi.string(),
+            isPassed: Joi.boolean().required()
+        }
+        return Joi.validate(value, schema)
+    }
+    
+    function validateMobileInfo(value) {
+        const schema = {
+            brand: Joi.string().required(),
+            model: Joi.string().required(),
+            platform: Joi.string().required()
+        }
+        return Joi.validate(value, schema)
+    }
+    
+    function validateTesterInfo(value) {
+        const schema = {
+            unionID: Joi.string().required(),
+            nickName: Joi.string(),
+            city: Joi.string(),
+            province: Joi.string(),
+            contry: Joi.string(),
+            language: Joi.string()
+        }
+        return Joi.validate(value, schema)
+    }
+    
+    function validatePeripheralInfo(value) {
+        const schema = {
+            chipset: Joi.string().required(),
+            softdevice: Joi.string().required(),
+            application: Joi.string(),
+            bootloader: Joi.string()
+        }
+        return Joi.validate(value, schema)
+    } 
+    
     return app;
 }
-
-
-function validateBrandName(value){
-    const schema = { 
-        brand: Joi.string().min(2).required()
-    }
-    return Joi.validate(value, schema)
-}
-
-function validateTestReport(value) {
-    const schema = {
-        sessionID: Joi.string().required(),
-        weChatVersion: Joi.string().required(),
-        sdkVersion: Joi.string().required(),
-        timeStamp: Joi.date().required(),
-        testType: Joi.string().required(),
-        mobileInfoID: Joi.string().required(),
-        peripheralInfoID: Joi.string(),
-        isPassed: Joi.boolean().required()
-    }
-    return Joi.validate(value, schema)
-}
-
-function validateMobileInfo(value) {
-    const schema = {
-        brand: Joi.string().required(),
-        model: Joi.string().required(),
-        platform: Joi.string().required()
-    }
-    return Joi.validate(value, schema)
-}
-
-function validateTesterInfo(value) {
-    const schema = {
-        unionID: Joi.string().required(),
-        nickName: Joi.string(),
-        city: Joi.string(),
-        province: Joi.string(),
-        contry: Joi.string(),
-        language: Joi.string()
-    }
-    return Joi.validate(value, schema)
-}
-
-function validatePeripheralInfo(value) {
-    const schema = {
-        chipset: Joi.string().required(),
-        softdevice: Joi.string().required(),
-        application: Joi.string(),
-        bootloader: Joi.string()
-    }
-    return Joi.validate(value, schema)
-} 
