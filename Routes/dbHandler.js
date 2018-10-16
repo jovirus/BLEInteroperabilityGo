@@ -22,7 +22,7 @@ module.exports = function(app, dbs) {
             model: model,
             platform: platform
         }
-        db.collection('MobileInfo').findOne(query).toArray((err, docs) => {
+        db.collection('MobileInfo').findOne(query, (err, docs) => {
             if (err) return res.status(400).send(docs)
             res.send(docs)
         })
@@ -34,7 +34,7 @@ module.exports = function(app, dbs) {
         var query = {
             unionID: id 
         };
-        db.collection('TesterInfo').findOne(query).toArray((err, docs) => {
+        db.collection('TesterInfo').findOne(query, (err, docs) => {
             if (err) throw err
             res.send(docs)
         })
