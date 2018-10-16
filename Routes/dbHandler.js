@@ -41,7 +41,7 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/api/find/testreport/:mobileinfoid', (req, res) => {
-        let id = req.params.unionid
+        let id = req.params.mobileinfoid;
         let db = dbs.db(DATABASE_NAME);
         var query = {
             mobileInfoID: id 
