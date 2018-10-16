@@ -123,11 +123,12 @@ function validateMobileInfo(value) {
 
 function validateTesterInfo(value) {
     const schema = {
-        nickName: Joi.string().required(),
-        city: Joi.string().required(),
-        province: Joi.string().required(),
-        contry: Joi.string().required(),
-        language: Joi.string().required()
+        unionID: Joi.string().required(),
+        nickName: Joi.string(),
+        city: Joi.string(),
+        province: Joi.string(),
+        contry: Joi.string(),
+        language: Joi.string()
     }
     return Joi.validate(value, schema)
 }
@@ -136,8 +137,8 @@ function validatePeripheralInfo(value) {
     const schema = {
         chipset: Joi.string().required(),
         softdevice: Joi.string().required(),
-        application: Joi.string().required(),
-        bootloader: Joi.string().required()
+        application: Joi.string(),
+        bootloader: Joi.string()
     }
     return Joi.validate(value, schema)
 } 
