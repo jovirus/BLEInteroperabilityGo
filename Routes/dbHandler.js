@@ -14,7 +14,7 @@ module.exports = function(app, dbs) {
         })
       });
 
-      app.put('/api/find/mobileinfo/:brand&:model&:platform', (req, res) => {
+      app.get('/api/find/mobileinfo/:brand&:model&:platform', (req, res) => {
         const inqueries = { pbrand, pmodel, pplatform } = req.query
         console.log(inqueries.query)
         console.log("---------------------")
