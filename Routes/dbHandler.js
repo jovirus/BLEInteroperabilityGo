@@ -103,7 +103,8 @@ module.exports = function(app, dbs) {
             timeStamp: Joi.date().required(),
             testType: Joi.string().required(),
             mobileInfoID: Joi.string().required(),
-            peripheralInfoID: Joi.string(),
+            testerInfoID: Joi.string().allow(null),
+            peripheralInfoID: Joi.string().allow(null),
             isPassed: Joi.boolean().required()
         }
         return Joi.validate(value, schema)
