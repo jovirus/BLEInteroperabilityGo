@@ -40,6 +40,17 @@ module.exports = function(app, dbs) {
         })
       });
 
+      app.get('/api/find/testreport/:mobileinfoid', (req, res) => {
+        let id = req.params.unionid
+        let db = dbs.db(DATABASE_NAME);
+        var query = {
+            mobileInfoID: id 
+        };
+        db.collection('TestReport').findOne(query, (err, docs) => {
+            if (err) throw err
+            res.send(docs)
+        })
+      });
 
       app.post('/api/insert/testreport', (req, res) => {
         let report = req.body
