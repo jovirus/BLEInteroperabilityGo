@@ -68,7 +68,7 @@ module.exports = function(app, dbs) {
         const { error } = validateTesterInfo(testerinfo)
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
-        db.collection("TesterInfo").insertOne(mobileinfo, function(err, object){
+        db.collection("TesterInfo").insertOne(testerinfo, function(err, object){
             if (err) return res.send(err)
             res.send(object.insertedId)
         }) 
