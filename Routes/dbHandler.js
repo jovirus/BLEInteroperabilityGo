@@ -46,7 +46,7 @@ module.exports = function(app, dbs) {
         var query = {
             mobileInfoID: id 
         };
-        db.collection('TestReport').findOne(query, (err, docs) => {
+        db.collection('TestReport').find(query, (err, docs) => {
             if (err) throw err
             res.send(docs)
         })
