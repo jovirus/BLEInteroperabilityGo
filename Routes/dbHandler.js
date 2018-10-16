@@ -1,5 +1,5 @@
 const Joi = require("joi")
-const express = require('express')
+const express = require("express")
 const DATABASE_NAME = "tesNrf"
 
 
@@ -86,7 +86,7 @@ module.exports = function(app, dbs) {
                 })
             })
         })
-    })
+    });
 
     function validateBrandName(value){
         const schema = { 
@@ -139,6 +139,6 @@ module.exports = function(app, dbs) {
         }
         return Joi.validate(value, schema)
     } 
-    
+
     return app;
 }
