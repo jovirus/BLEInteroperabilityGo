@@ -22,7 +22,7 @@ module.exports = function(app, dbs) {
             model: model,
             platform: platform
         }
-        db.collection('MobileInfo').find(query).toArray((err, docs) => {
+        db.collection('MobileInfo').findOne(query).toArray((err, docs) => {
             if (err) return res.status(400).send(docs)
             res.send(docs)
         })
@@ -32,9 +32,9 @@ module.exports = function(app, dbs) {
         let id = req.params.unionid
         let db = dbs.db(DATABASE_NAME);
         var query = {
-            unionid: id 
+            unionID: id 
         };
-        db.collection('TesterInfo').find(query).toArray((err, docs) => {
+        db.collection('TesterInfo').findOne(query).toArray((err, docs) => {
             if (err) throw err
             res.send(docs)
         })
