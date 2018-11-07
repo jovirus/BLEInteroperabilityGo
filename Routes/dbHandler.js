@@ -132,7 +132,6 @@ module.exports = function(app, dbs) {
     
     function validateTesterInfo(value) {
         const schema = {
-            unionID: Joi.string().required(),
             nickName: Joi.string(),
             city: Joi.string(),
             province: Joi.string(),
