@@ -1,15 +1,37 @@
 const Joi = require("joi")
 const express = require("express")
+const https = require('https')
 const DATABASE_NAME = "tesNrf"
 
+
+const wxAppID = "wx34660eb5736f3524"
+const wxAppSecret = "eacb31fdc1ce9359265135e62fb5e4b3"
 
 module.exports = function(app, dbs) {
     app.use(express.json());
 
+    app.get('/api/wechat/code2session', (req, res) => {
+        const inqueries = { wxtoken } = req.query
+        https.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${wxAppID}&secret=${wxAppSecret}&js_code=${wxtoken}&grant_type=authorization_code`, (resp) => {
+        resp.on('data', (chunk) => {
+            data += chunk;
+            });
+            // The whole response has been received. Print out the result.
+            resp.on('end', () => {
+            const edata = JSON.parse(data).explanation
+            console.log(edata);
+            res.status(200).send(edata)
+            });
+        }).on("error", (err) => {
+            console.log("Error when fetching session info from wechat server: " + err.message)
+            res.status(400).send(err)
+          });
+      });
+
     app.get('/api/testcase', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
         db.collection('testcase').find().toArray((err, docs) => {
-            if (err) throw err
+            if (err) throw res.status(400).send(err)
             res.json(docs)
         })
       });
@@ -23,8 +45,8 @@ module.exports = function(app, dbs) {
             platform: platform
         }
         db.collection('MobileInfo').findOne(query, (err, docs) => {
-            if (err) return res.status(400).send(docs)
-            res.send(docs)
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
         })
       });
 
@@ -35,8 +57,8 @@ module.exports = function(app, dbs) {
             unionID: id 
         };
         db.collection('TesterInfo').findOne(query, (err, docs) => {
-            if (err) throw err
-            res.send(docs)
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
         })
       });
 
@@ -47,8 +69,8 @@ module.exports = function(app, dbs) {
             mobileInfoID: id 
         };
         db.collection('TestReport').find(query).toArray((err, docs) => {
-            if (err) throw err
-            res.send(docs)
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
         })
       });
 
@@ -58,8 +80,8 @@ module.exports = function(app, dbs) {
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
         let result = db.collection("TestReport").insertOne(report, function(err, object){
-            if (err) return res.send(err)
-            res.send(object.insertedId) 
+            if (err) return res.status(400).send(err)
+            res.status(200).send(object.insertedId) 
         }) 
       });
 
@@ -69,8 +91,8 @@ module.exports = function(app, dbs) {
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
         db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
-            if (err) return res.send(err)
-            res.send(object.insertedId)
+            if (err) return res.status(400).send(err)
+            res.status(200).send(object.insertedId)
         }) 
       });
 
@@ -80,20 +102,20 @@ module.exports = function(app, dbs) {
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
         db.collection("TesterInfo").insertOne(testerinfo, function(err, object){
-            if (err) return res.send(err)
-            res.send(object.insertedId)
+            if (err) return res.status(400).send(err)
+            res.status(200).send(object.insertedId)
         }) 
       });
 
       app.get('/api/initialize', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
         let resultTestReportdb = db.createCollection("TestReport", {autoIndexId:true}, function(err1, collection1) {
-            if (err1) return res.send(err1)
+            if (err1) return res.status(400).send(err1)
             let resultMobileInfodb = db.createCollection("MobileInfo", {autoIndexId:true}, function(err2, collection2) {
-                if (err2) return res.send(err2)
+                if (err2) return res.status(400).send(err2)
                 let resultTestInfodb = db.createCollection("TesterInfo", (err3, collection3) => {
-                    if (err3) return res.send(err3)
-                    return res.send(`initial succeed with TestReportDB: ${collection1} and MobileInfoDB: ${collection2} and TesterInfo${collection3}`)
+                    if (err3) return res.status(400).send(err3)
+                    return res.status(200).send(`initial succeed with TestReportDB: ${collection1} and MobileInfoDB: ${collection2} and TesterInfo${collection3}`)
                 })
             })
         })

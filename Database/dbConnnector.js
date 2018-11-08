@@ -1,4 +1,3 @@
-// const mongoose = require('mongoose');
 
 const MongoClient = require('mongodb').MongoClient
 
@@ -8,11 +7,6 @@ const PROD_URI = "mongodb://root:Nordic@dds-n9eafa9e8c2661841.mongodb.rds.aliyun
 
 
 function open() {
-    // return mongoose.connect(PROD_URI, { useNewUrlParser: true }).then(client => {
-    //      console.log("Succeed connect to database instance.")
-    //           resolve(client)
-    //     })
-    // }
     return new Promise((resolve, reject) => {
         MongoClient.connect(PROD_URI, {useNewUrlParser: true}).then(client => {
             console.log("Succeed connect to database instance.")
