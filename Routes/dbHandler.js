@@ -13,6 +13,7 @@ module.exports = function(app, dbs) {
     app.get('/api/wechat/code2session', (req, res) => {
         const inqueries = { wxtoken } = req.query
         https.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${wxAppID}&secret=${wxAppSecret}&js_code=${wxtoken}&grant_type=authorization_code`, (resp) => {
+        let data = ''
         resp.on('data', (chunk) => {
             data += chunk;
             });
