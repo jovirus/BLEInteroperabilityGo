@@ -10,7 +10,7 @@ const wxAppSecret = "eacb31fdc1ce9359265135e62fb5e4b3"
 module.exports = function(app, dbs) {
     app.use(express.json());
 
-    app.get('/api/wechat/code2session', (req, res) => {
+    app.post('/api/wechat/code2session', (req, res) => {
         const inqueries = { wxtoken } = req.query
         https.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${wxAppID}&secret=${wxAppSecret}&js_code=${wxtoken}&grant_type=authorization_code`, (resp) => {
         let data = ''
@@ -19,7 +19,7 @@ module.exports = function(app, dbs) {
             });
             // The whole response has been received. Print out the result.
             resp.on('end', () => {
-            const edata = JSON.parse(data).explanation
+            const edata = JSON.parse(data)
             console.log(edata);
             res.status(200).send(edata)
             });
