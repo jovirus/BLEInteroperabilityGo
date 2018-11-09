@@ -1,7 +1,7 @@
 const Joi = require("joi")
 const express = require("express")
 const https = require('https')
-const DATABASE_NAME = "tesNrf"
+const DATABASE_NAME = "interoperaNrf"
 
 
 const wxAppID = "wx34660eb5736f3524"
