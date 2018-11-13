@@ -92,12 +92,23 @@ module.exports = function(app, dbs) {
         })
       });
 
+      // this request exclusive mobileinfo, testerinfo, peripehralinfo
       app.post('/api/insert/testreport', (req, res) => {
         let report = req.body
         const { error } = validateTestReport(report)
         if (error) return res.status(400).send(error.details[0].message)
         let db = dbs.db(DATABASE_NAME)
         let result = db.collection("TestReport").insertOne(report, function(err, object){
+            if (err) return res.status(400).send(err)
+            res.status(200).send(object.insertedId) 
+        }) 
+      });
+
+      // this request include mobileinfo, testerinfo, peripehralinfo with no validator
+      app.post('/api/insert/testcases', (req, res) => {
+        let report = req.body
+        let db = dbs.db(DATABASE_NAME)
+        let result = db.collection("TestCases").insertOne(report, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId) 
         }) 
@@ -124,7 +135,7 @@ module.exports = function(app, dbs) {
             res.status(200).send(object.insertedId)
         }) 
       });
-
+      
       app.get('/api/initialize', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
         let resultTestReportdb = db.createCollection("TestReport", {autoIndexId:true}, function(err1, collection1) {
@@ -132,8 +143,11 @@ module.exports = function(app, dbs) {
             let resultMobileInfodb = db.createCollection("MobileInfo", {autoIndexId:true}, function(err2, collection2) {
                 if (err2) return res.status(400).send(err2)
                 let resultTestInfodb = db.createCollection("TesterInfo", (err3, collection3) => {
-                    if (err3) return res.status(400).send(err3)
-                    return res.status(200).send(`initial succeed with TestReportDB: ${collection1} and MobileInfoDB: ${collection2} and TesterInfo${collection3}`)
+                    if (err3) return res.status(400).send(err3) 
+                    let resultTestCasesdb = db.createCollection("TestCases", (err4, collection4) => {
+                        if (err4) return res.status(400).send(err4)
+                        return res.status(200).send(`initial succeed with TestReportDB: ${collection1} and MobileInfoDB: ${collection2} and TesterInfo${collection3} and TestCases: ${collection4}`)
+                    }
                 })
             })
         })
