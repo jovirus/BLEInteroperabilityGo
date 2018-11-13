@@ -177,7 +177,7 @@ module.exports = function(app, dbs) {
             language: Joi.string().allow(''),
             city: Joi.string().allow(''),
             province: Joi.string().allow(''),
-            contry: Joi.string().allow(''),
+            country: Joi.string().allow(''),
             avatarUrl: Joi.string().allow('').optional()
         }
         return Joi.validate(value, schema)
