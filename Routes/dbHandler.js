@@ -147,8 +147,8 @@ module.exports = function(app, dbs) {
                     let resultTestCasesdb = db.createCollection("TestCases", (err4, collection4) => {
                         if (err4) return res.status(400).send(err4)
                         return res.status(200).send(`initial succeed with TestReportDB: ${collection1} and MobileInfoDB: ${collection2} and TesterInfo${collection3} and TestCases: ${collection4}`)
-                    }
                 })
+            })
             })
         })
     });
