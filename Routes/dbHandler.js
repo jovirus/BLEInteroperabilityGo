@@ -172,11 +172,11 @@ module.exports = function(app, dbs) {
     
     function validateTesterInfo(value) {
         const schema = {
-            nickName: Joi.string(),
-            city: Joi.string(),
-            province: Joi.string(),
-            contry: Joi.string(),
-            language: Joi.string()
+            nickName: Joi.string().allow(null),
+            city: Joi.string().allow(null),
+            province: Joi.string().allow(null),
+            contry: Joi.string().allow(null),
+            language: Joi.string().allow(null)
         }
         return Joi.validate(value, schema)
     }
