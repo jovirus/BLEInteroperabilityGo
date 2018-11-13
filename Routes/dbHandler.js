@@ -1,6 +1,5 @@
 const Joi = require("joi")
 const express = require("express")
-const https = require('https')
 const DATABASE_NAME = "interoperaNrf"
 
 
@@ -46,6 +45,24 @@ module.exports = function(app, dbs) {
             platform: platform
         }
         db.collection('MobileInfo').findOne(query, (err, docs) => {
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
+        })
+      });
+
+      app.get('/api/find/testerinfo', (req, res) => {
+        const inqueries = { nickName, gender, language, city, province, country, avatarUrl } = req.query
+        let db = dbs.db(DATABASE_NAME)
+        var query = {
+            nickName: nickName,
+            gender: gender,
+            language: language,
+            city: city,
+            province: province,
+            country: country,
+            avatarUrl: avatarUrl
+        };
+        db.collection('TesterInfo').findOne(query, (err, docs) => {
             if (err) return res.status(400).send(err)
             res.status(200).send(docs)
         })
