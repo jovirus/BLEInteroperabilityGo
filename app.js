@@ -6,7 +6,7 @@ const app = express()
 
 const initializeDatabases = require('./Database/dbConnnector')
 const routes = require('./Routes/dbHandler') 
-var credentials = {key: privateKey, cert: certificate};
+// var credentials = {key: privateKey, cert: certificate};
 // var httpsServer = https.createServer(credentials, app);
 
 // var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
