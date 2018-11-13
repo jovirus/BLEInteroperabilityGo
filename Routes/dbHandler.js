@@ -173,12 +173,12 @@ module.exports = function(app, dbs) {
     function validateTesterInfo(value) {
         const schema = {
             nickName: Joi.string().allow(''),
-            gender: Joi.string().allow(''),
+            gender: Joi.number().optional(),
             language: Joi.string().allow(''),
             city: Joi.string().allow(''),
             province: Joi.string().allow(''),
             contry: Joi.string().allow(''),
-            avatarUrl: Joi.string().allow('')
+            avatarUrl: Joi.string().allow('').optional()
         }
         return Joi.validate(value, schema)
     }
