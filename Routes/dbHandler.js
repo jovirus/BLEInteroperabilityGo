@@ -28,11 +28,11 @@ module.exports = function(app, dbs) {
           });
       });
 
-    app.get('/api/testcase', (req, res) => {
+    app.get('/api/find/testcases', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
-        db.collection('testcase').find().toArray((err, docs) => {
+        db.collection('TestCases').find().toArray((err, docs) => {
             if (err) throw res.status(400).send(err)
-            res.json(docs)
+            res.status(200).json(docs)
         })
       });
 
@@ -92,8 +92,9 @@ module.exports = function(app, dbs) {
         })
       });
 
-      app.get('/api/find/testreport/:sessionid', (req, res) => {
+      app.get('/api/find/testcases/:sessionid', (req, res) => {
         let id = req.params.sessionid;
+        console.log(`Requested sessionid is ${id}`)
         let db = dbs.db(DATABASE_NAME);
         var query = {
             sessionID: id 
