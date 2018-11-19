@@ -92,6 +92,18 @@ module.exports = function(app, dbs) {
         })
       });
 
+      app.get('/api/find/testreport/:sessionid', (req, res) => {
+        let id = req.params.sessionid;
+        let db = dbs.db(DATABASE_NAME);
+        var query = {
+            sessionID: id 
+        };
+        db.collection('TestCases').find(query).toArray((err, docs) => {
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
+        })
+      });
+
       // this request exclusive mobileinfo, testerinfo, peripehralinfo
       app.post('/api/insert/testreport', (req, res) => {
         let report = req.body
