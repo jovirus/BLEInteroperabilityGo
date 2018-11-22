@@ -27,15 +27,7 @@ module.exports = function(app, dbs) {
             res.status(400).send(err)
           });
       });
-
-    app.get('/api/find/testcases', (req, res) => {
-        let db = dbs.db(DATABASE_NAME);
-        db.collection('TestCases').find().toArray((err, docs) => {
-            if (err) throw res.status(400).send(err)
-            res.status(200).json(docs)
-        })
-      });
-
+      
       app.get('/api/find/mobileinfo', (req, res) => {
 	    const inqueries = { brand, model, platform } = req.query
         let db = dbs.db(DATABASE_NAME)
