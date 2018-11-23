@@ -84,6 +84,7 @@ module.exports = function(app, dbs) {
         })
       });
 
+      // Only open at test session
       app.get('/api/find/testcases/:sessionid', (req, res) => {
         let id = req.params.sessionid;
         console.log(`Requested sessionid is ${id}`)
@@ -95,6 +96,11 @@ module.exports = function(app, dbs) {
             if (err) return res.status(400).send(err)
             res.status(200).send(docs)
         })
+      });
+
+      // download ssl cert.
+      app.get('/.well-known/acme-challenge/vBOAFRg9QICgJeYDTrVO7qIpcSTx_pcmTAgsdozJ1l0', (req, res) => {
+        res.status(200).sendFile('../.well-known/acme-challenge/vBOAFRg9QICgJeYDTrVO7qIpcSTx_pcmTAgsdozJ1l0', {root: __dirname})
       });
 
       // this request exclusive mobileinfo, testerinfo, peripehralinfo
