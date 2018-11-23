@@ -100,7 +100,7 @@ module.exports = function(app, dbs) {
 
       // download ssl cert.
       app.get('/.well-known/acme-challenge/vBOAFRg9QICgJeYDTrVO7qIpcSTx_pcmTAgsdozJ1l0', (req, res) => {
-        res.status(200).sendFile('../.well-known/acme-challenge/vBOAFRg9QICgJeYDTrVO7qIpcSTx_pcmTAgsdozJ1l0', {root: __dirname})
+        res.status(200).sendFile('.well-known/acme-challenge/vBOAFRg9QICgJeYDTrVO7qIpcSTx_pcmTAgsdozJ1l0', {root: __dirname})
       });
 
       // this request exclusive mobileinfo, testerinfo, peripehralinfo
