@@ -20,9 +20,9 @@ const port = process.env.PORT || 80
 // })
 
 initializeDatabases.open().then(dbs => { 
-    routes(app, dbs).listen(port, () => {
+    routes(app, dbs).listen(() => {
         const httpServer = http.createServer(this)
-        return httpServer.listen.apply(httpServer)
+        return httpServer.listen(port).apply(httpServer)
         console.log(`listening on port ${port}`)
     })
 })
