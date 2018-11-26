@@ -101,9 +101,9 @@ module.exports = function(app, dbs) {
 
       // download ssl cert.
       ///usr/local/ble-interoperabilityTest/.well-known/acme-challenge/Dy3ix7C10iJOPkhxExeWWJaeNnKc_75xEfB9oWp681c
-      app.get('/.well-known/acme-challenge/vBOAFRg9QICgJeYDTrVO7qIpcSTx_pcmTAgsdozJ1l0', (req, res) => {
+      app.get('/.well-known/acme-challenge/vAujwULlSAuA8Pnhfirjvd7HvAErIIE4keaMo7lxAqw', (req, res) => {
         app.use(express.static('.well-known/acme-challenge'))
-        var jsonPath = path.join(__dirname, '../.well-known/acme-challenge/Dy3ix7C10iJOPkhxExeWWJaeNnKc_75xEfB9oWp681c');
+        var jsonPath = path.join(__dirname, '../.well-known/acme-challenge/vAujwULlSAuA8Pnhfirjvd7HvAErIIE4keaMo7lxAqw');
         console.log(`json path ${jsonPath}`)
         res.status(200).sendFile(jsonPath)
       });
