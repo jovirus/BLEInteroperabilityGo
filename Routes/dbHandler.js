@@ -10,10 +10,6 @@ const wxAppSecret = "eacb31fdc1ce9359265135e62fb5e4b3"
 module.exports = function(app, dbs) {
     app.use(express.json());
 
-    app.use((req, res) => {
-        res.send('This is Nordic IPA Test API portal !');
-    });
-
     app.post('/api/wechat/code2session', (req, res) => {
         const inqueries = { wxtoken } = req.query
         https.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${wxAppID}&secret=${wxAppSecret}&js_code=${wxtoken}&grant_type=authorization_code`, (resp) => {
@@ -171,6 +167,10 @@ module.exports = function(app, dbs) {
             })
             })
         })
+    });
+
+    app.use((req, res) => {
+        res.send('This is Nordic IPA Test API portal');
     });
 
     function validateBrandName(value){
