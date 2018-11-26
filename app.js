@@ -1,5 +1,6 @@
 const express = require('express')
 // const https = require('https')
+const http = require('http')
 var fs = require('fs');
 
 const app = express()
@@ -14,6 +15,14 @@ const routes = require('./Routes/dbHandler')
 
 const port = process.env.PORT || 80
 
+// initializeDatabases.open().then(dbs => { 
+//     routes(app, dbs).listen(port, () => console.log(`listening on port ${port}`))
+// })
+
 initializeDatabases.open().then(dbs => { 
-    routes(app, dbs).listen(port, () => console.log(`listening on port ${port}`))
+    routes(app, dbs).listen(port, () => {
+        const httpServer = http.createServer(this)
+        return httpServer.listen.apply(httpServer)
+        console.log(`listening on port ${port}`)
+    })
 })

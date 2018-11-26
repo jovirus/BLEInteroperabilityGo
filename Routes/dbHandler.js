@@ -105,8 +105,7 @@ module.exports = function(app, dbs) {
         app.use(express.static('.well-known/acme-challenge'))
         var jsonPath = path.join(__dirname, '../.well-known/acme-challenge/Dy3ix7C10iJOPkhxExeWWJaeNnKc_75xEfB9oWp681c');
         console.log(`json path ${jsonPath}`)
-        console.log(`json path ${__dirname}`)
-        res.status(200).sendFile(jsonPath, {root: __dirname})
+        res.status(200).sendFile(jsonPath)
       });
 
       // this request exclusive mobileinfo, testerinfo, peripehralinfo
