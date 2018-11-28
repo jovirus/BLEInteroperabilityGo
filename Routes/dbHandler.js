@@ -1,4 +1,4 @@
-/** This is file is used to handel web requests from clients and store in DB.
+/** File dbHandler.js is file is used to handel web requests.
  *  Usage: nrf devices interoperability test. No other purpose allowed.
  *  created by Jiajun Qiu @Nordic Semiconductor ASA 2018
  *  Email: jiajun.qiu@nordicsemi.no
