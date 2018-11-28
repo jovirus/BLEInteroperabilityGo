@@ -9,11 +9,7 @@
 const Joi = require("joi")
 const express = require("express")
 var path = require('path');
-const DATABASE_NAME = "interoperaNrf"
-
-
-const wxAppID = "wx34660eb5736f3524"
-const wxAppSecret = "eacb31fdc1ce9359265135e62fb5e4b3"
+const DATABASE_NAME = process.env.DATABASE_NAME
 
 module.exports = function(app, dbs) {
     app.use(express.json());
@@ -31,33 +27,35 @@ module.exports = function(app, dbs) {
         res.status(200).sendFile(jsonPath)
       });
 
-      /*  INSERT TESTCASE
-          The request shall include mobile info, tester info, test results
-          The method has no validator
-       */
+        /*  INSERT TESTCASE
+            The request shall include mobile info, tester info, test results
+            The method has no validator
+        */
       app.post('/api/insert/testcases', (req, res) => {
         let report = req.body
         let db = dbs.db(DATABASE_NAME)
-        let result = db.collection("TestCases").insertOne(report, function(err, object){
+        let result = db.collection(process.env.DB_COLLECTION_TESTCASES).insertOne(report, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId) 
         }) 
       });
 
-      /*  INSERT TESTCASE
-          The request shall ONLY include mobileinfoID, testerinfoID, peripheralinoID(optional)
-          The method has a validator
-       */
-      app.post('/api/insert/testreport', (req, res) => {
-        let report = req.body
-        const { error } = validateTestReport(report)
-        if (error) return res.status(400).send(error.details[0].message)
-        let db = dbs.db(DATABASE_NAME)
-        let result = db.collection("TestReport").insertOne(report, function(err, object){
+        /*  GET TESTCASE REPORT
+            Required parameter sessionId
+            The method return the desired test report in json format
+            This method shall preventing malicious request.
+        */
+    app.get('/api/find/testcases/:sessionid', (req, res) => {
+        let id = req.params.sessionid;
+        let db = dbs.db(DATABASE_NAME);
+        var query = {
+            sessionID: id 
+        };
+        db.collection(process.env.DB_COLLECTION_TESTCASES).find(query).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
-            res.status(200).send(object.insertedId) 
-        }) 
-      });
+            res.status(200).send(docs)
+        })
+    });
 
       /*  REQUEST SESSIONID FROM WECHAT
           The request shall include wxAppID, wxAppSecret, wxtoken as parameters
@@ -66,7 +64,7 @@ module.exports = function(app, dbs) {
        */
     app.post('/api/wechat/code2session', (req, res) => {
         const inqueries = { wxtoken } = req.query
-        https.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${wxAppID}&secret=${wxAppSecret}&js_code=${wxtoken}&grant_type=authorization_code`, (resp) => {
+        https.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${process.env.WX_APP_ID}&secret=${process.env.WX_APP_SECRET}&js_code=${wxtoken}&grant_type=authorization_code`, (resp) => {
         let data = ''
         resp.on('data', (chunk) => {
             data += chunk;
@@ -82,24 +80,6 @@ module.exports = function(app, dbs) {
             res.status(400).send(err)
           });
       });
-
-    /*  GET TESTCASE REPORT
-        Required parameter sessionId
-        The method return the desired test report in json format
-        This method shall preventing malicious request.
-    */
-    app.get('/api/find/testcases/:sessionid', (req, res) => {
-        let id = req.params.sessionid;
-        console.log(`Requested sessionid is ${id}`)
-        let db = dbs.db(DATABASE_NAME);
-        var query = {
-            sessionID: id 
-        };
-        db.collection('TestCases').find(query).toArray((err, docs) => {
-            if (err) return res.status(400).send(err)
-            res.status(200).send(docs)
-        })
-    });
 
     /*  INITIALIZE DATABASE
         The db shall only initialize once.
@@ -153,7 +133,19 @@ module.exports = function(app, dbs) {
     });
 
      /***************************************************************************************** NOT IN USED ****************************************************************************************************************/
-      app.get('/api/find/mobileinfo', (req, res) => {
+
+      app.post('/api/insert/testreport', (req, res) => {
+        let report = req.body
+        const { error } = validateTestReport(report)
+        if (error) return res.status(400).send(error.details[0].message)
+        let db = dbs.db(DATABASE_NAME)
+        let result = db.collection("TestReport").insertOne(report, function(err, object){
+            if (err) return res.status(400).send(err)
+            res.status(200).send(object.insertedId) 
+        }) 
+      }); 
+     
+     app.get('/api/find/mobileinfo', (req, res) => {
 	    const inqueries = { brand, model, platform } = req.query
         let db = dbs.db(DATABASE_NAME)
         var query = {
@@ -230,7 +222,6 @@ module.exports = function(app, dbs) {
             res.status(200).send(object.insertedId)
         }) 
       });
-      
 
     function validateBrandName(value){
         const schema = { 

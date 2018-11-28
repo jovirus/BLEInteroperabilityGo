@@ -11,7 +11,7 @@ const MongoClient = require('mongodb').MongoClient
 
 // Note: A production application should not expose database credentials in plain text.
 // For strategies on handling credentials, visit 12factor: https://12factor.net/config.
-const PROD_URI = "mongodb://root:Nordic119@dds-n9ed9c485fb5de941.mongodb.rds.aliyuncs.com:3717,dds-n9ed9c485fb5de942.mongodb.rds.aliyuncs.com:3717/admin?replicaSet=mgset-10430867"
+const PROD_URI = process.env.DB_CONNECTION_URL
 
 
 
@@ -28,10 +28,7 @@ function open() {
 }
 
 function close(db){
-    //Close connection
-    if(db){
-        db.close();
-    }
+    if(db) { db.close() }
 }
 
 let db = {
@@ -40,11 +37,3 @@ let db = {
 }
 
 module.exports = db;
-
-// module.exports = async function() {
-//     let databases = await Promise.all([connect(PROD_URI)]).catch(() => {})
-//     // let databases = new Promise(connect(PROD_URI)).catch(() => {})
-//     return {
-//       production: databases[0]
-//     }
-// }
