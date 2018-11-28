@@ -23,18 +23,16 @@ const routes = require('./Routes/dbHandler')
 // var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
 // var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 
-const port = process.env.PORT || 80
+const port = process.env.HTTP_PORT || 80
 
 // initializeDatabases.open().then(dbs => { 
 //     routes(app, dbs).listen(port, () => console.log(`listening on port ${port}`))
 // })
 
-// initializeDatabases.open().then(dbs => { 
-//     routes(app, dbs).listen(port, () => {
-//         const httpServer = http.createServer(this)
-//         return httpServer.listen.apply(httpServer)
-//         console.log(`listening on port ${port}`)
-//     })
-// })
-
-console.log(`ennnnnnnvvvv : ${process.env.DB_CONNECTION_URL}`)
+initializeDatabases.open().then(dbs => { 
+    routes(app, dbs).listen(port, () => {
+        const httpServer = http.createServer(this)
+        return httpServer.listen.apply(httpServer)
+        console.log(`listening on port ${port}`)
+    })
+})
