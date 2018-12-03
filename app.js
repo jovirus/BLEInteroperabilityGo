@@ -19,12 +19,14 @@ const app = express()
 const initializeDatabases = require('./Database/dbConnnector')
 const routes = require('./Routes/dbHandler') 
 
-var privateKey  = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.key', 'utf8');
-var certificate = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.pem', 'utf8');
+var privateKey  = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.key');
+var certificate = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.pem');
 
 var credentials = {key: privateKey, cert: certificate};
 
-const port = process.env.HTTPS_PORT || 443
+const port_https = process.env.HTTPS_PORT || 443
+const port_http = process.env.HTTP_PORT || 80
+
 
 // initializeDatabases.open().then(dbs => { 
 //     routes(app, dbs).listen(port, () => console.log(`listening on port ${port}`))
@@ -32,9 +34,9 @@ const port = process.env.HTTPS_PORT || 443
 
 initializeDatabases.open().then(dbs => { 
     routes(app, dbs).listen(port, () => {
-        // const httpServer = http.createServer(this)
-        var httpsServer = https.createServer(credentials, app);
-        console.log(`listening on port ${port} with crt. ${credentials}`)
-        return httpsServer.listen.apply(httpsServer)
+        const httpServer = http.createServer(app)
+        // var httpsServer = https.createServer(credentials, app);
+        // console.log(`listening on port ${port} with crt. ${credentials.privateKey}`)
+        return httpServer.listen.apply(httpServer)
     })
 })
