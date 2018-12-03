@@ -40,11 +40,11 @@ module.exports = function(app, dbs) {
         }) 
       });
 
-        /*  GET TESTCASE REPORT
-            Required parameter sessionId
-            The method return the desired test report in json format
-            This method shall preventing malicious request.
-        */
+    /*  GET TESTCASE REPORT
+        Required parameter sessionId
+        The method return the desired test report in json format
+        This method shall preventing malicious request.
+    */
     app.get('/api/find/testcases/:sessionid', (req, res) => {
         let id = req.params.sessionid;
         let db = dbs.db(DATABASE_NAME);

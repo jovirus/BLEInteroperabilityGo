@@ -1,4 +1,3 @@
-
 /** File dbConnection is file is used to connect DB.
  *  Usage: nrf devices interoperability test. No other purpose allowed.
  *  created by Jiajun Qiu @Nordic Semiconductor ASA 2018
