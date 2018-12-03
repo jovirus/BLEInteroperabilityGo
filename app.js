@@ -24,8 +24,8 @@ var certificate = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.pem');
 
 var credentials = {key: privateKey, cert: certificate};
 
-const port_https = process.env.HTTPS_PORT || 443
-const port_http = process.env.HTTP_PORT || 80
+// const port = process.env.HTTPS_PORT || 443
+const port = process.env.HTTP_PORT || 80
 
 
 // initializeDatabases.open().then(dbs => { 
