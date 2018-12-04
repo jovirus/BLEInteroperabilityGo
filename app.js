@@ -39,7 +39,7 @@ var credentials = {key: privateKey, cert: certificate};
 
 
 initializeDatabases.open().then(dbs => { 
-    routes(app, dbs).listen(80, () => {
+    routes(app, dbs).listen(443, () => {
         const httpServer = http.createServer(app)
         // const httpsServer = https.createServer(credentials, app)
         // console.log(`listening on port ${port}`)
