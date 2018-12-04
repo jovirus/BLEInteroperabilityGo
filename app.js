@@ -24,8 +24,8 @@ var certificate = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.pem');
 
 var credentials = {key: privateKey, cert: certificate};
 
-// const port = process.env.HTTPS_PORT || 443
-const port = process.env.HTTP_PORT || 80
+const port = process.env.HTTPS_PORT || 443
+// const port = process.env.HTTP_PORT || 80
 
 
 // initializeDatabases.open().then(dbs => { 
@@ -34,9 +34,9 @@ const port = process.env.HTTP_PORT || 80
 
 initializeDatabases.open().then(dbs => { 
     routes(app, dbs).listen(port, () => {
-        const httpServer = http.createServer(app)
-        // var httpsServer = https.createServer(credentials, app);
-        // console.log(`listening on port ${port} with crt. ${credentials.privateKey}`)
-        return httpServer.listen.apply(httpServer)
+        // const httpServer = http.createServer(app)
+        var httpsServer = https.createServer(credentials, app);
+        console.log(`listening on port ${port} with crt. ${credentials.privateKey}`)
+        return httpsServer.listen.apply(httpsServer)
     })
 })
