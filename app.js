@@ -49,7 +49,7 @@ initializeDatabases.open().then(dbs => {
     const httpsServer = https.createServer(credentials, (req, res) => {
     res.writeHead(200); 
     res.end("hello world\n"); 
-    }).listen(port)
+    }).listen(443)
 })
 
 // const httpServer = http.createServer(app).listen(80)
