@@ -35,8 +35,8 @@ const port = process.env.HTTPS_PORT || 443
 initializeDatabases.open().then(dbs => { 
     routes(app, dbs).listen(port, () => {
         // const httpServer = http.createServer(app).listen(80)
-        const httpsServer = https.createServer(credentials, app).listen(process.env.HTTPS_PORT)
-        // console.log(`listening on port ${port}`)
+        const httpsServer = https.createServer(credentials, app)
+        console.log(`listening on port ${port}`)asdsad
         // return httpsServer.listen.apply(httpsServer)
     })
 })
