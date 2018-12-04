@@ -42,7 +42,7 @@ initializeDatabases.open().then(dbs => {
     routes(app, dbs).listen(() => {
         const httpServer = http.createServer(app).listen(80)
         // const httpsServer = https.createServer(credentials, app).listen(443)
-        console.log(`listening on port ${port}`)
+        // console.log(`listening on port ${port}`)
         // return httpsServer.listen.apply(httpsServer)
     })
 })
