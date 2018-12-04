@@ -24,7 +24,7 @@ var certificate = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.pem');
 
 var credentials = {key: privateKey, cert: certificate};
 
-const port = process.env.HTTPS_PORT || 443
+// const port = process.env.HTTPS_PORT || 443
 // const port = process.env.HTTP_PORT || 80
 
 
@@ -32,22 +32,19 @@ const port = process.env.HTTPS_PORT || 443
 //     routes(app, dbs).listen(port, () => console.log(`listening on port ${port}`))
 // })
 
-const httpsServer = https.createServer(credentials, (req, res) => {
-    res.writeHead(200); 
-    res.end("hello world\n"); 
-}).listen(port)
+// const httpsServer = https.createServer(credentials, (req, res) => {
+//     res.writeHead(200); 
+//     res.end("hello world\n"); 
+// }).listen(port)
 
-// initializeDatabases.open().then(dbs => { 
-
-
-    // routes(app, dbs).listen(port, () => {
-    //     // const httpServer = http.createServer(app).listen(80)
-    //     const httpsServer = https.createServer(credentials, app)
-    //     console.log(`listening on port ${port}`)
-
-    //     // return httpsServer.listen.apply(httpsServer)
-    // })
-// })
+initializeDatabases.open().then(dbs => { 
+    routes(app, dbs).listen(() => {
+        const httpServer = http.createServer(app)
+        // const httpsServer = https.createServer(credentials, app).listen(443)
+        console.log(`listening on port ${port}`)
+        // return httpsServer.listen.apply(httpsServer)
+    })
+})
 
 // const httpServer = http.createServer(app).listen(80)
 // const httpsServer = https.createServer(credentials, app).listen(process.env.HTTPS_PORT)
