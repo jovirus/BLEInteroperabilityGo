@@ -162,7 +162,7 @@ module.exports = function(app, dbs) {
         switchNr: switch_nr,
         status: status
     }
-    let result = db.collection(DB_TEST_COLLECTION_NRF91).insertOne(report, function(err, object){
+    let result = db.collection(process.env.DB_TEST_COLLECTION_NRF91).insertOne(report, function(err, object){
         if (err) return res.status(400).send(err)
         res.status(200).send(object.insertedId) 
         }) 
@@ -178,7 +178,7 @@ module.exports = function(app, dbs) {
      */
     app.get('/nrf91/test/init', (req, res) => {
         let db = dbs.db(TEST91_DATABASE_NAME);
-        let resultTestCasesdb = db.createCollection(DB_TEST_COLLECTION_NRF91, (err, collection) => {
+        let resultTestCasesdb = db.createCollection(process.env.DB_TEST_COLLECTION_NRF91, (err, collection) => {
             if (err) return res.status(400).send(err)
             return res.status(200).send('succeed')
         })
