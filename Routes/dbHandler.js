@@ -152,17 +152,17 @@ module.exports = function(app, dbs) {
      *  required parameters:
      *  "/boardnr/switchnr/status"
      */  
-    app.post('/nrf91/test/push/:boardnr/:switchnr/:status', (req, res) => {
+    app.post('/nrf91/test/push/:boardnr/:status/:switchnr', (req, res) => {
     var board_nr = req.params.boardnr
-    var switch_nr = req.params.switchnr
     var status = req.params.status
+    var switch_nr = req.params.switchnr
     let db = dbs.db(TEST91_DATABASE_NAME)
     var query = {
         boardNr: board_nr 
     };
     let newValue = {
-        switchNr: switch_nr,
-        status: status
+        status: status,
+        switchNr: switch_nr
     }
     db.collection(process.env.DB_TEST_COLLECTION_NRF91).findOneAndUpdate(query, {$set: newValue}, {upsert: true}, (err, docs) => {
         if (err) return res.status(400).send(err)
