@@ -166,9 +166,7 @@ module.exports = function(app, dbs) {
     }
     db.collection(process.env.DB_TEST_COLLECTION_NRF91).findOneAndUpdate(query, {$set: newValue}, {upsert: true}, (err, docs) => {
         if (err) return res.status(400).send(err)
-        let result = JSON.parse(docs).lastErrorObject.updatedExisting
-        console.log(`Updating existing ${result}`)
-        res.status(200).send(result)
+        res.status(200).send(docs)
         })
     })
     // let result = db.collection(process.env.DB_TEST_COLLECTION_NRF91).insertOne(report, function(err, object){
