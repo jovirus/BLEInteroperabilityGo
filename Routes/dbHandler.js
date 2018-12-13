@@ -146,7 +146,7 @@ module.exports = function(app, dbs) {
         switchNr: 1,
         _id: 0
     }
-    db.collection(process.env.DB_TEST_COLLECTION_NRF91).find(query).toArray((err, docs) => {
+    db.collection(process.env.DB_TEST_COLLECTION_NRF91).find(query, supressedValue).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
         res.status(200).send(docs)
     })
