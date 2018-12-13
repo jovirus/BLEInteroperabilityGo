@@ -124,8 +124,66 @@ module.exports = function(app, dbs) {
         })
     });
 
-    /*  RESPONSE TO UNUSED SERVICES
-    */
+    /** GET 91 SWITCH RESULT
+     *  Required parameter board nr
+     *  The method return the desired board switch status
+     */
+   app.get('/nrf91/test/find/:boardnr', (req, res) => {
+    let board_nr = req.params.boardnr;
+    let db = dbs.db(DATABASE_NAME);
+    var query = {
+        boardNr: board_nr 
+    };
+    db.collection("nRF91Test").find(query).toArray((err, docs) => {
+        if (err) return res.status(400).send(err)
+        res.status(200).send(docs)
+    })
+});
+
+
+
+    /** Push DK(nRF91) swtich status
+     *  Client send current status to the server
+     *  Type: text/html: charset=utf-8
+     *  Structure:
+     *  "bordnr=?&switchnr=?&status=0|1"
+     */  
+    app.post('/nrf91/test/push', (req, res) => {
+    var board_nr = req.param('bordnr')
+    var switch_nr = req.param('switchnr')
+    var status = req.param('status')
+    let db = dbs.db(DATABASE_NAME)
+    let report = {
+        boardNr: board_nr,
+        switchNr: switch_nr,
+        status: status
+    }
+    let result = db.collection("nRF91Test").insertOne(report, function(err, object){
+        if (err) return res.status(400).send(err)
+        res.status(200).send(object.insertedId) 
+        }) 
+    });
+
+    /**
+     * Initialize nRF91 demo test use database.
+     * The db shall only initialize once.
+     * structure:
+     *  ---boardNr
+     *  ---switchNr
+     *  ---status
+     */
+    app.get('/nrf91/test/init', (req, res) => {
+        let db = dbs.db(DATABASE_NAME);
+        let resultTestCasesdb = db.createCollection("nRF91Test", (err, collection) => {
+            if (err) return res.status(400).send(err)
+            return res.status(200).send(`initial succeed with nRF91Test: ${collection}`)
+        })
+    })
+
+    /**
+     * RESPONSE TO UNUSED SERVICES
+     *  
+     */  
     app.use((req, res) => {
         res.send('***This is a private portal used for nrf devices interoperability test. \n***Any unauthorized access will be blocked and shall leave this portal.');
     });
