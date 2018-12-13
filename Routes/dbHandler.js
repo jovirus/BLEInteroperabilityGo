@@ -153,9 +153,9 @@ module.exports = function(app, dbs) {
      *  "/bordnr/switchnr/status"
      */  
     app.post('/nrf91/test/push/:bordnr/:switchnr/:status', (req, res) => {
-    var board_nr = req.param('bordnr')
-    var switch_nr = req.param('switchnr')
-    var status = req.param('status')
+    var board_nr = req.params.boardnr
+    var switch_nr = req.params.switchnr
+    var status = req.params.status
     let db = dbs.db(TEST91_DATABASE_NAME)
     let report = {
         boardNr: board_nr,
