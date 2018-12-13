@@ -9,7 +9,8 @@
 const Joi = require("joi")
 const express = require("express")
 var path = require('path');
-const DATABASE_NAME = process.env.DATABASE_NAME
+const PROD_DATABASE_NAME = process.env.DATABASE_NAME
+const TEST91_DATABASE_NAME = process.env.DB_91
 
 module.exports = function(app, dbs) {
     app.use(express.json());
@@ -31,7 +32,7 @@ module.exports = function(app, dbs) {
         */
       app.post('/api/insert/testcases', (req, res) => {
         let report = req.body
-        let db = dbs.db(DATABASE_NAME)
+        let db = dbs.db(PROD_DATABASE_NAME)
         let result = db.collection(process.env.DB_COLLECTION_TESTCASES).insertOne(report, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId) 
@@ -45,7 +46,7 @@ module.exports = function(app, dbs) {
     */
     app.get('/api/find/testcases/:sessionid', (req, res) => {
         let id = req.params.sessionid;
-        let db = dbs.db(DATABASE_NAME);
+        let db = dbs.db(PROD_DATABASE_NAME);
         var query = {
             sessionID: id 
         };
@@ -108,7 +109,7 @@ module.exports = function(app, dbs) {
         FOR NOW, ONLY TESTCASES TABLE IS IN USE! MOBILEINFO, TESTINFO, PERIPHERALINFO(OPTION) IS INCLUDED IN THE TESTREPORT. 
     */
     app.get('/api/initialize', (req, res) => {
-        let db = dbs.db(DATABASE_NAME);
+        let db = dbs.db(PROD_DATABASE_NAME);
         let resultTestCasesdb = db.createCollection("TestCases", (err4, collection4) => {
             if (err4) return res.status(400).send(err4)
             return res.status(200).send('succeed')
@@ -127,7 +128,8 @@ module.exports = function(app, dbs) {
         //         })
         //     })
         // })
-
+    /************************************************************************** NRF 91 **********************************************************************
+     * *****************************************************************************************************************************************************/
 
     /** GET 91 SWITCH RESULT
      *  Required parameter board nr
@@ -135,33 +137,32 @@ module.exports = function(app, dbs) {
      */
    app.get('/nrf91/test/find/:boardnr', (req, res) => {
     let board_nr = req.params.boardnr;
-    let db = dbs.db(DATABASE_NAME);
+    let db = dbs.db(TEST91_DATABASE_NAME);
     var query = {
         boardNr: board_nr 
     };
-    db.collection("nRF91Test").find(query).toArray((err, docs) => {
+    db.collection(process.env.DB_TEST_COLLECTION_NRF91).find(query).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
         res.status(200).send(docs)
     })
    })
 
     /** Push DK(nRF91) swtich status
-     *  Client send current status to the server
      *  Type: text/html: charset=utf-8
-     *  Structure:
-     *  "bordnr=?&switchnr=?&status=0|1"
+     *  required parameters:
+     *  "/bordnr/switchnr/status"
      */  
-    app.post('/nrf91/test/push', (req, res) => {
+    app.post('/nrf91/test/push/:bordnr/:switchnr/:status', (req, res) => {
     var board_nr = req.param('bordnr')
     var switch_nr = req.param('switchnr')
     var status = req.param('status')
-    let db = dbs.db(DATABASE_NAME)
+    let db = dbs.db(TEST91_DATABASE_NAME)
     let report = {
         boardNr: board_nr,
         switchNr: switch_nr,
         status: status
     }
-    let result = db.collection("nRF91Test").insertOne(report, function(err, object){
+    let result = db.collection(DB_TEST_COLLECTION_NRF91).insertOne(report, function(err, object){
         if (err) return res.status(400).send(err)
         res.status(200).send(object.insertedId) 
         }) 
@@ -176,22 +177,25 @@ module.exports = function(app, dbs) {
      *  ---status
      */
     app.get('/nrf91/test/init', (req, res) => {
-        let db = dbs.db(DATABASE_NAME);
-        let resultTestCasesdb = db.createCollection("nRF91Test", (err, collection) => {
+        let db = dbs.db(TEST91_DATABASE_NAME);
+        let resultTestCasesdb = db.createCollection(DB_TEST_COLLECTION_NRF91, (err, collection) => {
             if (err) return res.status(400).send(err)
-            return res.status(200).send(`initial succeed with nRF91Test: ${collection}`)
+            return res.status(200).send('succeed')
         })
     })
 
     /**
      * RESPONSE TO UNUSED SERVICES
-     *  
      */  
     app.use((req, res) => {
         res.send('***This is a private portal used for nrf devices interoperability test. \n***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
-     /***************************************************************************************** NOT IN USED ****************************************************************************************************************/
+     /***************************************************************************************** NOT IN USED ***************************************************************************************************************
+      * 
+      * 
+      * 
+      * ********************************************************************************************************************************************************************************************************************/
 
       /* DOWNLOAD SSL CERT.
           cert. installed at /usr/local/ble-interoperabilityTest/.well-known/acme-challenge/
@@ -210,7 +214,7 @@ module.exports = function(app, dbs) {
         let report = req.body
         const { error } = validateTestReport(report)
         if (error) return res.status(400).send(error.details[0].message)
-        let db = dbs.db(DATABASE_NAME)
+        let db = dbs.db(PROD_DATABASE_NAME)
         let result = db.collection("TestReport").insertOne(report, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId) 
@@ -219,7 +223,7 @@ module.exports = function(app, dbs) {
      
      app.get('/api/find/mobileinfo', (req, res) => {
 	    const inqueries = { brand, model, platform } = req.query
-        let db = dbs.db(DATABASE_NAME)
+        let db = dbs.db(PROD_DATABASE_NAME)
         var query = {
             brand: brand,
             model: model,
@@ -233,7 +237,7 @@ module.exports = function(app, dbs) {
 
       app.get('/api/find/testerinfo', (req, res) => {
         const inqueries = { nickName, gender, language, city, province, country, avatarUrl } = req.query
-        let db = dbs.db(DATABASE_NAME)
+        let db = dbs.db(PROD_DATABASE_NAME)
         var query = {
             nickName: nickName,
             gender: gender,
@@ -251,7 +255,7 @@ module.exports = function(app, dbs) {
 
       app.get('/api/find/testerinfo/:unionid', (req, res) => {
         let id = req.params.unionid
-        let db = dbs.db(DATABASE_NAME);
+        let db = dbs.db(PROD_DATABASE_NAME);
         var query = {
             unionID: id 
         };
@@ -263,7 +267,7 @@ module.exports = function(app, dbs) {
 
       app.get('/api/find/testreport/:mobileinfoid', (req, res) => {
         let id = req.params.mobileinfoid;
-        let db = dbs.db(DATABASE_NAME);
+        let db = dbs.db(PROD_DATABASE_NAME);
         var query = {
             mobileInfoID: id 
         };
@@ -277,7 +281,7 @@ module.exports = function(app, dbs) {
         let mobileinfo = req.body
         const { error } = validateMobileInfo(mobileinfo)
         if (error) return res.status(400).send(error.details[0].message)
-        let db = dbs.db(DATABASE_NAME)
+        let db = dbs.db(PROD_DATABASE_NAME)
         db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId)
@@ -288,7 +292,7 @@ module.exports = function(app, dbs) {
         let testerinfo = req.body
         const { error } = validateTesterInfo(testerinfo)
         if (error) return res.status(400).send(error.details[0].message)
-        let db = dbs.db(DATABASE_NAME)
+        let db = dbs.db(PROD_DATABASE_NAME)
         db.collection("TesterInfo").insertOne(testerinfo, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId)
