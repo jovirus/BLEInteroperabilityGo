@@ -109,20 +109,25 @@ module.exports = function(app, dbs) {
     */
     app.get('/api/initialize', (req, res) => {
         let db = dbs.db(DATABASE_NAME);
-        let resultTestReportdb = db.createCollection("TestReport", {autoIndexId:true}, function(err1, collection1) {
-            if (err1) return res.status(400).send(err1)
-            let resultMobileInfodb = db.createCollection("MobileInfo", {autoIndexId:true}, function(err2, collection2) {
-                if (err2) return res.status(400).send(err2)
-                let resultTestInfodb = db.createCollection("TesterInfo", (err3, collection3) => {
-                    if (err3) return res.status(400).send(err3) 
-                    let resultTestCasesdb = db.createCollection("TestCases", (err4, collection4) => {
-                        if (err4) return res.status(400).send(err4)
-                        return res.status(200).send(`initial succeed with TestReportDB: ${collection1} and MobileInfoDB: ${collection2} and TesterInfo${collection3} and TestCases: ${collection4}`)
-                    })
-                })
-            })
+        let resultTestCasesdb = db.createCollection("TestCases", (err4, collection4) => {
+            if (err4) return res.status(400).send(err4)
+            return res.status(200).send('succeed')
         })
     });
+        // let resultTestReportdb = db.createCollection("TestReport", {autoIndexId:true}, function(err1, collection1) {
+        //     if (err1) return res.status(400).send(err1)
+        //     let resultMobileInfodb = db.createCollection("MobileInfo", {autoIndexId:true}, function(err2, collection2) {
+        //         if (err2) return res.status(400).send(err2)
+        //         let resultTestInfodb = db.createCollection("TesterInfo", (err3, collection3) => {
+        //             if (err3) return res.status(400).send(err3) 
+        //             let resultTestCasesdb = db.createCollection("TestCases", (err4, collection4) => {
+        //                 if (err4) return res.status(400).send(err4)
+        //                 return res.status(200).send("initial succeed with TestReportDB:")
+        //             })
+        //         })
+        //     })
+        // })
+
 
     /** GET 91 SWITCH RESULT
      *  Required parameter board nr
@@ -138,9 +143,7 @@ module.exports = function(app, dbs) {
         if (err) return res.status(400).send(err)
         res.status(200).send(docs)
     })
-});
-
-
+   })
 
     /** Push DK(nRF91) swtich status
      *  Client send current status to the server
