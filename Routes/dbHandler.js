@@ -150,9 +150,9 @@ module.exports = function(app, dbs) {
     /** Push DK(nRF91) swtich status
      *  Type: text/html: charset=utf-8
      *  required parameters:
-     *  "/bordnr/switchnr/status"
+     *  "/boardnr/switchnr/status"
      */  
-    app.post('/nrf91/test/push/:bordnr/:switchnr/:status', (req, res) => {
+    app.post('/nrf91/test/push/:boardnr/:switchnr/:status', (req, res) => {
     var board_nr = req.params.boardnr
     var switch_nr = req.params.switchnr
     var status = req.params.status
