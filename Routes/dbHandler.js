@@ -157,16 +157,22 @@ module.exports = function(app, dbs) {
     var switch_nr = req.params.switchnr
     var status = req.params.status
     let db = dbs.db(TEST91_DATABASE_NAME)
-    let report = {
-        boardNr: board_nr,
+    var query = {
+        boardNr: board_nr 
+    };
+    let newValue = {
         switchNr: switch_nr,
         status: status
     }
-    let result = db.collection(process.env.DB_TEST_COLLECTION_NRF91).insertOne(report, function(err, object){
+    db.collection(process.env.DB_TEST_COLLECTION_NRF91).findOneAndUpdate(query, {$set: newValue}, {upsert: true}, (err, docs) => {
         if (err) return res.status(400).send(err)
-        res.status(200).send(object.insertedId) 
-        }) 
-    });
+        res.status(200).send(docs)
+        })
+    })
+    // let result = db.collection(process.env.DB_TEST_COLLECTION_NRF91).insertOne(report, function(err, object){
+    //     if (err) return res.status(400).send(err)
+    //     res.status(200).send(object.insertedId) 
+    //     }) 
 
     /**
      * Initialize nRF91 demo test use database.
