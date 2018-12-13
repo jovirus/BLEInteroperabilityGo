@@ -142,10 +142,10 @@ module.exports = function(app, dbs) {
         boardNr: board_nr 
     };
     var supressedValue = {
-        status: 1,
-        switchNr: 1,
-        boardNr: 0,
-        _id: 0
+        status: true,
+        switchNr: true,
+        boardNr: false,
+        _id: false
     }
     db.collection(process.env.DB_TEST_COLLECTION_NRF91).find(query, supressedValue).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
