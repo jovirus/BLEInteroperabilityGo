@@ -141,6 +141,11 @@ module.exports = function(app, dbs) {
     var query = {
         boardNr: board_nr 
     };
+    var supressedValue = {
+        status: 1,
+        switchNr: 1,
+        _id: 0
+    }
     db.collection(process.env.DB_TEST_COLLECTION_NRF91).find(query).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
         res.status(200).send(docs)
@@ -166,13 +171,9 @@ module.exports = function(app, dbs) {
     }
     db.collection(process.env.DB_TEST_COLLECTION_NRF91).findOneAndUpdate(query, {$set: newValue}, {upsert: true}, (err, docs) => {
         if (err) return res.status(400).send(err)
-        res.status(200).send(docs)
+        res.status(200).send("succeed")
         })
     })
-    // let result = db.collection(process.env.DB_TEST_COLLECTION_NRF91).insertOne(report, function(err, object){
-    //     if (err) return res.status(400).send(err)
-    //     res.status(200).send(object.insertedId) 
-    //     }) 
 
     /**
      * Initialize nRF91 demo test use database.
