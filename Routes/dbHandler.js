@@ -9,7 +9,7 @@
 const Joi = require("joi")
 const express = require("express")
 var path = require('path');
-const PROD_DATABASE_NAME = process.env.DATABASE_NAME
+const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
 const TEST91_DATABASE_NAME = process.env.DB_91
 
 module.exports = function(app, dbs) {
@@ -30,27 +30,49 @@ module.exports = function(app, dbs) {
             The request shall include mobile info, tester info, test results
             The method has no validator
         */
-      app.post('/api/insert/testcases', (req, res) => {
+      app.post('/api/miniapp/insert/testreport', (req, res) => {
         let report = req.body
-        let db = dbs.db(PROD_DATABASE_NAME)
-        let result = db.collection(process.env.DB_COLLECTION_TESTCASES).insertOne(report, function(err, object){
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
+        let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).insertOne(report, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId) 
         }) 
       });
 
-    /*  GET TESTCASE REPORT
+    /*  GET ALL TEST REPORT
+        POP UP ALL COLLECTED REPORT
+        The method return the desired test report in json format
+        This method shall preventing malicious request.
+    */
+    app.get('/api/miniapp/find/testreport/all', (req, res) => {
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+        var supressedValue = {
+            _id: 0,
+        }
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
+            if (err) return res.status(400).send(err)
+            db.collection(process.env.DB_COLLECTION_TESTREPORT).count((err, count) => {
+                const result = {
+                    totalTestReport: count,
+                    testReports: docs
+                }
+                res.status(200).send(result)
+            })
+        })
+    });
+
+        /*  GET TEST REPORT
         Required parameter sessionId
         The method return the desired test report in json format
         This method shall preventing malicious request.
     */
-    app.get('/api/find/testcases/:sessionid', (req, res) => {
+   app.get('/api/miniapp/find/testreport/:sessionid', (req, res) => {
         let id = req.params.sessionid;
-        let db = dbs.db(PROD_DATABASE_NAME);
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
         var query = {
             sessionID: id 
         };
-        db.collection(process.env.DB_COLLECTION_TESTCASES).find(query).toArray((err, docs) => {
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
             res.status(200).send(docs)
         })
@@ -83,7 +105,7 @@ module.exports = function(app, dbs) {
     /*  INITIALIZE DATABASE
         The db shall only initialize once.
         Structure:
-        --TestCases
+        --TestReport
         -----sessionID
         -----timeStamp
         -----userInfo
@@ -106,12 +128,12 @@ module.exports = function(app, dbs) {
         -----------additionalInfo1
         -----------additionalInfo2
         This method shall preventing malicious request.
-        FOR NOW, ONLY TESTCASES TABLE IS IN USE! MOBILEINFO, TESTINFO, PERIPHERALINFO(OPTION) IS INCLUDED IN THE TESTREPORT. 
+        FOR NOW, ONLY TESTREPORT TABLE IS IN USE! MOBILEINFO, TESTINFO, PERIPHERALINFO(OPTION) IS INCLUDED IN THE TESTREPORT. 
     */
-    app.get('/api/initialize', (req, res) => {
-        let db = dbs.db(PROD_DATABASE_NAME);
-        let resultTestCasesdb = db.createCollection("TestCases", (err4, collection4) => {
-            if (err4) return res.status(400).send(err4)
+    app.get('/api/miniapp/initialize', (req, res) => {
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+        let collection = db.createCollection(process.env.DB_COLLECTION_TESTREPORT, (err, collection) => {
+            if (err) return res.status(400).send(err)
             return res.status(200).send('succeed')
         })
     });
@@ -220,7 +242,7 @@ module.exports = function(app, dbs) {
         let report = req.body
         const { error } = validateTestReport(report)
         if (error) return res.status(400).send(error.details[0].message)
-        let db = dbs.db(PROD_DATABASE_NAME)
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
         let result = db.collection("TestReport").insertOne(report, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId) 
@@ -229,7 +251,7 @@ module.exports = function(app, dbs) {
      
      app.get('/api/find/mobileinfo', (req, res) => {
 	    const inqueries = { brand, model, platform } = req.query
-        let db = dbs.db(PROD_DATABASE_NAME)
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
         var query = {
             brand: brand,
             model: model,
@@ -243,7 +265,7 @@ module.exports = function(app, dbs) {
 
       app.get('/api/find/testerinfo', (req, res) => {
         const inqueries = { nickName, gender, language, city, province, country, avatarUrl } = req.query
-        let db = dbs.db(PROD_DATABASE_NAME)
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
         var query = {
             nickName: nickName,
             gender: gender,
@@ -261,7 +283,7 @@ module.exports = function(app, dbs) {
 
       app.get('/api/find/testerinfo/:unionid', (req, res) => {
         let id = req.params.unionid
-        let db = dbs.db(PROD_DATABASE_NAME);
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
         var query = {
             unionID: id 
         };
@@ -273,7 +295,7 @@ module.exports = function(app, dbs) {
 
       app.get('/api/find/testreport/:mobileinfoid', (req, res) => {
         let id = req.params.mobileinfoid;
-        let db = dbs.db(PROD_DATABASE_NAME);
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
         var query = {
             mobileInfoID: id 
         };
@@ -287,7 +309,7 @@ module.exports = function(app, dbs) {
         let mobileinfo = req.body
         const { error } = validateMobileInfo(mobileinfo)
         if (error) return res.status(400).send(error.details[0].message)
-        let db = dbs.db(PROD_DATABASE_NAME)
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
         db.collection("MobileInfo").insertOne(mobileinfo, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId)
@@ -298,7 +320,7 @@ module.exports = function(app, dbs) {
         let testerinfo = req.body
         const { error } = validateTesterInfo(testerinfo)
         if (error) return res.status(400).send(error.details[0].message)
-        let db = dbs.db(PROD_DATABASE_NAME)
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
         db.collection("TesterInfo").insertOne(testerinfo, function(err, object){
             if (err) return res.status(400).send(err)
             res.status(200).send(object.insertedId)
