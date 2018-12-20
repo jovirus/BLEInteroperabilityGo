@@ -72,7 +72,10 @@ module.exports = function(app, dbs) {
         var query = {
             sessionID: id 
         };
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
+        var supressedValue = {
+            _id: 0,
+        }
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
             res.status(200).send(docs)
         })
