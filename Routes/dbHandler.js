@@ -99,10 +99,8 @@ module.exports = function(app, dbs) {
     let brand = "mobileInfo.brand"
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     
-    db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(brand).toArray((err, docs) => {
-        if (err) return res.status(400).send(err)
-        res.status(200).send(docs)
-        })
+    let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(brand) 
+        res.status(200).send(result)
     });
 
     /* GET TEST REPORT BY ANDROID
