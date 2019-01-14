@@ -49,16 +49,22 @@ module.exports = function(app, dbs) {
         var supressedValue = {
             _id: 0,
         }
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
-            if (err) return res.status(400).send(err)
-            db.collection(process.env.DB_COLLECTION_TESTREPORT).count((err, count) => {
-                const result = {
-                    totalTestReport: count,
-                    testReports: docs
-                }
-                res.status(200).send(result)
-            })
-        })
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
+            const result = {
+                totalTestReport: count,
+                testReports: docs
+            }
+            res.status(200).send(result)})
+        // db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
+        //     if (err) return res.status(400).send(err)
+        //     db.collection(process.env.DB_COLLECTION_TESTREPORT).count((err, count) => {
+        //         const result = {
+        //             totalTestReport: count,
+        //             testReports: docs
+        //         }
+        //         res.status(200).send(result)
+        //     })
+        // })
     });
  
     /* GET TEST REPORT BY SPECIFIED BRAND
@@ -102,13 +108,14 @@ module.exports = function(app, dbs) {
     let platform = "android"
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     var query = {
-        "mobileInfo.platform": platform 
+        'mobileInfo.platform': platform 
     };
     var supressedValue = {
         _id: 0,
     }
     db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
+        console.log(docs)
         res.status(200).send(docs)
         })
     });
@@ -290,7 +297,7 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
-        res.send('***This is a private portal used for nrf devices interoperability test. \n***Any unauthorized access will be blocked and shall leave this portal.');
+        res.send('***This is a private portal used for nrf devices interoperability test. \n ***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
      /***************************************************************************************** NOT IN USED ***************************************************************************************************************
