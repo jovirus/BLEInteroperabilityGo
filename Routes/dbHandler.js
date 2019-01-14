@@ -75,6 +75,7 @@ module.exports = function(app, dbs) {
         Given specific brand return related reports
     */
    app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
+       console.log(req.query.brand)
     let searchField = "mobileInfo.brand"
     let brand = req.query.brand
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
