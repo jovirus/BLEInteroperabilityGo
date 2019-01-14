@@ -60,8 +60,79 @@ module.exports = function(app, dbs) {
             })
         })
     });
+ 
+    /* GET TEST REPORT BY SPECIFIED BRAND
+        POP UP REPORTS BY BRAND
+        Given specific brand return related reports
+    */
+   app.get('/api/miniapp/find/testreport/:brand', (req, res) => {
+    let brand = req.params.brand;
+    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+    var query = {
+        "mobileInfo.brand": brand 
+    };
+    var supressedValue = {
+        _id: 0,
+    }
+    db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
+        if (err) return res.status(400).send(err)
+        res.status(200).send(docs)
+        })
+    });
 
-        /*  GET TEST REPORT
+    /* GET ALL COLLECTED BRAND
+        POP UP REPORTS BY BRAND
+        List all brands
+    */
+   app.get('/api/miniapp/find/testreport/brand', (req, res) => {
+    let brand = "mobileInfo.brand"
+    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+    
+    db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(brand).toArray((err, docs) => {
+        if (err) return res.status(400).send(err)
+        res.status(200).send(docs)
+        })
+    });
+
+    /* GET TEST REPORT BY ANDROID
+        POP UP REPORTS BY ANDROID
+        List all reports by android
+    */
+   app.get('/api/miniapp/find/testreport/android', (req, res) => {
+    let platform = "android"
+    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+    var query = {
+        "mobileInfo.platform": platform 
+    };
+    var supressedValue = {
+        _id: 0,
+    }
+    db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
+        if (err) return res.status(400).send(err)
+        res.status(200).send(docs)
+        })
+    });
+
+    /* GET TEST REPORT BY IOS
+        POP UP REPORTS BY IOS
+        List all reports by iOS
+    */
+   app.get('/api/miniapp/find/testreport/ios', (req, res) => {
+    let platform = "ios"
+    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+    var query = {
+        "mobileInfo.platform": platform 
+    };
+    var supressedValue = {
+        _id: 0,
+    }
+    db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
+        if (err) return res.status(400).send(err)
+        res.status(200).send(docs)
+        })
+    });
+
+    /*  GET TEST REPORT
         Required parameter sessionId
         The method return the desired test report in json format
         This method shall preventing malicious request.
