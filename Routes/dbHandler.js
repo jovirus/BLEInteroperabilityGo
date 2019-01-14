@@ -9,6 +9,9 @@
 const Joi = require("joi")
 const express = require("express")
 var path = require('path');
+const url = require('url');  
+const querystring = require('querystring');
+
 const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
 const TEST91_DATABASE_NAME = process.env.DB_91
 
@@ -71,7 +74,8 @@ module.exports = function(app, dbs) {
         POP UP REPORTS BY BRAND
         Given specific brand return related reports
     */
-   app.get('/api/miniapp/find/testreport/:brand', (req, res) => {
+   app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
+       console.log(req.query.brand)
     let brand = req.params.brand;
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     var query = {
@@ -90,7 +94,7 @@ module.exports = function(app, dbs) {
         POP UP REPORTS BY BRAND
         List all brands
     */
-   app.get('/api/miniapp/find/testreport/brand', (req, res) => {
+   app.get('/api/miniapp/find/testreport/brand/all', (req, res) => {
     let brand = "mobileInfo.brand"
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     
