@@ -113,7 +113,7 @@ module.exports = function(app, dbs) {
     var supressedValue = {
         _id: 0,
     }
-    db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
+    db.collection(process.env.DB_COLLECTION_TESTREPORT).find({"mobileInfo.platform": "android" }).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
         console.log(docs)
         res.status(200).send(docs)
