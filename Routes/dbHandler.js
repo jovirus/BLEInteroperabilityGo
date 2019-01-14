@@ -75,34 +75,42 @@ module.exports = function(app, dbs) {
         Given specific brand return related reports
     */
    app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
-       console.log(req.query.brand)
-    let brand = req.params.brand;
+    let searchField = "mobileInfo.brand"
+    let brand = req.query.brand
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     var query = {
-        "mobileInfo.brand": brand 
+        searchField: brand 
     };
     var supressedValue = {
         _id: 0,
     }
-    db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
-        if (err) return res.status(400).send(err)
-        res.status(200).send(docs)
+    if (brand === "") {
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct({searchField}).toArray((err, docs) => {
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
         })
+    } else {
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
+        })
+    }
     });
+
 
     /* GET ALL COLLECTED BRAND
         POP UP REPORTS BY BRAND
         List all brands
     */
-   app.get('/api/miniapp/find/testreport/brand/all', (req, res) => {
-    let brand = "mobileInfo.brand"
-    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+//    app.get('/api/miniapp/find/testreport/brand/all', (req, res) => {
+//     let brand = "mobileInfo.brand"
+//     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     
-    db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct({brand}).toArray((err, docs) => {
-        if (err) return res.status(400).send(err)
-        res.status(200).send(docs)
-        })
-    });
+//     db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct({brand}).toArray((err, docs) => {
+//         if (err) return res.status(400).send(err)
+//         res.status(200).send(docs)
+//         })
+//     });
 
     /* GET TEST REPORT BY ANDROID
         POP UP REPORTS BY ANDROID
