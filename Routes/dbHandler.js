@@ -96,11 +96,13 @@ module.exports = function(app, dbs) {
         List all brands
     */
    app.get('/api/miniapp/find/testreport/brand/all', (req, res) => {
-    let brand = "mobileInfo.brand"
+    let field = "mobileInfo.brand"
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     
-    let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct("mobileInfo.brand") 
-        res.status(200).send(result)
+    let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
+        if (err) return res.status(400).send(err)
+        res.status(200).send(docs)
+    }) 
     });
 
     /* GET TEST REPORT BY ANDROID
