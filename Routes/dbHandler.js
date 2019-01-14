@@ -99,7 +99,7 @@ module.exports = function(app, dbs) {
     let brand = "mobileInfo.brand"
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     
-    let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(brand) 
+    let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct("mobileInfo.brand") 
         res.status(200).send(result)
     });
 
