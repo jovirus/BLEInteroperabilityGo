@@ -72,8 +72,8 @@ module.exports = function(app, dbs) {
     let originalUrl = req.originalUrl
     let field = "mobileInfo.brand"
     let brand = req.query.brand
-    console.log(originalUrl)
-    console.log(brand)
+    console.log(`the original url ${originalUrl}`)
+    console.log(`the query parameter ${brand}`)
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
     if (originalUrl === "/api/miniapp/find/testreport/brand/") {
         db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
@@ -83,21 +83,22 @@ module.exports = function(app, dbs) {
     }
     console.log(0)
     if (brand === undefined || brand === "") {
-        return res.status(200).send("No source found")
-    } else {
+        console.log("Bad request")
+        return res.status(400).send("No source found")
+    } 
+    console.log(1)
         var query = {
             "mobileInfo.brand": brand 
         }
         var supressedValue = {
             _id: 0,
         }
-        console.log(1)
+        console.log(2)
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
             res.status(200).send(docs)
         })
-        console.log(2)
-    } 
+        console.log(3)
     });
 
 
