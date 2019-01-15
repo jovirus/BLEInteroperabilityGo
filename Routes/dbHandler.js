@@ -89,10 +89,12 @@ module.exports = function(app, dbs) {
         var supressedValue = {
             _id: 0,
         }
+        console.log(1)
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
             res.status(200).send(docs)
         })
+        console.log(2)
         return
     } 
     });
