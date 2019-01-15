@@ -69,13 +69,18 @@ module.exports = function(app, dbs) {
         Given specific brand return related reports
     */
    app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
+
     let originalUrl = req.originalUrl
     let field = "mobileInfo.brand"
     let brand = req.query.brand
     console.log(`the original url ${originalUrl}`)
+    console.log(`is the original url equal to designated url ${originalUrl === '/api/miniapp/find/testreport/brand/'}`)
+    console.log(`is the original url absolute equal to designated url ${originalUrl == '/api/miniapp/find/testreport/brand/'}`)
+
     console.log(`the query parameter ${brand}`)
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
-    if (originalUrl === "/api/miniapp/find/testreport/brand/") {
+
+    if (originalUrl === '/api/miniapp/find/testreport/brand/') {
         db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
             return res.status(200).send(docs)
