@@ -52,12 +52,6 @@ module.exports = function(app, dbs) {
         var supressedValue = {
             _id: 0,
         }
-        // db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
-        //     const result = {
-        //         totalTestReport: count,
-        //         testReports: docs
-        //     }
-        //     res.status(200).send(result)})
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
             db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
@@ -83,6 +77,12 @@ module.exports = function(app, dbs) {
     };
     var supressedValue = {
         _id: 0,
+    }
+    if (brand === "") {
+        let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
+        })
     }
     db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
