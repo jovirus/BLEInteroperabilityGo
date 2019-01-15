@@ -102,8 +102,8 @@ module.exports = function(app, dbs) {
                     matchedResults: count,
                     contents: docs
                 }
+                res.status(200).send(result)
             })
-            res.status(200).send(result)
         })
     });
 
@@ -126,8 +126,8 @@ module.exports = function(app, dbs) {
                 matchedResults: count,
                 contents: docs
             }
-        })
-        res.status(200).send(result)
+            res.status(200).send(result)
+            })
         })
     });
 
@@ -150,8 +150,8 @@ module.exports = function(app, dbs) {
                 matchedResults: count,
                 contents: docs
             }
-        })
-        res.status(200).send(result)
+            res.status(200).send(result)
+            })
         })
     });
 
@@ -174,7 +174,6 @@ module.exports = function(app, dbs) {
         }
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
-            console.log(docs)
             res.status(200).send(docs)
         })
     });
