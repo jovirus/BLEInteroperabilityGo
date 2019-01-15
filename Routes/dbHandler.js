@@ -97,7 +97,6 @@ module.exports = function(app, dbs) {
             res.status(200).send(docs)
         })
         console.log(2)
-        return
     } 
     });
 
