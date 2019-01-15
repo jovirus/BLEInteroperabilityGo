@@ -78,10 +78,10 @@ module.exports = function(app, dbs) {
     if (originalUrl === "/api/miniapp/find/testreport/brand/") {
         db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
-            res.status(200).send(docs)
+            return res.status(200).send(docs)
         })
-        return
     }
+    console.log(0)
     if (brand != undefined && brand != "") {
         var query = {
             "mobileInfo.brand": brand 
