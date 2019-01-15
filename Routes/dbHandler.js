@@ -82,7 +82,7 @@ module.exports = function(app, dbs) {
         })
     }
     console.log(0)
-    if (brand != undefined && brand != "") {
+    if (brand !== undefined && brand !== "") {
         var query = {
             "mobileInfo.brand": brand 
         }
