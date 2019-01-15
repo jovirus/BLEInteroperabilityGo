@@ -68,7 +68,7 @@ module.exports = function(app, dbs) {
         POP UP REPORTS BY BRAND
         Given specific brand return related reports
     */
-   app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
+   app.get('/api/miniapp/find/testreport/brand/', async (req, res) => {
 
     let originalUrl = req.originalUrl
     let field = "mobileInfo.brand"
@@ -81,7 +81,7 @@ module.exports = function(app, dbs) {
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
 
     if (originalUrl === '/api/miniapp/find/testreport/brand/') {
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
+        await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
             return res.status(200).send(docs)
         })
