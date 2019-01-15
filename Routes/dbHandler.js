@@ -81,10 +81,12 @@ module.exports = function(app, dbs) {
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
 
     if (originalUrl === '/api/miniapp/find/testreport/brand/') {
+        console.log(-1)
         await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
             return res.status(200).send(docs)
         })
+        console.log(-2)
     }
     console.log(0)
     if (brand === undefined || brand === "") {
