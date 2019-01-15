@@ -69,10 +69,14 @@ module.exports = function(app, dbs) {
         Given specific brand return related reports
     */
    app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
-    console.log(req.query.brand)
-    console.log(req.originalUrl)
-    console.log(req.protocol)
-
+    let originalUrl = req.originalUrl
+    if (originalUrl === "/api/miniapp/find/testreport/brand/") {
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
+            if (err) return res.status(400).send(err)
+            res.status(200).send(docs)
+        })
+        return
+    }
     let field = "mobileInfo.brand"
     let brand = req.query.brand
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
@@ -80,7 +84,7 @@ module.exports = function(app, dbs) {
     var supressedValue = {
         _id: 0,
     }
-    if (brand != "") {
+    if (brand != undefined && brand != "") {
         var query = {
             "mobileInfo.brand": brand 
         }
@@ -89,11 +93,7 @@ module.exports = function(app, dbs) {
             res.status(200).send(docs)
         })
         return
-    }
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
-        if (err) return res.status(400).send(err)
-        res.status(200).send(docs)
-    })
+    } 
     });
 
 
