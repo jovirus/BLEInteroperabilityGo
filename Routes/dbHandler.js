@@ -72,6 +72,8 @@ module.exports = function(app, dbs) {
     let originalUrl = req.originalUrl
     let field = "mobileInfo.brand"
     let brand = req.query.brand
+    console.log(originalUrl)
+    console.log(brand)
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
     if (originalUrl === "/api/miniapp/find/testreport/brand/") {
         db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
