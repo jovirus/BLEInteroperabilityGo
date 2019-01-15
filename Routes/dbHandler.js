@@ -82,7 +82,9 @@ module.exports = function(app, dbs) {
         })
     }
     console.log(0)
-    if (brand !== undefined && brand !== "") {
+    if (brand === undefined || brand === "") {
+        return res.status(200).send("No source found")
+    } else {
         var query = {
             "mobileInfo.brand": brand 
         }
