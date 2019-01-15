@@ -47,7 +47,7 @@ module.exports = function(app, dbs) {
         The method return the desired test report in json format
         This method shall preventing malicious request.
     */
-    app.get('/api/miniapp/find/reports/', (req, res) => {
+    app.get('/api/miniapp/find/report/', (req, res) => {
         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
         var supressedValue = {
             _id: 0,
@@ -56,8 +56,8 @@ module.exports = function(app, dbs) {
             if (err) return res.status(400).send(err)
             db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
                 const result = {
-                    totalTestReport: count,
-                    testReports: docs
+                    matchedResults: count,
+                    contents: docs
                 }
                 res.status(200).send(result)
             })
@@ -68,7 +68,6 @@ module.exports = function(app, dbs) {
         Given specific brand return related reports OR get return all reports by hitting the designated url
     */
    app.get('/api/miniapp/find/report/brand/', async (req, res) => {
-
     let originalUrl = req.originalUrl
     let field = "mobileInfo.brand"
     let brand = req.query.pm
@@ -77,8 +76,13 @@ module.exports = function(app, dbs) {
     if (originalUrl === '/api/miniapp/find/report/brand/') {
         await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
-            console.log(docs)
-            res.status(200).send(docs)
+            db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
+                const result = {
+                    matchedResults: count,
+                    contents: docs
+                }
+                res.status(200).send(result)
+            })
         })
         return
     }
@@ -93,7 +97,13 @@ module.exports = function(app, dbs) {
         }
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
-            res.status(200).send(docs)
+            db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
+                const result = {
+                    matchedResults: count,
+                    contents: docs
+                }
+            })
+            res.status(200).send(result)
         })
     });
 
@@ -111,8 +121,13 @@ module.exports = function(app, dbs) {
     }
     db.collection(process.env.DB_COLLECTION_TESTREPORT).find({"mobileInfo.platform": "android" }).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
-        console.log(docs)
-        res.status(200).send(docs)
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
+            const result = {
+                matchedResults: count,
+                contents: docs
+            }
+        })
+        res.status(200).send(result)
         })
     });
 
@@ -130,7 +145,13 @@ module.exports = function(app, dbs) {
     }
     db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
-        res.status(200).send(docs)
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
+            const result = {
+                matchedResults: count,
+                contents: docs
+            }
+        })
+        res.status(200).send(result)
         })
     });
 
@@ -139,16 +160,18 @@ module.exports = function(app, dbs) {
         The method return the desired test report in json format
         This method shall preventing malicious request.
     */
-   app.get('/api/miniapp/find/report/sessionid/:sessionid', (req, res) => {
-        let id = req.params.sessionid;
+   app.get('/api/miniapp/find/report/sessionid/', (req, res) => {
+        let id = req.query.pm
         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+        if (id === undefined || id === "") {
+            return res.status(404).send("The requested URL was not found on this server.")
+        } 
         var query = {
             sessionID: id 
         };
         var supressedValue = {
             _id: 0,
         }
-        console.log(query)
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
             console.log(docs)
