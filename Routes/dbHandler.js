@@ -70,21 +70,23 @@ module.exports = function(app, dbs) {
     */
    app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
     console.log(req.query.brand)
+    let field = "mobileInfo.brand"
     let brand = req.query.brand
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-    var query = {
-        "mobileInfo.brand": brand 
-    };
+
     var supressedValue = {
         _id: 0,
     }
-    if (brand === "") {
-        let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
+    if (brand != "") {
+        var query = {
+            "mobileInfo.brand": brand 
+        }
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
             res.status(200).send(docs)
         })
     }
-    db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
         if (err) return res.status(400).send(err)
         res.status(200).send(docs)
     })
