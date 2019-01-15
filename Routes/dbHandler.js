@@ -84,6 +84,7 @@ module.exports = function(app, dbs) {
         console.log(-1)
         await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
+            console.log(docs)
             return res.status(200).send(docs)
         })
         console.log(-2)
