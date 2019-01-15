@@ -54,14 +54,12 @@ module.exports = function(app, dbs) {
         }
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
-            db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
                 const result = {
-                    matchedResults: count,
+                    matchedResults: docs.length,
                     contents: docs
                 }
                 res.status(200).send(result)
             })
-        })
     });
  
     /* GET TEST REPORT BY BRAND
@@ -76,14 +74,12 @@ module.exports = function(app, dbs) {
     if (originalUrl === '/api/miniapp/find/report/brand/') {
         await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
-            db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
                 const result = {
-                    matchedResults: count,
+                    matchedResults: docs.length,
                     contents: docs
                 }
                 res.status(200).send(result)
             })
-        })
         return
     }
     if (brand === undefined || brand === "") {
@@ -97,14 +93,12 @@ module.exports = function(app, dbs) {
         }
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
-            db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
                 const result = {
-                    matchedResults: count,
+                    matchedResults: docs.length,
                     contents: docs
                 }
                 res.status(200).send(result)
             })
-        })
     });
 
     /* GET ALL ANDROID device TEST REPORT 
