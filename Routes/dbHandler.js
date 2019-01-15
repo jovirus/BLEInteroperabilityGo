@@ -121,13 +121,11 @@ module.exports = function(app, dbs) {
     }
     db.collection(process.env.DB_COLLECTION_TESTREPORT).find({"mobileInfo.platform": "android" }).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
             const result = {
-                matchedResults: count,
+                matchedResults: docs.length,
                 contents: docs
             }
             res.status(200).send(result)
-            })
         })
     });
 
@@ -145,13 +143,11 @@ module.exports = function(app, dbs) {
     }
     db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
         if (err) return res.status(400).send(err)
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).countDocuments({},{}, (err, count) => {
             const result = {
-                matchedResults: count,
+                matchedResults: docs.length,
                 contents: docs
             }
             res.status(200).send(result)
-            })
         })
     });
 
