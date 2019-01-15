@@ -70,6 +70,9 @@ module.exports = function(app, dbs) {
     */
    app.get('/api/miniapp/find/testreport/brand/', (req, res) => {
     console.log(req.query.brand)
+    console.log(req.originalUrl)
+    console.log(req.protocol)
+
     let field = "mobileInfo.brand"
     let brand = req.query.brand
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
