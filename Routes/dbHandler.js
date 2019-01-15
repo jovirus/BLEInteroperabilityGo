@@ -47,7 +47,7 @@ module.exports = function(app, dbs) {
         The method return the desired test report in json format
         This method shall preventing malicious request.
     */
-    app.get('/api/miniapp/find/testreport/all', (req, res) => {
+    app.get('/api/miniapp/find/reports/', (req, res) => {
         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
         var supressedValue = {
             _id: 0,
@@ -64,18 +64,17 @@ module.exports = function(app, dbs) {
         })
     });
  
-    /* GET TEST REPORT BY SPECIFIED BRAND
-        POP UP REPORTS BY BRAND
-        Given specific brand return related reports
+    /* GET TEST REPORT BY BRAND
+        Given specific brand return related reports OR get return all reports by hitting the designated url
     */
-   app.get('/api/miniapp/find/testreport/brand/', async (req, res) => {
+   app.get('/api/miniapp/find/report/brand/', async (req, res) => {
 
     let originalUrl = req.originalUrl
     let field = "mobileInfo.brand"
-    let brand = req.query.brand
+    let brand = req.query.pm
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
 
-    if (originalUrl === '/api/miniapp/find/testreport/brand/') {
+    if (originalUrl === '/api/miniapp/find/report/brand/') {
         await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
             console.log(docs)
@@ -98,26 +97,10 @@ module.exports = function(app, dbs) {
         })
     });
 
-
-    /* GET ALL COLLECTED BRAND
-        POP UP REPORTS BY BRAND
-        List all brands
+    /* GET ALL ANDROID device TEST REPORT 
+        List all android device reports
     */
-   app.get('/api/miniapp/find/testreport/brand/all', (req, res) => {
-    let field = "mobileInfo.brand"
-    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-    
-    let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
-        if (err) return res.status(400).send(err)
-        res.status(200).send(docs)
-    }) 
-    });
-
-    /* GET TEST REPORT BY ANDROID
-        POP UP REPORTS BY ANDROID
-        List all reports by android
-    */
-   app.get('/api/miniapp/find/testreport/android', (req, res) => {
+   app.get('/api/miniapp/find/report/platform/android/', (req, res) => {
     let platform = "android"
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     var query = {
@@ -133,11 +116,10 @@ module.exports = function(app, dbs) {
         })
     });
 
-    /* GET TEST REPORT BY IOS
-        POP UP REPORTS BY IOS
-        List all reports by iOS
+    /* GET ALL IOS PHONE TEST REPORT 
+        List all iOS device reports
     */
-   app.get('/api/miniapp/find/testreport/ios', (req, res) => {
+   app.get('/api/miniapp/find/report/platform/ios/', (req, res) => {
     let platform = "ios"
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
     var query = {
@@ -157,7 +139,7 @@ module.exports = function(app, dbs) {
         The method return the desired test report in json format
         This method shall preventing malicious request.
     */
-   app.get('/api/miniapp/find/testreport/:sessionid', (req, res) => {
+   app.get('/api/miniapp/find/report/sessionid/:sessionid', (req, res) => {
         let id = req.params.sessionid;
         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
         var query = {
