@@ -1,0 +1,91 @@
+<h1><strong>nRF Interoperability API</strong></h1>
+<div>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Usage: The web services are used for nrf devices interoperability test. No other purpose allowed.</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Protocol: The web service support both https and http request</span></span></p>
+<p><span style="text-decoration: underline;"><span style="color: #000000; text-decoration: underline;">Created by Jiajun Qiu @Nordic Semiconductor ASA 2018</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Email: jiajun.qiu@nordicsemi.no</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Lisence: GPL3.0</span></span></p>
+<p><strong><u>Version 1.0.0</u></strong></p>
+<p><strong><u> Last updated: 2019-01-16</u></strong></p>
+<h2>Mini-App</h2>
+<p><span style="background-color: #d3d3d3;">The following APIs are used to retrieve data collected by app "nRF Interoperability(weChat)"</span></p>
+<h3>GET</h3>
+<p><em>/api/miniapp/find/report/</em></p>
+Description: Return all reports<hr />
+<p><em>/api/miniapp/find/report/brand/</em></p>
+Description: Return all mobile brand<hr /></div>
+<p><em>/api/miniapp/find/report/brand/{parameter}</em></p>
+<p>Description: Return reports related to the given brand name.</p>
+<p>Example: /api/miniapp/find/report/brand?pm=***</p>
+<hr />
+<div>
+<div><em>/api/miniapp/find/report/platform/android/</em></div>
+</div>
+<p>Description: Return all android device report</p>
+<div><hr /></div>
+<div><em>/api/miniapp/find/report/platform/ios/</em></div>
+<p>Description: Return all iOS device report</p>
+<h2>nRF91 devkit</h2>
+<p><span style="background-color: #d3d3d3;">APIs in this section are used for nRF91 devkit internet connection test.</span></p>
+<h3>GET</h3>
+<div>
+<div><em>/nrf91/test/find/{boardnr}</em></div>
+<p>Description: Return switch status of the given board number</p>
+<p>Example:&nbsp;<em>/nrf91/test/find/***</em></p>
+<div><hr /></div>
+</div>
+<h3>POST</h3>
+<div>
+<div><em>/nrf91/test/push/{boardnr}/{status}/{switchnr}</em></div>
+<p><em><em>Description:</em></em>Push DK(nRF91) swtich status</p>
+<div>
+<p>Type: text/html: charset=utf-8</p>
+<p>Parameters: "/boardnr/switchnr/status"</p>
+<p>Example: "/1/2/0" means we send the switch number 1 with status is off on board 1</p>
+<div><hr /></div>
+</div>
+</div><h1><strong>nRF Interoperability API</strong></h1>
+<div>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Usage: The web services are used for nrf devices interoperability test. No other purpose allowed.</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Protocol: The web service support both https and http request</span></span></p>
+<p><span style="text-decoration: underline;"><span style="color: #000000; text-decoration: underline;">Created by Jiajun Qiu @Nordic Semiconductor ASA 2018</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Email: jiajun.qiu@nordicsemi.no</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Lisence: GPL3.0</span></span></p>
+<h2>Mini-App</h2>
+<p><span style="background-color: #d3d3d3;">The following APIs are used to retrieve data collected by app "nRF Interoperability(weChat)"</span></p>
+<h3>GET</h3>
+<p><em>/api/miniapp/find/report/</em></p>
+Description: Return all reports<hr />
+<p><em>/api/miniapp/find/report/brand/</em></p>
+Description: Return all mobile brand<hr /></div>
+<p><em>/api/miniapp/find/report/brand/{parameter}</em></p>
+<p>Description: Return reports related to the given brand name.</p>
+<p>Example: /api/miniapp/find/report/brand?pm=***</p>
+<hr />
+<div>
+<div><em>/api/miniapp/find/report/platform/android/</em></div>
+</div>
+<p>Description: Return all android device report</p>
+<div><hr /></div>
+<div><em>/api/miniapp/find/report/platform/ios/</em></div>
+<p>Description: Return all iOS device report</p>
+<h2>nRF91 devkit</h2>
+<p><span style="background-color: #d3d3d3;">APIs in this section are used for nRF91 devkit internet connection test.</span></p>
+<h3>GET</h3>
+<div>
+<div><em>/nrf91/test/find/{boardnr}</em></div>
+<p>Description: Return switch status of the given board number</p>
+<p>Example:&nbsp;<em>/nrf91/test/find/***</em></p>
+<div><hr /></div>
+</div>
+<h3>POST</h3>
+<div>
+<div><em>/nrf91/test/push/{boardnr}/{status}/{switchnr}</em></div>
+<p><em><em>Description:</em></em>Push DK(nRF91) swtich status</p>
+<div>
+<p>Type: text/html: charset=utf-8</p>
+<p>Parameters: "/boardnr/switchnr/status"</p>
+<p>Example: "/1/2/0" means we send the switch number 1 with status is off on board 1</p>
+<div><hr /></div>
+</div>
+</div>
