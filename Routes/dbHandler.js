@@ -33,7 +33,7 @@ module.exports = function(app, dbs) {
        *  Present API for client use
        */
       app.get('/api/doc/index.html', (req, res) => {
-        var docPath = path.join(__dirname, '/index.html');
+        var docPath = path.join(__dirname, '../index.html');
         console.log(`path ${docPath}`)
         res.status(200).sendFile(docPath)
       });
