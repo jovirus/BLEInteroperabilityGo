@@ -41,7 +41,7 @@ module.exports = function(app, dbs) {
     /**  INSERT TESTCASE
      *   Return insertedid
      */
-      app.post('/api/miniapp/insert/testreport', (req, res) => {
+      app.post('/api/miniapp/insert/report/', (req, res) => {
         let report = req.body
         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
         let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).insertOne(report, function(err, object){
