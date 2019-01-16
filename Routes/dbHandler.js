@@ -25,7 +25,6 @@ module.exports = function(app, dbs) {
       app.get('/sUVEnOBdTo.txt', (req, res) => {
         app.use(express.static('.crc'))
         var jsonPath = path.join(__dirname, '../.crc/sUVEnOBdTo.txt');
-        console.log(`json path ${jsonPath}`)
         res.status(200).sendFile(jsonPath)
       });
 
@@ -34,7 +33,6 @@ module.exports = function(app, dbs) {
        */
       app.get('/api/doc/index.html', (req, res) => {
         var docPath = path.join(__dirname, '../index.html');
-        console.log(`path ${docPath}`)
         res.status(200).sendFile(docPath)
       });
 
