@@ -36,6 +36,11 @@ module.exports = function(app, dbs) {
         res.status(200).sendFile(docPath)
       });
 
+      app.get('/api/doc/testcases.html', (req, res) => {
+        var docPath = path.join(__dirname, '../doc/testcases.html');
+        res.status(200).sendFile(docPath)
+      });
+
     /**  INSERT TESTCASE
      *   Return insertedid
      */
