@@ -53,23 +53,23 @@ module.exports = function(app, dbs) {
         }) 
       });
 
-    /**  GET ALL TEST REPORTS
-     *   Pop up all reports
-     */
-    app.get('/api/miniapp/find/report/', (req, res) => {
-        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-        var supressedValue = {
-            _id: 0,
-        }
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
-            if (err) return res.status(400).send(err)
-                const result = {
-                    matchedResults: docs.length,
-                    contents: docs
-                }
-                res.status(200).send(result)
-            })
-    });
+    // /**  GET ALL TEST REPORTS
+    //  *   Pop up all reports
+    //  */
+    // app.get('/api/miniapp/find/report/', (req, res) => {
+    //     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+    //     var supressedValue = {
+    //         _id: 0,
+    //     }
+    //     db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
+    //         if (err) return res.status(400).send(err)
+    //             const result = {
+    //                 matchedResults: docs.length,
+    //                 contents: docs
+    //             }
+    //             res.status(200).send(result)
+    //         })
+    // });
  
 //     /**  GET REPORT BY MOBILE BRAND
 //      *   Return related reports by given specific brand name and OR return all reports by hitting the designated url
