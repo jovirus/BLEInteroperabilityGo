@@ -71,109 +71,109 @@ module.exports = function(app, dbs) {
             })
     });
  
-    /**  GET REPORT BY MOBILE BRAND
-     *   Return related reports by given specific brand name and OR return all reports by hitting the designated url
-     */
-   app.get('/api/miniapp/find/report/brand/', async (req, res) => {
-    let originalUrl = req.originalUrl
-    let field = "mobileInfo.brand"
-    let brand = req.query.pm
-    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
+//     /**  GET REPORT BY MOBILE BRAND
+//      *   Return related reports by given specific brand name and OR return all reports by hitting the designated url
+//      */
+//    app.get('/api/miniapp/find/report/brand/', async (req, res) => {
+//     let originalUrl = req.originalUrl
+//     let field = "mobileInfo.brand"
+//     let brand = req.query.pm
+//     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
 
-    if (originalUrl === '/api/miniapp/find/report/brand/') {
-        await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
-            if (err) return res.status(400).send(err)
-                const result = {
-                    matchedResults: docs.length,
-                    contents: docs
-                }
-                res.status(200).send(result)
-            })
-        return
-    }
-    if (brand === undefined || brand === "") {
-        return res.status(404).send("The requested URL was not found on this server.")
-    } 
-        var query = {
-            "mobileInfo.brand": brand 
-        }
-        var supressedValue = {
-            _id: 0,
-        }
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
-            if (err) return res.status(400).send(err)
-                const result = {
-                    matchedResults: docs.length,
-                    contents: docs
-                }
-                res.status(200).send(result)
-            })
-    });
+//     if (originalUrl === '/api/miniapp/find/report/brand/') {
+//         await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
+//             if (err) return res.status(400).send(err)
+//                 const result = {
+//                     matchedResults: docs.length,
+//                     contents: docs
+//                 }
+//                 res.status(200).send(result)
+//             })
+//         return
+//     }
+//     if (brand === undefined || brand === "") {
+//         return res.status(404).send("The requested URL was not found on this server.")
+//     } 
+//         var query = {
+//             "mobileInfo.brand": brand 
+//         }
+//         var supressedValue = {
+//             _id: 0,
+//         }
+//         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
+//             if (err) return res.status(400).send(err)
+//                 const result = {
+//                     matchedResults: docs.length,
+//                     contents: docs
+//                 }
+//                 res.status(200).send(result)
+//             })
+//     });
 
-    /** GET ALL ANDROID DEVICE REPORT
-     *  Return all android device report
-     */
-   app.get('/api/miniapp/find/report/platform/android/', (req, res) => {
-    let platform = "android"
-    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-    var query = {
-        'mobileInfo.platform': platform 
-    };
-    var supressedValue = {
-        _id: 0,
-    }
-    db.collection(process.env.DB_COLLECTION_TESTREPORT).find({"mobileInfo.platform": "android" }).toArray((err, docs) => {
-        if (err) return res.status(400).send(err)
-            const result = {
-                matchedResults: docs.length,
-                contents: docs
-            }
-            res.status(200).send(result)
-        })
-    });
+//     /** GET ALL ANDROID DEVICE REPORT
+//      *  Return all android device report
+//      */
+//    app.get('/api/miniapp/find/report/platform/android/', (req, res) => {
+//     let platform = "android"
+//     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+//     var query = {
+//         'mobileInfo.platform': platform 
+//     };
+//     var supressedValue = {
+//         _id: 0,
+//     }
+//     db.collection(process.env.DB_COLLECTION_TESTREPORT).find({"mobileInfo.platform": "android" }).toArray((err, docs) => {
+//         if (err) return res.status(400).send(err)
+//             const result = {
+//                 matchedResults: docs.length,
+//                 contents: docs
+//             }
+//             res.status(200).send(result)
+//         })
+//     });
 
-    /** GET ALL IOS DEVICE REPORT 
-     *  Return all iOS device report
-     */
-   app.get('/api/miniapp/find/report/platform/ios/', (req, res) => {
-    let platform = "ios"
-    let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-    var query = {
-        "mobileInfo.platform": platform 
-    };
-    var supressedValue = {
-        _id: 0,
-    }
-    db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
-        if (err) return res.status(400).send(err)
-            const result = {
-                matchedResults: docs.length,
-                contents: docs
-            }
-            res.status(200).send(result)
-        })
-    });
+//     /** GET ALL IOS DEVICE REPORT 
+//      *  Return all iOS device report
+//      */
+//    app.get('/api/miniapp/find/report/platform/ios/', (req, res) => {
+//     let platform = "ios"
+//     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+//     var query = {
+//         "mobileInfo.platform": platform 
+//     };
+//     var supressedValue = {
+//         _id: 0,
+//     }
+//     db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).toArray((err, docs) => {
+//         if (err) return res.status(400).send(err)
+//             const result = {
+//                 matchedResults: docs.length,
+//                 contents: docs
+//             }
+//             res.status(200).send(result)
+//         })
+//     });
 
-    /** GET REPORT BY SESSIONID
-     *  Return report associated by the sessionid in json format
-     */
-   app.get('/api/miniapp/find/report/sessionid/', (req, res) => {
-        let id = req.query.pm
-        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-        if (id === undefined || id === "") {
-            return res.status(404).send("The requested URL was not found on this server.")
-        } 
-        var query = {
-            sessionID: id 
-        };
-        var supressedValue = {
-            _id: 0,
-        }
-        db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
-            if (err) return res.status(400).send(err)
-            res.status(200).send(docs)
-        })
-    });
+//     /** GET REPORT BY SESSIONID
+//      *  Return report associated by the sessionid in json format
+//      */
+//    app.get('/api/miniapp/find/report/sessionid/', (req, res) => {
+//         let id = req.query.pm
+//         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+//         if (id === undefined || id === "") {
+//             return res.status(404).send("The requested URL was not found on this server.")
+//         } 
+//         var query = {
+//             sessionID: id 
+//         };
+//         var supressedValue = {
+//             _id: 0,
+//         }
+//         db.collection(process.env.DB_COLLECTION_TESTREPORT).find(query).project(supressedValue).toArray((err, docs) => {
+//             if (err) return res.status(400).send(err)
+//             res.status(200).send(docs)
+//         })
+//     });
 
     /* REQUEST SESSIONID FROM WECHAT
      *  The request shall include wxAppID, wxAppSecret, wxtoken as parameters
