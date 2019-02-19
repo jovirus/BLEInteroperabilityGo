@@ -32,8 +32,21 @@ module.exports = function(app, dbs) {
        *  Present API for client use
        */
       app.get('/api/doc/index.html', (req, res) => {
-        var docPath = path.join(__dirname, '../index.html');
-        res.status(200).sendFile(docPath)
+        const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com&response_type=code&scope=snsapi_login&state=STATE')
+
+        const req = https.request(options, (res) => {
+            console.log('statusCode:', res.statusCode);
+            console.log('headers:', res.headers);
+
+            res.on('data', (dataChunck) => {
+                res.status(200).sendFile(dataChunck)
+            });
+            console.log('redirect:', res.request.url);
+            
+          });
+
+        // var docPath = path.join(__dirname, '../index.html');
+        // res.status(200).sendFile(docPath)
       });
 
       app.get('/api/doc/testcases.html', (req, res) => {
