@@ -34,14 +34,14 @@ module.exports = function(app, dbs) {
       app.get('/api/doc/index.html', (req, res) => {
         const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com&response_type=code&scope=snsapi_login&state=STATE')
 
-        const req = https.request(options, (res) => {
-            console.log('statusCode:', res.statusCode);
-            console.log('headers:', res.headers);
+        https.request(options, (r) => {
+            console.log('statusCode:', r.statusCode);
+            console.log('headers:', r.headers);
 
             res.on('data', (dataChunck) => {
-                res.status(200).sendFile(dataChunck)
+                r.status(200).sendFile(dataChunck)
             });
-            console.log('redirect:', res.request.url);
+            console.log('redirect:', r.request.url.href);
             
           });
 
