@@ -39,15 +39,14 @@ module.exports = function(app, dbs) {
             console.log('statusCode:', r.statusCode);
             console.log('headers:', r.headers);
             var body = ''
-            res.on('data', (dataChunck) => {
+            r.on('data', (dataChunck) => {
                 var result = process.stdout.write(dataChunck);
                 body += dataChunck
             });
-            res.on('end', (end) => {
+            r.on('end', (end) => {
                 console.log(body)
-                res.status(200).sendFile(body)
+                res.status(200).send(body)
             })
-            
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
           });
