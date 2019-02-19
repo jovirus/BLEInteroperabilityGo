@@ -42,7 +42,6 @@ module.exports = function(app, dbs) {
             res.on('data', (dataChunck) => {
                 process.stdout.write(dataChunck);
             });
-            console.log('redirect:', r.request.url.href);
             
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
