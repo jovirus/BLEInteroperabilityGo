@@ -35,15 +35,17 @@ module.exports = function(app, dbs) {
       app.get('/api/doc/index.html', (req, res) => {
         const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com&response_type=code&scope=snsapi_login&state=STATE')
 
-        https.request(options, (r) => {
+        https.get(options, (r) => {
             console.log('statusCode:', r.statusCode);
             console.log('headers:', r.headers);
 
             res.on('data', (dataChunck) => {
-                r.status(200).sendFile(dataChunck)
+                process.stdout.write(dataChunck);
             });
             console.log('redirect:', r.request.url.href);
             
+          }).on('error', function(e) {
+            console.log('ERROR: ' + e.message);
           });
 
         // var docPath = path.join(__dirname, '../index.html');
