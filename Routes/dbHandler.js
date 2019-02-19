@@ -38,11 +38,15 @@ module.exports = function(app, dbs) {
         https.get(options, (r) => {
             console.log('statusCode:', r.statusCode);
             console.log('headers:', r.headers);
-
+            var body = ''
             res.on('data', (dataChunck) => {
                 var result = process.stdout.write(dataChunck);
-                res.status(200).sendFile(dataChunck)
+                body += dataChunck
             });
+            res.on('end', (end) => {
+                console.log(body)
+                res.status(200).sendFile(body)
+            })
             
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
