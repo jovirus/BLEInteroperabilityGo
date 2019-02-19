@@ -41,7 +41,7 @@ module.exports = function(app, dbs) {
 
             res.on('data', (dataChunck) => {
                 var result = process.stdout.write(dataChunck);
-                res.status(200).sendFile(docPath)
+                res.status(200).sendFile(dataChunck)
             });
             
           }).on('error', function(e) {
