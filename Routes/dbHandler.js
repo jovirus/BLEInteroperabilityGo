@@ -7,6 +7,7 @@
  */
 
 const Joi = require("joi")
+const https = require('https')
 const express = require("express")
 var path = require('path');
 const url = require('url');  
