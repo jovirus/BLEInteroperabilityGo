@@ -40,7 +40,8 @@ module.exports = function(app, dbs) {
             console.log('headers:', r.headers);
 
             res.on('data', (dataChunck) => {
-                process.stdout.write(dataChunck);
+                var result = process.stdout.write(dataChunck);
+                res.status(200).sendFile(docPath)
             });
             
           }).on('error', function(e) {
