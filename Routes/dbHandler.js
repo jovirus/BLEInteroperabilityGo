@@ -44,8 +44,8 @@ module.exports = function(app, dbs) {
                 body += dataChunck
             });
             r.on('end', (end) => {
-                body.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
-                res.status(200).send(body)
+                var modifiedResult = body.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
+                res.status(200).send(modifiedResult)
             })
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
