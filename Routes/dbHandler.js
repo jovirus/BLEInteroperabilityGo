@@ -45,6 +45,7 @@ module.exports = function(app, dbs) {
             });
             r.on('end', (end) => {
                 console.log(body)
+                body.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
                 res.status(200).send(body)
             })
           }).on('error', function(e) {
