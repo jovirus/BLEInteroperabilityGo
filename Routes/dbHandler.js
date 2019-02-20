@@ -47,10 +47,10 @@ module.exports = function(app, dbs) {
                 var modifiedResult = body.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
                 res.status(200).send(modifiedResult)
             })
+            console.log("redirect url", r.request.url)
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
           });
-
         // var docPath = path.join(__dirname, '../index.html');
         // res.status(200).sendFile(docPath)
       });
