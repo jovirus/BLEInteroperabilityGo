@@ -33,7 +33,7 @@ module.exports = function(app, dbs) {
        *  Present API for client use
        */
       app.get('/api/doc/index.html', (req, res) => {
-        const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com&response_type=code&scope=snsapi_login&state=STATE')
+        const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com/mypage/session=3371qw6y&response_type=code&scope=snsapi_login&state=STATE')
 
         https.get(options, (r) => {
             console.log('statusCode:', r.statusCode);
