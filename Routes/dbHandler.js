@@ -47,7 +47,8 @@ module.exports = function(app, dbs) {
                 var modifiedResult = body.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
                 res.status(200).send(modifiedResult)
             })
-            console.log("redirect url", r.request.url)
+            console.log("redirect url", r.request)
+            console.log("redirect url", r.headers.location)
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
           });
