@@ -72,7 +72,7 @@ let services = {
     writeCookie: writeCookie,
     readCookie: readCookie,
     random: random,
-    randomWithSeed: randomWithSeed.networkHandler,
+    randomWithSeed: randomWithSeed,
     getWxLoginQRCode: getWxLoginQRCode,
     getWxLoginToken: getWxLoginToken
 }
