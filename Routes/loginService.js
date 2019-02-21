@@ -68,6 +68,7 @@ function getWxLoginToken(wxCode) {
         networkHandler.httpsRequest(options).then((rawJson) => {
             resolve(rawJson)
         }).catch(function(error) {
+            console.log(error)
             reject(error)
           })
     })
