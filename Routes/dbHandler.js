@@ -34,18 +34,22 @@ module.exports = function(app, dbs) {
        *  Redirect URL
        */
       app.get('/oauth2.0/login', (req, res) => {
-        var qrCode = loginService.getWxLoginQRCode()
-        res.status(200).send(qrCode)
+        loginService.getWxLoginQRCode().then((result) => {
+            res.status(200).send(result)
+        }).catch(function(error) {
+            res.status(400).send("Error when contact WeChat server, Please try again later")
+        })
       })
 
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
         console.log("code: ", wxCode)
-        var rawJson = loginService.getWxLoginToken(wxCode)
-        res.status(200).send(rawJson)
+        loginService.getWxLoginToken(wxCode).then((result) => {
+            res.status(200).send(result)
+        }).catch(function(error) {
+            res.status(400).send("Error when authorizing with WeChat Server, Please try again later")
+        })
       });
-
-
 
       /** API documentation
        *  Present API for client use
