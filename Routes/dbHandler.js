@@ -31,6 +31,7 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/oauth2.0/login', (req, res) => {
+        loginService.writeCookie("sessionId", "s234543245", 3)
         const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com/mypage/session=3371qw6y&response_type=code&scope=snsapi_login&state=STATE')
         https.get(options, (r) => {
             console.log('statusCode:', r.statusCode);
@@ -47,7 +48,6 @@ module.exports = function(app, dbs) {
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
           });
-          loginService.writeCookie("sessionId", "s234543245", 3)
       })
 
       /** API documentation
