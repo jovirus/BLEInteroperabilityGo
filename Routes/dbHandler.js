@@ -16,6 +16,7 @@ const querystring = require('querystring');
 
 const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
 const TEST91_DATABASE_NAME = process.env.DB_91
+const SESSION_SEED = "nrf.no"
 
 module.exports = function(app, dbs) {
     app.use(express.json());
@@ -31,9 +32,7 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/oauth2.0/login', (req, res) => {
-        console.log("the random number: ",loginService.random())
-        loginService.writeCookie("sessionId", "s234543245", 3)
-        const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com/mypage/session=3371qw6y&response_type=code&scope=snsapi_login&state=STATE')
+        const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com/login/wx&response_type=code&scope=snsapi_login&state=STATE')
         https.get(options, (r) => {
             // console.log('statusCode:', r.statusCode);
             // console.log('headers:', r.headers);
@@ -51,10 +50,21 @@ module.exports = function(app, dbs) {
           });
       })
 
+      /** Login oauth2 with WeChat
+       *  Redirect URL
+       */
+      app.get('/login/wx', (req, res) => {
+        let wxCode = req.query.code
+        console.log("code: ", wxCode)
+        res.status(200).sendFile(wxCode)
+      });
+
+
+
       /** API documentation
        *  Present API for client use
        */
-      app.get('/api/doc/index.html', (req, res) => {
+      app.get('/api/index.html', (req, res) => {
         var docPath = path.join(__dirname, '../index.html');
         res.status(200).sendFile(docPath)
       });

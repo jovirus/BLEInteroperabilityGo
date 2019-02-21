@@ -12,6 +12,11 @@ function random() {
     console.log(rng())
 }
 
+function randomWithSeed(seed) {
+    var rng = seedrandom(seed);
+    console.log(rng())
+}
+
 function writeCookie(name,value,days) {
     var date, expires;
     if (days) {
@@ -46,7 +51,8 @@ function readCookie(name) {
 let services = {
     writeCookie: writeCookie,
     readCookie: readCookie,
-    random: random
+    random: random,
+    randomWithSeed: randomWithSeed
 }
 
 module.exports = services;
