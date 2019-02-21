@@ -16,7 +16,9 @@ function writeCookie(name,value,days) {
     }
     var cookie = name + "=" + value + expires + "; path=/"
     console.log(cookie)
-    document.cookie = cookie
+    if (typeof document !== 'undefined') {
+        document.cookie = cookie
+    }
 }
 
 function readCookie(name) {
