@@ -55,7 +55,6 @@ function getWxLoginQRCode() {
         const options = new URL(`https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.LOGIN_WX_APP_ID}&redirect_uri=${process.env.LOGIN_WX_REDIRECT_URL}&response_type=code&scope=snsapi_login&state=STATE`)
         networkHandler.httpsRequest(options).then((rawHTML) => {
             var modifiedResult = rawHTML.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
-            console.log(modifiedResult)
             resolve(modifiedResult)
         }).catch(function(error) {
             reject(error)
@@ -67,7 +66,6 @@ function getWxLoginToken(wxCode) {
     return new Promise((resolve, reject) => {
         const options = new URL(`https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.LOGIN_WX_APP_ID}&secret=${process.env.LOGIN_WX_APP_SECRET}&code=${wxCode}&grant_type=authorization_code`)
         networkHandler.httpsRequest(options).then((rawJson) => {
-            console.log(rawJson)
             resolve(rawJson)
         }).catch(function(error) {
             reject(error)
