@@ -7,7 +7,6 @@
 
 var seedrandom = require('seedrandom');
 const networkHandler = require('./networkHandler') 
-const 
 
 
 function random() {
