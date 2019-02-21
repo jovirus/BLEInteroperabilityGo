@@ -31,14 +31,15 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/oauth2.0/login', (req, res) => {
+        console.log("the random number: ",loginService.random())
         loginService.writeCookie("sessionId", "s234543245", 3)
         const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com/mypage/session=3371qw6y&response_type=code&scope=snsapi_login&state=STATE')
         https.get(options, (r) => {
-            console.log('statusCode:', r.statusCode);
-            console.log('headers:', r.headers);
+            // console.log('statusCode:', r.statusCode);
+            // console.log('headers:', r.headers);
             var body = ''
             r.on('data', (dataChunck) => {
-                var result = process.stdout.write(dataChunck);
+                // var result = process.stdout.write(dataChunck);
                 body += dataChunck
             });
             r.on('end', (end) => {
@@ -317,8 +318,7 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
-        console.log("request address", req.url)
-        res.send('***This is a private portal used for nrf devices interoperability test. \n ***Any unauthorized access will be blocked and shall leave this portal.');
+        res.send('***This is a private portal used for nrf devices interoperability test.\n ***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
      /***************************************************************************************** NOT IN USED ***************************************************************************************************************

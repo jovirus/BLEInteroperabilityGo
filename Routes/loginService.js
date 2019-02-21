@@ -5,6 +5,13 @@
  *  See more detail on https://github.com/jovirus/ble-interoperabilityTest
  */
 
+var seedrandom = require('seedrandom');
+
+function random() {
+    rng = seedrandom()
+    console.log(rng())
+}
+
 function writeCookie(name,value,days) {
     var date, expires;
     if (days) {
@@ -36,9 +43,10 @@ function readCookie(name) {
     return '';
 }
 
-let service = {
+let services = {
     writeCookie: writeCookie,
-    readCookie: readCookie
+    readCookie: readCookie,
+    random: random
 }
 
-module.exports = service;
+module.exports = services;
