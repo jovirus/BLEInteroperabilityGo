@@ -6,6 +6,7 @@
  *  See more detail on https://github.com/jovirus/ble-interoperabilityTest
  */
 
+const loginService = require("./loginService") 
 const Joi = require("joi")
 const https = require('https')
 const express = require("express")
@@ -29,12 +30,8 @@ module.exports = function(app, dbs) {
         res.status(200).sendFile(jsonPath)
       });
 
-      /** API documentation
-       *  Present API for client use
-       */
-      app.get('/api/doc/index.html', (req, res) => {
+      app.get('/oauth2.0/login', (req, res) => {
         const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com/mypage/session=3371qw6y&response_type=code&scope=snsapi_login&state=STATE')
-
         https.get(options, (r) => {
             console.log('statusCode:', r.statusCode);
             console.log('headers:', r.headers);
@@ -47,13 +44,18 @@ module.exports = function(app, dbs) {
                 var modifiedResult = body.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
                 res.status(200).send(modifiedResult)
             })
-            console.log("redirect url", r.request)
-            console.log("redirect url", r.headers.location)
           }).on('error', function(e) {
             console.log('ERROR: ' + e.message);
           });
-        // var docPath = path.join(__dirname, '../index.html');
-        // res.status(200).sendFile(docPath)
+          loginService.writeCookie("sessionId", "s234543245", 3)
+      })
+
+      /** API documentation
+       *  Present API for client use
+       */
+      app.get('/api/doc/index.html', (req, res) => {
+        var docPath = path.join(__dirname, '../index.html');
+        res.status(200).sendFile(docPath)
       });
 
       app.get('/api/doc/testcases.html', (req, res) => {
