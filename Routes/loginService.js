@@ -66,9 +66,10 @@ function getWxLoginToken(wxCode) {
     return new Promise((resolve, reject) => {
         const options = new URL(`https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.LOGIN_WX_APP_ID}&secret=${process.env.LOGIN_WX_APP_SECRET}&code=${wxCode}&grant_type=authorization_code`)
         networkHandler.httpsRequest(options).then((rawJson) => {
+            console.log("token is back: ", rawJson)
             resolve(rawJson)
         }).catch(function(error) {
-            console.log(error)
+            console.log("error when fecting token: ",error)
             reject(error)
           })
     })

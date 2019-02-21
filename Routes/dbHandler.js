@@ -43,12 +43,10 @@ module.exports = function(app, dbs) {
 
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
-        console.log("code: ", wxCode)
         loginService.getWxLoginToken(wxCode).then((result) => {
-            console.log("token: ", JSON.parse(result))
             res.status(200).send(result)
         }).catch(function(error) {
-            res.status(400).send("Error when authorizing with WeChat Server, Please try again later")
+            res.status(400).send("Error when authorizing with WeChat Server, Please try again later: ", error)
         })
       });
 
