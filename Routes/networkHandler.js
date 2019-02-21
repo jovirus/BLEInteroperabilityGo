@@ -8,21 +8,23 @@
 const https = require('https')
 
  function httpsRequest(url) {
-    https.get(url, (r) => {
-        // console.log('statusCode:', r.statusCode);
-        // console.log('headers:', r.headers);
-        var body = ''
-        r.on('data', (dataChunck) => {
-            // var result = process.stdout.write(dataChunck);
-            body += dataChunck
-        });
-        r.on('end', (end) => {
-            return body
-        })
-      }).on('error', function(e) {
-        console.log('ERROR: ' + e.message);
-        return 'ERROR'
-      });
+     return new Promise((resolve, reject) => {
+        https.get(url, (r) => {
+            // console.log('statusCode:', r.statusCode);
+            // console.log('headers:', r.headers);
+            var body = ''
+            r.on('data', (dataChunck) => {
+                // var result = process.stdout.write(dataChunck);
+                body += dataChunck
+            });
+            r.on('end', (end) => {
+                resolve(body)
+            })
+          }).on('error', function(e) {
+            console.log('ERROR: ' + e.message);
+            reject(Error(e.message))
+          });
+     });
  }
 
  let handlers = {
