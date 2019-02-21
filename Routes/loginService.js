@@ -54,6 +54,10 @@ function getWxLoginQRCode() {
     const options = new URL(`https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.LOGIN_WX_APP_ID}&redirect_uri=${process.env.LOGIN_WX_REDIRECT_URL}&response_type=code&scope=snsapi_login&state=STATE`)
     var rawHTML = networkHandler.httpsRequest(options)
     if (rawHTML !== "ERROR") {
+        console.log("qr code raw", rawHTML)
+        if (typeof(rawHTML) === String) {
+            console.log("String type")
+        }
         var modifiedResult = rawHTML.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
         return modifiedResult
     }
