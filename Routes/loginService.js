@@ -6,6 +6,9 @@
  */
 
 var seedrandom = require('seedrandom');
+const networkHandler = require('./networkHandler') 
+const 
+
 
 function random() {
     rng = seedrandom()
@@ -48,11 +51,30 @@ function readCookie(name) {
     return '';
 }
 
+function getWxLoginQRCode() {
+    const options = new URL(`https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.LOGIN_WX_APP_ID}&redirect_uri=${process.env.LOGIN_WX_REDIRECT_URL}&response_type=code&scope=snsapi_login&state=STATE`)
+    var rawHTML = networkHandler.httpsRequest(options)
+    if (rawHTML !== "ERROR") {
+        var modifiedResult = rawHTML.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
+        return modifiedResult
+    }
+}
+
+function getWxLoginToken(wxCode) {
+    const options = new URL(`https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.LOGIN_WX_APP_ID}&secret=${process.env.LOGIN_WX_APP_SECRET}&code=${wxCode}&grant_type=authorization_code`)
+    var rawHTML = networkHandler.httpsRequest(options)
+    if (rawHTML !== "ERROR") {
+        return rawHTML
+    }
+}
+
 let services = {
     writeCookie: writeCookie,
     readCookie: readCookie,
     random: random,
-    randomWithSeed: randomWithSeed
+    randomWithSeed: randomWithSeed.networkHandler,
+    getWxLoginQRCode: getWxLoginQRCode,
+    getWxLoginToken: getWxLoginToken
 }
 
 module.exports = services;

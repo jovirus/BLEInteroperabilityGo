@@ -16,7 +16,6 @@ const querystring = require('querystring');
 
 const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
 const TEST91_DATABASE_NAME = process.env.DB_91
-const SESSION_SEED = "nrf.no"
 
 module.exports = function(app, dbs) {
     app.use(express.json());
@@ -31,32 +30,19 @@ module.exports = function(app, dbs) {
         res.status(200).sendFile(jsonPath)
       });
 
-      app.get('/oauth2.0/login', (req, res) => {
-        const options = new URL('https://open.weixin.qq.com/connect/qrconnect?appid=wxf2563a9d5c32e77f&redirect_uri=https://nrfipa.com/login/wx&response_type=code&scope=snsapi_login&state=STATE')
-        https.get(options, (r) => {
-            // console.log('statusCode:', r.statusCode);
-            // console.log('headers:', r.headers);
-            var body = ''
-            r.on('data', (dataChunck) => {
-                // var result = process.stdout.write(dataChunck);
-                body += dataChunck
-            });
-            r.on('end', (end) => {
-                var modifiedResult = body.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
-                res.status(200).send(modifiedResult)
-            })
-          }).on('error', function(e) {
-            console.log('ERROR: ' + e.message);
-          });
-      })
-
       /** Login oauth2 with WeChat
        *  Redirect URL
        */
+      app.get('/oauth2.0/login', (req, res) => {
+        var qrCode = loginService.getWxLoginQRCode()
+        res.status(200).send(qrCode)
+      })
+
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
         console.log("code: ", wxCode)
-        res.status(200).sendFile(wxCode)
+        var rawJson = loginService.getWxLoginToken(wxCode)
+        res.status(200).send(rawJson)
       });
 
 
