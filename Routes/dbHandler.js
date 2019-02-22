@@ -35,7 +35,7 @@ module.exports = function(app, dbs) {
        */
       app.get('/oauth2.0/login', (req, res) => {
         loginService.getWxLoginQRCode().then((result) => {
-            res.status(200).json(result)
+            res.status(200).send(result)
         }).catch(function(error) {
             res.status(400).send("Error when contact WeChat server, Please try again later", error)
         })
