@@ -35,19 +35,25 @@ module.exports = function(app, dbs) {
        */
       app.get('/oauth2.0/login', (req, res) => {
         loginService.getWxLoginQRCode().then((result) => {
-            res.status(200).send(result)
+            res.status(200).json(result)
         }).catch(function(error) {
-            res.status(400).send("Error when contact WeChat server, Please try again later")
+            res.status(400).send("Error when contact WeChat server, Please try again later", error)
         })
       })
 
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
-            console.log("json result: ", result)
-            res.status(200).send(result)
+            console.log("token result: ", result)
+            var tokenInfo = JSON.parse(result)
+            loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
+                console.log("userinfo result: ", userInfo)
+                res.status(200).json(userInfo)
+            }).catch(function(error) {
+                res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
+            })
         }).catch(function(error) {
-            res.status(400).send("Error when authorizing with WeChat Server, Please try again later: ", error)
+            res.status(400).send("Error when authorizing with WeChat server, Please try again later: ", error)
         })
       });
 

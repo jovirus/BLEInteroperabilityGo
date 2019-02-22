@@ -68,9 +68,20 @@ function getWxLoginToken(wxCode) {
         networkHandler.httpsRequest(options).then((rawJson) => {
             resolve(rawJson)
         }).catch(function(error) {
-            console.log("error when fecting token: ",error)
             reject(error)
           })
+    })
+}
+
+
+function getWxUserInfo(token, openId) {
+    return new Promise((resolve, reject) => {
+        const options = new URL(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${token}&openid=${openId}&lang=en`)
+        networkHandler.httpsRequest(options).then((rawJson) => {
+            resolve(rawJson)
+        }).catch(function(error) {
+            reject(error)
+        })
     })
 }
 
@@ -80,7 +91,8 @@ let services = {
     random: random,
     randomWithSeed: randomWithSeed,
     getWxLoginQRCode: getWxLoginQRCode,
-    getWxLoginToken: getWxLoginToken
+    getWxLoginToken: getWxLoginToken,
+    getWxUserInfo: getWxUserInfo
 }
 
 module.exports = services;
