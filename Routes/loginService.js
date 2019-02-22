@@ -52,7 +52,6 @@ function readCookie(name) {
 
 function getWxLoginQRCode() {
     return new Promise((resolve, reject) => {
-        // const options = new URL(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${process.env.LOGIN_WX_APP_ID}&redirect_uri=${process.env.LOGIN_WX_REDIRECT_URL}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`)
         const options = new URL(`https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.LOGIN_WX_APP_ID}&redirect_uri=${process.env.LOGIN_WX_REDIRECT_URL}&response_type=code&scope=snsapi_login&state=STATE`)
         networkHandler.httpsRequest(options).then((rawHTML) => {
             var modifiedResult = rawHTML.replace("/connect/qrcode/", "https://open.weixin.qq.com/connect/qrcode/")
@@ -78,7 +77,6 @@ function getWxLoginToken(wxCode) {
 function getWxUserInfo(token, openId) {
     return new Promise((resolve, reject) => {
         const options = new URL(`https://api.weixin.qq.com/sns/userinfo?access_token=${token}&openid=${openId}&lang=zh_CN`)
-        // const options = new URL(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${token}&openid=${openId}&lang=en`)
         networkHandler.httpsRequest(options).then((rawJson) => {
             resolve(rawJson)
         }).catch(function(error) {
