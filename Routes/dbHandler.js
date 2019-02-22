@@ -44,8 +44,8 @@ module.exports = function(app, dbs) {
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
-            console.log("token result: ", result)
             var tokenInfo = JSON.parse(result)
+            console.log("token result: ", tokenInfo.access_token)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 console.log("userinfo result: ", userInfo)
                 res.status(200).json(userInfo)
