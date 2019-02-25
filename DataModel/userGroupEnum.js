@@ -6,11 +6,11 @@
  */
 
 
- var UserGroupEnum = {
-    admin: 1,
-    sales: 2,
-    developer: 3,
-    marketing: 4
+ class UserGroupEnum {
+    static admin = 1;
+    static sales = 2;
+    static developer = 3;
+    static marketing = 4
   };
 
   module.exports = UserGroupEnum
