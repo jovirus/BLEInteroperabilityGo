@@ -20,7 +20,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         headimgurl: info.headimgurl,
         privilege: info.privilege,
         unionid: unionid,
-        usergroup: userGroup
+        usergroup: nrfUserGroup
     }
     return newInfo
  }
