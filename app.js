@@ -17,7 +17,7 @@ require('dotenv').config()
 const app = express()
 
 const initializeDatabases = require('./Database/dbConnnector')
-const routes = require('./Routes/dbHandler') 
+const routes = require('./Routes/routerHandler') 
 
 var privateKey  = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.key');
 var certificate = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.pem');

@@ -6,9 +6,11 @@
  */
 
 
-export var UserGroupEnum = {
+ var UserGroupEnum = {
     admin: 1,
     sales: 2,
     developer: 3,
     marketing: 4
   };
+
+  module.exports = UserGroupEnum
