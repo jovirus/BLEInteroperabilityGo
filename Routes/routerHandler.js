@@ -6,6 +6,8 @@
  *  See more detail on https://github.com/jovirus/ble-interoperabilityTest
  */
 
+const userGroup = require("../DataModel/userGroupEnum")
+const dataStorageService = require("./dataStorageService") 
 const loginService = require("./loginService") 
 const Joi = require("joi")
 const https = require('https')
@@ -45,10 +47,16 @@ module.exports = function(app, dbs) {
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
-            console.log("token result: ", tokenInfo.access_token)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
-                console.log("userinfo result: ", userInfo)
-                res.status(200).json(userInfo)
+                dataStorageService.isUserExist(dbs, userInfo).then((isExisting) => {
+                    if (!isExisting) {
+                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.sales)
+                        console.log("The nRF User: ", nrfUser)
+                        dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
+                            res.status(200).json(result)
+                        })
+                    }
+                })
             }).catch(function(error) {
                 res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
             })
@@ -258,6 +266,15 @@ module.exports = function(app, dbs) {
             return res.status(200).send('succeed')
         })
     });
+
+    app.get('/api/miniapp/initialize', (req, res) => {
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+        let collection = db.createCollection(process.env.DB_COLLECTION_TESTREPORT, (err, collection) => {
+            if (err) return res.status(400).send(err)
+            return res.status(200).send('succeed')
+        })
+    });
+
     /************************************************************************** NRF 91 **********************************************************************
      * *****************************************************************************************************************************************************/
 
