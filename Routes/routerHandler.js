@@ -59,12 +59,12 @@ module.exports = function(app, dbs) {
                         console.log("The nRF User: ", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             var res1 = loginService.setCookie(req, res)
-                            res1.status(200).json(result)
+                            // res1.status(200).json(result)
                         })
                     } else {
                         // send cookies
                         var res1 = loginService.setCookie(req, res)
-                        res1.status(200).send("Login succeed!")
+                        // res1.status(200).send("Login succeed!")
                     }
                 })
             }).catch(function(error) {
