@@ -32,7 +32,7 @@ function setCookie(req, res) {
     // Redirect back after setting cookie
     res.statusCode = 302;
     res.setHeader('Location', req.headers.referer || '/index.html');
-    res.end();
+    res.send()
     return res
 }
 
