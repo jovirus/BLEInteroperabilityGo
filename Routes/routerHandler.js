@@ -16,7 +16,6 @@ var path = require('path');
 const url = require('url');  
 const querystring = require('querystring');
 var cookieParser = require('cookie-parser')
-var cookie = require('cookie');
 
 
 
@@ -59,13 +58,13 @@ module.exports = function(app, dbs) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.sales)
                         console.log("The nRF User: ", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
-                            onRequest(req, res)
-                            res.status(200).json(result)
+                            var res1 = loginService.setCookie(req, res)
+                            res1.status(200).json(result)
                         })
                     } else {
                         // send cookies
-                        onRequest(req, res)
-                        res.status(200).send("Login succeed!")
+                        var res1 = loginService.setCookie(req, res)
+                        res1.status(200).send("Login succeed!")
                     }
                 })
             }).catch(function(error) {
@@ -75,24 +74,6 @@ module.exports = function(app, dbs) {
             res.status(400).send("Error when authorizing with WeChat server, Please try again later: ", error)
         })
       });
-
-      function onRequest(req, res) {
-        // Parse the query string
-        var query = url.parse(req.url, true, true).query;
-       
-        if (query && query.name) {
-          // Set a new cookie with the name
-          res.setHeader('Set-Cookie', cookie.serialize('nrf', String(query.name), {
-            httpOnly: true,
-            maxAge: 60 * 60 * 24 * 7 // 1 week
-          }));
-       
-          // Redirect back after setting cookie
-          res.statusCode = 302;
-          res.setHeader('Location', req.headers.referer || '/index.html');
-          res.end();
-          return;
-        }
 
       /** API documentation
        *  Present API for client use

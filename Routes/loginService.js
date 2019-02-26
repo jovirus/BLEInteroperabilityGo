@@ -5,9 +5,9 @@
  *  See more detail on https://github.com/jovirus/ble-interoperabilityTest
  */
 
-var seedrandom = require('seedrandom');
-var cookieParser = require('cookie-parser')
-const networkHandler = require('./networkHandler') 
+var seedrandom = require('seedrandom')
+const networkHandler = require('./networkHandler')
+var cookie = require('cookie')
 
 
 function random() {
@@ -18,6 +18,25 @@ function random() {
 function randomWithSeed(seed) {
     var rng = seedrandom(seed);
     console.log(rng())
+}
+
+function setCookie(req, res) {
+// Parse the query string
+var query = url.parse(req.url, true, true).query;
+
+if (query && query.name) {
+    // Set a new cookie with the name
+    res.setHeader('Set-Cookie', cookie.serialize('nrf', String(query.name), {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7 // 1 week
+    }));
+
+    // Redirect back after setting cookie
+    res.statusCode = 302;
+    res.setHeader('Location', req.headers.referer || '/index.html');
+    res.end();
+    return res
+}
 }
 
 function writeCookie(name,value,days) {
@@ -93,7 +112,8 @@ let services = {
     randomWithSeed: randomWithSeed,
     getWxLoginQRCode: getWxLoginQRCode,
     getWxLoginToken: getWxLoginToken,
-    getWxUserInfo: getWxUserInfo
+    getWxUserInfo: getWxUserInfo,
+    setCookie: setCookie
 }
 
 module.exports = services;
