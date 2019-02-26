@@ -15,6 +15,8 @@ const express = require("express")
 var path = require('path');
 const url = require('url');  
 const querystring = require('querystring');
+var cookieParser = require('cookie-parser')
+
 
 const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
 const TEST91_DATABASE_NAME = process.env.DB_91
@@ -47,16 +49,20 @@ module.exports = function(app, dbs) {
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
-            console.log("Test Enum: ", userGroup.UserGroupEnum.sales)
+            console.log('Cookies: ', req.cookies)
+            console.log('Signed Cookies: ', req.signedCookies)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 dataStorageService.isUserExist(dbs, userInfo).then((isExisting) => {
-                    console.log("is user existing: ", isExisting)
                     if (!isExisting) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.sales)
                         console.log("The nRF User: ", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
+                            loginService.writeCookie(nrfUser.openid, )
                             res.status(200).json(result)
                         })
+                    } else {
+                        // send cookies
+                        res.status(200).send("Login succeed!")
                     }
                 })
             }).catch(function(error) {

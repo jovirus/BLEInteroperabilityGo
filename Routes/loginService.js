@@ -6,6 +6,7 @@
  */
 
 var seedrandom = require('seedrandom');
+var cookieParser = require('cookie-parser')
 const networkHandler = require('./networkHandler') 
 
 
