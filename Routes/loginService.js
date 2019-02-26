@@ -22,11 +22,9 @@ function randomWithSeed(seed) {
 
 function setCookie(req, res) {
 // Parse the query string
-var query = url.parse(req.url, true, true).query;
 
-if (query && query.name) {
     // Set a new cookie with the name
-    res.setHeader('Set-Cookie', cookie.serialize('nrf', String(query.name), {
+    res.setHeader('Set-Cookie', cookie.serialize('nrf', String("token"), {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 7 // 1 week
     }));
@@ -36,7 +34,6 @@ if (query && query.name) {
     res.setHeader('Location', req.headers.referer || '/index.html');
     res.end();
     return res
-}
 }
 
 function writeCookie(name,value,days) {
