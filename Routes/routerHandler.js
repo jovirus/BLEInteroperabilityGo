@@ -16,6 +16,8 @@ var path = require('path');
 const url = require('url');  
 const querystring = require('querystring');
 var cookieParser = require('cookie-parser')
+var cookie = require('cookie');
+
 
 
 const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
@@ -58,10 +60,12 @@ module.exports = function(app, dbs) {
                         console.log("The nRF User: ", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             loginService.writeCookie(nrfUser.openid, )
+                            var setCookie = cookie.serialize('foo', 'bar');
                             res.status(200).json(result)
                         })
                     } else {
                         // send cookies
+                        var setCookie = cookie.serialize('foo', 'bar');
                         res.status(200).send("Login succeed!")
                     }
                 })
