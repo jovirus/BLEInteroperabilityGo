@@ -29,7 +29,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      return new Promise((resolve, reject) => { 
         let db = dbs.db(process.env.DB_WEB_NAME);
         var query = {
-            "mobileInfo.platform": wxUserInfo.openid 
+            "openid": wxUserInfo.openid 
         };
         var supressedValue = {
                     _id: 0,
@@ -51,7 +51,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         let db = dbs.db(process.env.DB_WEB_NAME);
         let result = db.collection(process.env.DB_COLLECTION_USERINFO).insertOne(nRFUserInfo, function(err, object){
             if (err) reject(err)
-            else resolve(object)
+            else resolve(true)
         }) 
      })
  }
