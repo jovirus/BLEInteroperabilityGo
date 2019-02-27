@@ -62,9 +62,10 @@ module.exports = function(app, dbs) {
                     } else if (resultInfo.usergroup === userGroup.UserGroupEnum.unauthorized) {
                         res.send("Your application is pending. please contact admin to process.")
                     } else {
+                        res.clearCookie("nrfa1");
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.send("Welcome Jiajun")
+                        res.status.send("Welcome Jiajun")
                     }
                 }).catch(function(error) {
                     res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
