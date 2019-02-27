@@ -11,8 +11,6 @@ var cookie = require('cookie')
 var url = require('url')
 const crypto = require('crypto');
 
-
-
 function random() {
     rng = seedrandom()
     console.log(rng())
@@ -39,6 +37,10 @@ function writeCookie(name,value,days) {
     }
 }
 
+/**
+ * Read a cookie
+ * @param {String} name, cookie name
+ */
 function readCookie(name) {
     var i, c, ca, nameEQ = name + "=";
     ca = document.cookie.split(';');
@@ -52,6 +54,18 @@ function readCookie(name) {
         }
     }
     return '';
+}
+
+/**
+ * Delete a cookie
+ * @param {String} cname, cookie name
+ */
+function deleteCookie(cname) {
+    var d = new Date(); //Create an date object
+    d.setTime(d.getTime() - (1000*60*60*24)); //Set the time to the past. 1000 milliseonds = 1 second
+    var expires = "expires=" + d.toGMTString(); //Compose the expirartion date
+    window.document.cookie = cname+"="+"; "+expires;//Set the cookie with name and the expiration date
+ 
 }
 
 function getWxLoginQRCode() {
@@ -111,7 +125,8 @@ let services = {
     getWxLoginToken: getWxLoginToken,
     getWxUserInfo: getWxUserInfo,
     generate256RandomBytes: generate256RandomBytes,
-    generateHash: generateHash
+    generateHash: generateHash,
+    deleteCookie: deleteCookie
 }
 
 module.exports = services;

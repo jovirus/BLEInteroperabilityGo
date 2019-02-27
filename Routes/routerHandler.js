@@ -84,11 +84,13 @@ module.exports = function(app, dbs) {
         var docPath = path.join(__dirname, '../index.html');
         console.log('Cookies: ', req.cookies)
         console.log('Signed Cookies: ', req.signedCookies)
+        loginService.writeCookie("cx001", "1", 0.1)
         res.status(200).sendFile(docPath)
       });
 
       app.get('/api/doc/testcases.html', (req, res) => {
         var docPath = path.join(__dirname, '../doc/testcases.html');
+        loginService.readCookie("cx001")
         res.status(200).sendFile(docPath)
       });
 
@@ -355,7 +357,7 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
-        res.clearCookie('nrfa1');
+        loginService.deleteCookie("cx001")
         res.send('***This is a private portal used for nrf devices interoperability test.\n ***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
