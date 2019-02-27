@@ -39,9 +39,9 @@ function writeCookie(name,value,days) {
 
 /**
  * Read a cookie
- * @param {String} name, cookie name
+ * @param {String} cname, cookie name
  */
-function readCookie(name) {
+function readCookie(cname) {
     var name = cname + "="; //Create the cookie name variable with cookie name concatenate with = sign
     var cArr = document.cookie.split(';'); //Create cookie array by split the cookie by ';'
     if (typeof document !== 'undefined') {
