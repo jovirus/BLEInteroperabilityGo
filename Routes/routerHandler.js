@@ -62,7 +62,8 @@ module.exports = function(app, dbs) {
                     } else if (resultInfo.usergroup === userGroup.UserGroupEnum.unauthorized) {
                         res.send("Your application is pending. please contact admin to process.")
                     } else {
-                        res.cookie('t', `${loginService.generateHash(tokenInfo.access_token)}`, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
+                        var hash = loginService.generateHash(tokenInfo.access_token)
+                        res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
                         res.send("Welcome Jiajun")
                     }
                 })
