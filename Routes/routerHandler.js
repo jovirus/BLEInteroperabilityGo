@@ -65,7 +65,7 @@ module.exports = function(app, dbs) {
                     } else {
                         // send cookies
                         // var res1 = loginService.setCookie(req, res)
-                        res.cookie("nrfa1", 'cookie_value1', { httpOnly: true, signed: true, expires: new Date(Date.now() + 3600) });
+                        res.cookie("nrfa1", 'cookie_value1', { httpOnly: true, signed: true, maxAge: 60000 });
                         res.send("all cookie is set.")
                     }
                 })
