@@ -60,9 +60,9 @@ module.exports = function(app, dbs) {
                         console.log("The nRF User: ", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             // var res1 = loginService.setCookie(req, res)
-                            res.cookie("nrfuser" , 'cookie_value').send('Cookie is set');
-
-                            // res1.status(200).json(result)
+                            res.cookie("nrfa", 'cookie_value1');
+                            res.cookie("nrfb", 'cookie_value2');
+                            res.send("all cookie is set.")
                         })
                     } else {
                         // send cookies
