@@ -95,7 +95,8 @@ function generate256RandomBytes() {
 }
 
 function generateHash(token) {
-    const hash = crypto.createHash(token);    
+    const hash = crypto.createHash('sha256')
+    hash.update(token);   
     console.log(hash.digest('hex'))
     return hash.digest('hex')
 }
