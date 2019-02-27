@@ -24,7 +24,7 @@ const TEST91_DATABASE_NAME = process.env.DB_91
 
 module.exports = function(app, dbs) {
     app.use(express.json());
-    app.use(cookieParser('4N9FzOPZl2'));
+    app.use(cookieParser('4N9FzOPZlxoE08WIYv9NPDN6uFTpfyvb'));
 
        /**  Tencent Mini-app verfication file sUVEnOBdTo.txt.
         *   To satisfy Mini-app publish process, the web server shall able to retrieve the file
@@ -64,7 +64,7 @@ module.exports = function(app, dbs) {
                         // send cookies
                         // var res1 = loginService.setCookie(req, res)
                         // res.append('Set-Cookie', 'nrfa1=cookie_value1; Path=/; HttpOnly; Secure; Max-Age=60000; Domain=nrfipa.com');
-                        res.cookie("nrfa1", 'cookie_value1', { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
+                        res.cookie("nrfa1b", 'cookie_value1', { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
                         res.send("all cookie is set.")
                     }
                 })
