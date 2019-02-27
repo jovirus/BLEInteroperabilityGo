@@ -42,19 +42,18 @@ function writeCookie(name,value,days) {
  * @param {String} name, cookie name
  */
 function readCookie(name) {
-    var i, c, ca, nameEQ = name + "=";
-    if (typeof document !== 'undefined') { 
-        ca = document.cookie.split(';') 
-        for(i=0;i < ca.length;i++) {
-            c = ca[i];
-            while (c.charAt(0)==' ') {
-                c = c.substring(1,c.length);
-            }
-            if (c.indexOf(nameEQ) == 0) {
-                return c.substring(nameEQ.length,c.length);
-            }
-        }
-        return '';
+    var name = cname + "="; //Create the cookie name variable with cookie name concatenate with = sign
+    var cArr = document.cookie.split(';'); //Create cookie array by split the cookie by ';'
+    if (typeof document !== 'undefined') {
+    //Loop through the cookies and return the cooki value if it find the cookie name
+    for(var i=0; i<cArr.length; i++) {
+        var c = cArr[i].trim();
+        //If the name is the cookie string at position 0, we found the cookie and return the cookie value
+        if (c.indexOf(name) == 0) 
+            return c.substring(name.length, c.length);
+    }
+    //If we get to this point, that means the cookie wasn't find in the look, we return an empty string.
+    return "";
     }
 }
 
