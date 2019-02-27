@@ -67,8 +67,9 @@ module.exports = function(app, dbs) {
                     } else {
                         // send cookies
                         // var res1 = loginService.setCookie(req, res)
-                        res.cookie("nrfuser" , 'cookie_value').send('login suceed Cookie is set');
-                        // res1.status(200).send("Login succeed!")
+                        res.cookie("nrfa", 'cookie_value1');
+                        res.cookie("nrfb", 'cookie_value2');
+                        res.send("all cookie is set.")
                     }
                 })
             }).catch(function(error) {
