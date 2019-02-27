@@ -95,10 +95,7 @@ function generate256RandomBytes() {
 }
 
 function generateHash(token) {
-    const hash = crypto.createHash('sha256')
-    hash.update(token);   
-    console.log(hash.digest('hex'))
-    return hash.digest('hex')
+    return crypto.createHash('sha256').update(token).digest('hex')
 }
 
 let services = {
