@@ -94,8 +94,7 @@ let services = {
     randomWithSeed: randomWithSeed,
     getWxLoginQRCode: getWxLoginQRCode,
     getWxLoginToken: getWxLoginToken,
-    getWxUserInfo: getWxUserInfo,
-    setCookie: setCookie
+    getWxUserInfo: getWxUserInfo
 }
 
 module.exports = services;
