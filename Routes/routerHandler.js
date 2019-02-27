@@ -24,7 +24,7 @@ const TEST91_DATABASE_NAME = process.env.DB_91
 
 module.exports = function(app, dbs) {
     app.use(express.json());
-    app.use(cookieParser(process.env.COOKIE_SECRET));
+    app.use(cookieParser('4N9FzOPZlxoE08WIYv9NPDN6uFTpfyvb'));
 
        /**  Tencent Mini-app verfication file sUVEnOBdTo.txt.
         *   To satisfy Mini-app publish process, the web server shall able to retrieve the file
