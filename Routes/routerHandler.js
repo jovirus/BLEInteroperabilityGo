@@ -66,7 +66,7 @@ module.exports = function(app, dbs) {
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.status.send("Welcome Jiajun")
+                        res.send("Welcome Jiajun")
                     }
                 })
             }).catch(function(error) {
