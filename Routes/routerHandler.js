@@ -24,7 +24,7 @@ const TEST91_DATABASE_NAME = process.env.DB_91
 
 module.exports = function(app, dbs) {
     app.use(express.json());
-    app.use(cookieParser('4N9FzOPZlxoE08WIYv9NPDN6uFTpfyvb'));
+    app.use(cookieParser(process.env.COOKIE_SECRET));
 
        /**  Tencent Mini-app verfication file sUVEnOBdTo.txt.
         *   To satisfy Mini-app publish process, the web server shall able to retrieve the file
@@ -52,20 +52,18 @@ module.exports = function(app, dbs) {
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
-                dataStorageService.isUserExist(dbs, userInfo).then((isExisting) => {
-                    if (!isExisting) {
-                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.sales)
+                dataStorageService.isUserExist(dbs, userInfo).then((resultInfo) => {
+                    if (resultInfo === undefined) {
+                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         console.log("The nRF User: ", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
-                            // var res1 = loginService.setCookie(req, res)
-                            res.send("all cookie is set.")
+                            res.send("Application has received. please contact admin to process.")
                         })
+                    } else if (resultInfo.usergroup === userGroup.UserGroupEnum.unauthorized) {
+                        res.send("Your application is pending. please contact admin to process.")
                     } else {
-                        // send cookies
-                        // var res1 = loginService.setCookie(req, res)
-                        // res.append('Set-Cookie', 'nrfa1=cookie_value1; Path=/; HttpOnly; Secure; Max-Age=60000; Domain=nrfipa.com');
-                        res.cookie("nrfa1b", 'cookie_value1', { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.send("all cookie is set.")
+                        res.cookie('t', `${loginService.generateHash(tokenInfo)}`, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
+                        res.send("Welcome Jiajun")
                     }
                 })
             }).catch(function(error) {

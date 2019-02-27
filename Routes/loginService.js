@@ -9,6 +9,8 @@ var seedrandom = require('seedrandom')
 const networkHandler = require('./networkHandler')
 var cookie = require('cookie')
 var url = require('url')
+const crypto = require('crypto');
+
 
 
 function random() {
@@ -87,6 +89,17 @@ function getWxUserInfo(token, openId) {
     })
 }
 
+function generate256RandomBytes() {
+    const buf = crypto.randomBytes(256);
+    console.log(`${buf.length} bytes of random data: ${buf.toString('hex')}`);
+}
+
+function generateHash(token) {
+    const hash = crypto.createHash(token);    
+    console.log(hash.digest('hex'))
+    return hash.digest('hex')
+}
+
 let services = {
     writeCookie: writeCookie,
     readCookie: readCookie,
@@ -94,7 +107,9 @@ let services = {
     randomWithSeed: randomWithSeed,
     getWxLoginQRCode: getWxLoginQRCode,
     getWxLoginToken: getWxLoginToken,
-    getWxUserInfo: getWxUserInfo
+    getWxUserInfo: getWxUserInfo,
+    generate256RandomBytes: generate256RandomBytes,
+    generateHash: generateHash
 }
 
 module.exports = services;
