@@ -51,6 +51,7 @@ module.exports = function(app, dbs) {
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
+            console.log(tokenInfo)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 dataStorageService.isUserExist(dbs, userInfo).then((resultInfo) => {
                     if (resultInfo === undefined) {
@@ -66,8 +67,6 @@ module.exports = function(app, dbs) {
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
                         res.status.send("Welcome Jiajun")
                     }
-                }).catch(function(error) {
-                    res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
                 })
             }).catch(function(error) {
                 res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
