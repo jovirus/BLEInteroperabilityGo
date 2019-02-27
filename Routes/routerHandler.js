@@ -58,13 +58,12 @@ module.exports = function(app, dbs) {
                         console.log("The nRF User: ", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             // var res1 = loginService.setCookie(req, res)
-                            res.cookie("nrfa", 'cookie_value1');
-                            res.cookie("nrfb", 'cookie_value2');
                             res.send("all cookie is set.")
                         })
                     } else {
                         // send cookies
                         // var res1 = loginService.setCookie(req, res)
+                        res.append('Set-Cookie', 'nrfa1=cookie_value1; Path=/; HttpOnly; Secure; Max-Age=60000; Domain=nrfipa.com');
                         res.cookie("nrfa1", 'cookie_value1', { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
                         res.send("all cookie is set.")
                     }
