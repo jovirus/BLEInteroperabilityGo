@@ -51,8 +51,6 @@ module.exports = function(app, dbs) {
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
-            console.log('Cookies: ', req.cookies)
-            console.log('Signed Cookies: ', req.signedCookies)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 dataStorageService.isUserExist(dbs, userInfo).then((isExisting) => {
                     if (!isExisting) {
@@ -67,8 +65,8 @@ module.exports = function(app, dbs) {
                     } else {
                         // send cookies
                         // var res1 = loginService.setCookie(req, res)
-                        res.cookie("nrfa", 'cookie_value1');
-                        res.cookie("nrfb", 'cookie_value2');
+                        res.cookie("nrfa", 'cookie_value1', {signed: true});
+                        res.cookie("nrfb", 'cookie_value2', {signed: true});
                         res.send("all cookie is set.")
                     }
                 })
@@ -85,7 +83,8 @@ module.exports = function(app, dbs) {
        */
       app.get('/api/index.html', (req, res) => {
         var docPath = path.join(__dirname, '../index.html');
-        console.log("Cookies :  ", req.cookies);
+        console.log('Cookies: ', req.cookies)
+        console.log('Signed Cookies: ', req.signedCookies)
         res.status(200).sendFile(docPath)
       });
 
