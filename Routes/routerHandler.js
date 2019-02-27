@@ -90,7 +90,7 @@ module.exports = function(app, dbs) {
 
       app.get('/api/doc/testcases.html', (req, res) => {
         var docPath = path.join(__dirname, '../doc/testcases.html');
-        loginService.readCookie("cx001")
+        console.log(loginService.readCookie("cx001"))
         res.status(200).sendFile(docPath)
       });
 
