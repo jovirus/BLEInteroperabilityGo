@@ -62,7 +62,6 @@ module.exports = function(app, dbs) {
                     } else if (resultInfo.usergroup === userGroup.UserGroupEnum.unauthorized) {
                         res.send("Your application is pending. please contact admin to process.")
                     } else {
-                        res.clearCookie("nrfa1");
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
                         res.status.send("Welcome Jiajun")
@@ -356,6 +355,7 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
+        res.clearCookie('nrfa1');
         res.send('***This is a private portal used for nrf devices interoperability test.\n ***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
