@@ -119,16 +119,13 @@ function generateHash(token) {
 }
 
 let services = {
-    writeCookie: writeCookie,
-    readCookie: readCookie,
     random: random,
     randomWithSeed: randomWithSeed,
     getWxLoginQRCode: getWxLoginQRCode,
     getWxLoginToken: getWxLoginToken,
     getWxUserInfo: getWxUserInfo,
     generate256RandomBytes: generate256RandomBytes,
-    generateHash: generateHash,
-    deleteCookie: deleteCookie
+    generateHash: generateHash
 }
 
 module.exports = services;
