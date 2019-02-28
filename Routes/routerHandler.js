@@ -40,6 +40,8 @@ module.exports = function(app, dbs) {
        *  Redirect URL
        */
       app.get('/oauth2.0/login', (req, res) => {
+        console.log('Login Cookies: ', req.cookies)
+        console.log('Login Signed Cookies: ', req.signedCookies)
         loginService.getWxLoginQRCode().then((result) => {
             res.status(200).send(result)
         }).catch(function(error) {
@@ -49,8 +51,8 @@ module.exports = function(app, dbs) {
 
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
-        console.log('Cookies: ', req.cookies)
-        console.log('Signed Cookies: ', req.signedCookies)
+        console.log('Redirect1 Cookies: ', req.cookies)
+        console.log('Redirect1 Signed Cookies: ', req.signedCookies)
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
