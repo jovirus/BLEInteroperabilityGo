@@ -26,6 +26,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
  }
 
  function isUserExist(dbs, wxUserInfo) {
+    console.log("Requested userInfo: ", wxUserInfo)
      return new Promise((resolve, reject) => { 
         let db = dbs.db(process.env.DB_WEB_NAME);
         var query = {
