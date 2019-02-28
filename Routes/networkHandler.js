@@ -25,7 +25,7 @@ const https = require('https')
             reject(Error(e.message))
           });
      });
- }
+ } 
 
  let handlers = {
     httpsRequest: httpsRequest

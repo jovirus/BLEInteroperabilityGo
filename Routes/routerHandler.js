@@ -49,13 +49,14 @@ module.exports = function(app, dbs) {
 
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
+        console.log('Cookies: ', req.cookies)
+        console.log('Signed Cookies: ', req.signedCookies)
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 dataStorageService.isUserExist(dbs, tokenInfo.openid).then((resultInfo) => {
                     if (resultInfo.length === 0) {
-                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
-                        console.log("The nRF User: ", nrfUser)
+                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.admin)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             res.send("Application has received. please contact admin to process.")
                         })
@@ -63,8 +64,10 @@ module.exports = function(app, dbs) {
                         res.send("Your application is pending. please contact admin to process.")
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
+                        // dataStorageService.saveCookie(dbs,tokenInfo.access_token, hash, tokenInfo.openid, false)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.send("Welcome")
+                        res.redirect('https://nrfipa.com/api/index.html');
+                        // res.send(`Welcome to nRF Interoperability! ${resultInfo[0].nickName}`)
                     }
                 }).catch(function(error) {
                     res.status(400).send("Error when fetch login history from server, Please try again later: ", error)
