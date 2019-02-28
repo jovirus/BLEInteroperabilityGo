@@ -66,7 +66,7 @@ module.exports = function(app, dbs) {
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.send("Welcome Jiajun")
+                        res.send("Welcome")
                     }
                 })
             }).catch(function(error) {
@@ -81,15 +81,14 @@ module.exports = function(app, dbs) {
        *  Present API for client use
        */
       app.get('/api/index.html', (req, res) => {
-        var docPath = path.join(__dirname, '../index.html');
+        var docPath = path.join(__dirname, '../index.html')
         console.log('Cookies: ', req.cookies)
         console.log('Signed Cookies: ', req.signedCookies)
-        loginService.writeCookie("cx001", "1", 0.1)
         res.status(200).sendFile(docPath)
       });
 
       app.get('/api/doc/testcases.html', (req, res) => {
-        var docPath = path.join(__dirname, '../doc/testcases.html');
+        var docPath = path.join(__dirname, '../doc/testcases.html')
         console.log(loginService.readCookie("cx001"))
         res.status(200).sendFile(docPath)
       });
@@ -106,23 +105,23 @@ module.exports = function(app, dbs) {
         }) 
       });
 
-//     /**  GET ALL TEST REPORTS
-//      *   Pop up all reports
-//      */
-//     app.get('/api/miniapp/find/report/', (req, res) => {
-//         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-//         var supressedValue = {
-//             _id: 0,
-//         }
-//         db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
-//             if (err) return res.status(400).send(err)
-//                 const result = {
-//                     matchedResults: docs.length,
-//                     contents: docs
-//                 }
-//                 res.status(200).send(result)
-//             })
-//     });
+    /**  GET ALL TEST REPORTS
+     *   Pop up all reports
+     */
+    app.get('/api/miniapp/find/report/', (req, res) => {
+        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+        var supressedValue = {
+            _id: 0,
+        }
+        db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
+            if (err) return res.status(400).send(err)
+                const result = {
+                    matchedResults: docs.length,
+                    contents: docs
+                }
+                res.status(200).send(result)
+            })
+    });
  
 //     /**  GET REPORT BY MOBILE BRAND
 //      *   Return related reports by given specific brand name and OR return all reports by hitting the designated url
