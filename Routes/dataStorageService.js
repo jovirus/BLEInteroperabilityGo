@@ -35,7 +35,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         var supressedValue = {
                     _id: 0,
         }
-        db.collection(process.env.DB_COLLECTION_USERINFO).find(query).project(supressedValue).toArray((err, user) => {
+        db.collection(process.env.DB_COLLECTION_USERINFO).find({}).project(supressedValue).toArray((err, user) => {
             if (err) reject(err)
             else resolve(user)
         })
