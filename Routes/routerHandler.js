@@ -356,7 +356,6 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
-        loginService.deleteCookie("cx001")
         res.send('***This is a private portal used for nrf devices interoperability test.\n ***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
