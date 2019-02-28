@@ -55,10 +55,10 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
  function saveCookie(dbs, token, hash, openid, expire) {
     return new Promise((resolve, reject) => { 
         var cookie = {
-            token = token,
-            hash = hash,
-            openid = openid,
-            expire = expire
+            token: token,
+            hash: hash,
+            openid: openid,
+            expire: expire
         }
         let db = dbs.db(process.env.DB_WEB_NAME);
         let result = db.collection(process.env.DB_COLLECTION_COOKIE).insertOne(cookie, function(err, object){
