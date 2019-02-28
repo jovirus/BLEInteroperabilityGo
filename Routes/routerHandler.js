@@ -52,8 +52,7 @@ module.exports = function(app, dbs) {
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
-                dataStorageService.isUserExist(dbs, userInfo).then((resultInfo) => {
-                    console.log("db user: ", resultInfo)
+                dataStorageService.isUserExist(dbs, tokenInfo.openid).then((resultInfo) => {
                     if (resultInfo.length === 0) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         console.log("The nRF User: ", nrfUser)

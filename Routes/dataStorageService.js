@@ -25,17 +25,17 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
     return newInfo
  }
 
- function isUserExist(dbs, wxUserInfo) {
-    console.log("Requested userInfo: ", wxUserInfo)
+ function isUserExist(dbs, opendId) {
+    console.log("Requested userInfo: ", opendId)
      return new Promise((resolve, reject) => { 
         let db = dbs.db(process.env.DB_WEB_NAME);
         var query = {
-            openid: wxUserInfo.openid 
+            openid: opendId 
         };
         var supressedValue = {
                     _id: 0,
         }
-        db.collection(process.env.DB_COLLECTION_USERINFO).find({}).project(supressedValue).toArray((err, user) => {
+        db.collection(process.env.DB_COLLECTION_USERINFO).find(query).project(supressedValue).toArray((err, user) => {
             if (err) reject(err)
             else resolve(user)
         })
