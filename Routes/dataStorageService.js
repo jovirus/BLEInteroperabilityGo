@@ -29,7 +29,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      return new Promise((resolve, reject) => { 
         let db = dbs.db(process.env.DB_WEB_NAME);
         var query = {
-            "openid": wxUserInfo.openid 
+            openid: wxUserInfo.openid 
         };
         var supressedValue = {
                     _id: 0,
