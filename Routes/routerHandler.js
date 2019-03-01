@@ -44,7 +44,8 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) {
             console.log("cached cookie: ", req.signedCookies.t)
             dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
-                if (cookies.length === 0) return res.status(400).send("Unauthorized access", error)
+                console.log("db cookie: ", cookies)
+                if (cookies.length === 0) console.log("No cookie found")
                 else if (cookies.length === 1) {
                     var cki = JSON.parse(cookie[0])
                     console.log("db cookie: ", cki.openid)
