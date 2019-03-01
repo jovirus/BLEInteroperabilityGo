@@ -25,7 +25,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
     return newInfo
  }
 
- function isUserExist(dbs, opendId) {
+ function isUserExist(dbs, opendId = "") {
     console.log("Requested userInfo: ", opendId)
      return new Promise((resolve, reject) => { 
         let db = dbs.db(process.env.DB_WEB_NAME);
@@ -68,7 +68,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      })
  }
 
- function deleteCookie(dbs, hash) {
+ function deleteCookie(dbs, hash = "") {
     return new Promise((resolve, reject) => { 
         var query = {
             hash: hash
@@ -81,7 +81,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      })
  }
 
- function isExistCookie(dbs, hash) {
+ function isExistCookie(dbs, hash = "") {
     return new Promise((resolve, reject) => { 
         var query = {
             hash: hash

@@ -58,7 +58,11 @@ module.exports = function(app, dbs) {
             dataStorageService.isExistCookie(dbs, signedCookie).then((isExist) => {
                 if (isExist) {
                     res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
+                } else {
+                    res.status(400).send("Access denied.", error)
                 }
+            }).catch(function(error) {
+                res.status(400).send("Unauthorized access", error)
             })
         }
         loginService.getWxLoginToken(wxCode).then((result) => {
@@ -74,7 +78,7 @@ module.exports = function(app, dbs) {
                         res.send("Your application is pending. please contact admin to process.")
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
-                         var expireIn = loginService.getExpireTime(60000) // use wechat limit time for token without refresh 2h
+                        var expireIn = loginService.getExpireTime(60000) // use wechat limit time for token without refresh 2h
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
                         res.redirect(`https://nrfipa.com/api/index.html?user=${resultInfo[0].nickName}`);
