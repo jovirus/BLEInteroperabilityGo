@@ -42,15 +42,11 @@ module.exports = function(app, dbs) {
        */
       app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
-            console.log("cached cookie: ", req.signedCookies.t)
             dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
-                console.log("db cookie: ", cookies)
                 if (cookies.length === 0) {
                     return res.status(400).send("Access denied.", error)
                 }
                 else if (cookies.length === 1) {
-                    console.log("db cookie val: ", cookies[0])
-                    console.log("db cookie openid: ", cookies[0].openid)
                     dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
                         if (users.length === 1) {
                             return res.redirect(`/api/index.html?user=${users[0].nickname}`)
@@ -93,9 +89,8 @@ module.exports = function(app, dbs) {
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn).catch(function(error) {
                             return res.status(400).send("Internal Error: ", error)
                           });
-                        var user = JSON.parse(userInfo)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 7200000 });
-                        return res.redirect(`/api/index.html?user=${user.nickname}`);
+                        return res.redirect(`/api/index.html?user=${userInfo.nickname}`);
                     }
                 }).catch(function(error) {
                     return res.status(400).send("Error when fetch login history from server, Please try again later: ", error)

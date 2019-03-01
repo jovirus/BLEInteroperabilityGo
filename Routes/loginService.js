@@ -108,7 +108,8 @@ function getWxUserInfo(token, openId) {
     return new Promise((resolve, reject) => {
         const options = new URL(`https://api.weixin.qq.com/sns/userinfo?access_token=${token}&openid=${openId}&lang=zh_CN`)
         networkHandler.httpsRequest(options).then((rawJson) => {
-            resolve(rawJson)
+            var user = JSON.parse(rawJson)
+            resolve(user)
         }).catch(function(error) {
             reject(error)
         })

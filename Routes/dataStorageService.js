@@ -8,7 +8,7 @@
 const userGroupEnum = require('../DataModel/userGroupEnum') 
 
  function createNrfUser(wxUserInfo, nrfUserGroup) {
-    var info = JSON.parse(wxUserInfo)
+    var info = wxUserInfo
     var newInfo = {
         openid: info.openid,
         nickname: info.nickname,
