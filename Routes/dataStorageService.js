@@ -52,11 +52,11 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      })
  }
 
- function saveCookie(dbs, token, hash, openid, expire) {
+ function saveCookie(dbs, hash, token, openid, expire) {
     return new Promise((resolve, reject) => { 
         var cookie = {
-            token: token,
             hash: hash,
+            token: token,
             openid: openid,
             expire: expire
         }
