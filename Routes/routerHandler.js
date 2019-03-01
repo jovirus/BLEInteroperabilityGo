@@ -40,32 +40,26 @@ module.exports = function(app, dbs) {
        *  Redirect URL
        */
       app.get('/oauth2.0/login', (req, res) => {
-        console.log('Login Cookies: ', req.cookies)
-        console.log('Login Signed Cookies: ', req.signedCookies)
-        console.log("signed cookie... undefined",req.signedCookies.t)
         if (req.signedCookies.t !== undefined) {
             dataStorageService.isExistCookie(dbs, req.signedCookies.t).then((isExist) => {
                 if (isExist) {
-                    res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
+                    return res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
                 } else {
-                    res.status(400).send("Access denied.", error)
+                    return res.status(400).send("Access denied.", error)
                 }
             }).catch(function(error) {
-                res.status(400).send("Unauthorized access", error)
+                return res.status(400).send("Unauthorized access", error)
             })
         }
         loginService.getWxLoginQRCode().then((result) => {
-            res.status(200).send(result)
+            return res.status(200).send(result)
         }).catch(function(error) {
-            res.status(400).send("Error when contact WeChat server, Please try again later", error)
+            return res.status(400).send("Error when contact WeChat server, Please try again later", error)
         })
       })
 
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
-        console.log('Redirect1 Cookies: ', req.cookies)
-        console.log('Redirect1 Signed Cookies: ', req.signedCookies)
-        console.log("signed cookie... undefined",req.signedCookies.t)
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
@@ -73,32 +67,28 @@ module.exports = function(app, dbs) {
                     if (resultInfo.length === 0) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.admin)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
-                            res.send("Application has received. please contact admin to process.")
+                            return res.send("Application has received. please contact admin to process.")
                         })
                     } else if (resultInfo[0].usergroup === userGroup.UserGroupEnum.unauthorized) {
-                        res.send("Your application is pending. please contact admin to process.")
+                        return res.send("Your application is pending. please contact admin to process.")
                     } else {
-                        console.log("resultInfo: ", resultInfo)
                         var hash = loginService.generateHash(tokenInfo.access_token)
-                        console.log("hash: ", hash)
                         var expireIn = loginService.getExpireTime(60000) // use wechat limit time for token without refresh 2h
-                        console.log("expireIn: ", expireIn)
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn).catch(function(error) {
-                            res.status(400).send("error when save cookie: ", error)
+                            return res.status(400).send("error when save cookie: ", error)
                           });
-                        console.log("cookie saved ")
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.redirect(`https://nrfipa.com/api/index.html?user=nickName`);
+                        return res.redirect(`https://nrfipa.com/api/index.html?user=nickName`);
                         // res.send(`Welcome to nRF Interoperability! ${resultInfo[0].nickName}`)
                     }
                 }).catch(function(error) {
-                    res.status(400).send("Error when fetch login history from server, Please try again later: ", error)
+                    return res.status(400).send("Error when fetch login history from server, Please try again later: ", error)
                   });
             }).catch(function(error) {
-                res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
+                return res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
             })
         }).catch(function(error) {
-            res.status(400).send("Error when authorizing with WeChat server, Please try again later: ", error)
+            return res.status(400).send("Error when authorizing with WeChat server, Please try again later: ", error)
         })
       });
 
@@ -107,15 +97,12 @@ module.exports = function(app, dbs) {
        */
       app.get('/api/index.html', (req, res) => {
         var docPath = path.join(__dirname, '../index.html')
-        console.log('Cookies: ', req.cookies)
-        console.log('Signed Cookies: ', req.signedCookies)
-        res.status(200).sendFile(docPath)
+        return res.status(200).sendFile(docPath)
       });
 
       app.get('/api/doc/testcases.html', (req, res) => {
         var docPath = path.join(__dirname, '../doc/testcases.html')
-        console.log(loginService.readCookie("cx001"))
-        res.status(200).sendFile(docPath)
+        return res.status(200).sendFile(docPath)
       });
 
     /**  INSERT TESTCASE
@@ -126,7 +113,7 @@ module.exports = function(app, dbs) {
         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
         let result = db.collection(process.env.DB_COLLECTION_TESTREPORT).insertOne(report, function(err, object){
             if (err) return res.status(400).send(err)
-            res.status(200).send(object.insertedId) 
+            return res.status(200).send(object.insertedId) 
         }) 
       });
 
@@ -144,7 +131,7 @@ module.exports = function(app, dbs) {
                     matchedResults: docs.length,
                     contents: docs
                 }
-                res.status(200).send(result)
+                return res.status(200).send(result)
             })
     });
  
@@ -381,7 +368,7 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
-        res.send('***This is a private portal used for nrf devices interoperability test.\n ***Any unauthorized access will be blocked and shall leave this portal.');
+        return res.send('***This is a private portal used for nrf devices interoperability test.\n ***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
      /***************************************************************************************** NOT IN USED ***************************************************************************************************************

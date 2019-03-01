@@ -91,7 +91,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         }
         let db = dbs.db(process.env.DB_WEB_NAME);
         let result = db.collection(process.env.DB_COLLECTION_COOKIE).find(query).project(supressedValue).toArray((err, cookie) => {
-            if (cookie.length !== 1 || err) reject(false)
+            if (cookie.length !== 1 || err) reject(err)
             else resolve(true)
         })
      })
