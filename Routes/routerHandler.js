@@ -51,6 +51,8 @@ module.exports = function(app, dbs) {
 
       app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
+        var expireIn = loginService.getExpireTime(60000)
+        console.log("expires in: ", expireIn)
         console.log('Redirect1 Cookies: ', req.cookies)
         console.log('Redirect1 Signed Cookies: ', req.signedCookies)
         if (req.signedCookies.t !== undefined) {

@@ -23,12 +23,12 @@ function randomWithSeed(seed) {
 
 function getExpireTime(millisecond) {
     var date = new Date();
-    return date.setTime(date.getTime() + millisecond).toGMTString();
+    return date.setTime(date.getTime() + millisecond).toString();
 }
 
 function setExpire() {
     var date = new Date();
-    return date.setTime(date.getTime() - (1000*60*60*24)).toGMTString();
+    return date.setTime(date.getTime() - (1000*60*60*24)).toString();
 }
 
 // function writeCookie(name,value,days) {
