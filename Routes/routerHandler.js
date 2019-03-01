@@ -43,16 +43,21 @@ module.exports = function(app, dbs) {
       app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
             console.log("cached cookie: ", req.signedCookies.t)
-            dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookie) => {
-                var cki = JSON.parse(cookie)
-                console.log("db cookie: ", cki.openid)
-                dataStorageService.isUserExist(dbs, cki.openid).then((users) => {
-                    if (users.length === 1) {
-                        return res.redirect(`/api/index.html?user=${users[0].nickname}`)
-                    } else {
-                        return res.status(400).send("Access denied.", error)
-                    }
-                })
+            dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
+                if (cookies.length === 0) return res.status(400).send("Unauthorized access", error)
+                else if (cookies.length === 1) {
+                    var cki = JSON.parse(cookie[0])
+                    console.log("db cookie: ", cki.openid)
+                    dataStorageService.isUserExist(dbs, cki.openid).then((users) => {
+                        if (users.length === 1) {
+                            return res.redirect(`/api/index.html?user=${users[0].nickname}`)
+                        } else {
+                            return res.status(400).send("Access denied.", error)
+                        }
+                    })
+                } else {
+                    return res.status(400).send("Access denied.", error)
+                }
             }).catch(function(error) {
                 return res.status(400).send("Unauthorized access", error)
             })
