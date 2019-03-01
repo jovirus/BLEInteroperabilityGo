@@ -55,7 +55,7 @@ module.exports = function(app, dbs) {
         console.log('Redirect1 Signed Cookies: ', req.signedCookies)
         var signedCookie = req.signedCookies 
         if (signedCookie) {
-            dataStorageService.readCookie(dbs, signedCookie).then((isExist) => {
+            dataStorageService.isExistCookie(dbs, signedCookie).then((isExist) => {
                 if (isExist) {
                     res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
                 }
