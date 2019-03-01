@@ -84,7 +84,7 @@ module.exports = function(app, dbs) {
                             return res.status(400).send("Internal Error: ", error)
                           });
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 7200000 });
-                        return res.redirect(`/api/index.html?user=${nrfUser.nickname}`);
+                        return res.redirect(`/api/index.html?user=${userInfo.nickname}`);
                     }
                 }).catch(function(error) {
                     return res.status(400).send("Error when fetch login history from server, Please try again later: ", error)
