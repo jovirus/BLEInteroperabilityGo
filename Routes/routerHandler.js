@@ -77,11 +77,17 @@ module.exports = function(app, dbs) {
                     } else if (resultInfo[0].usergroup === userGroup.UserGroupEnum.unauthorized) {
                         res.send("Your application is pending. please contact admin to process.")
                     } else {
+                        console.log("resultInfo: ", resultInfo)
                         var hash = loginService.generateHash(tokenInfo.access_token)
+                        console.log("hash: ", hash)
                         var expireIn = loginService.getExpireTime(60000) // use wechat limit time for token without refresh 2h
-                        dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn)
+                        console.log("expireIn: ", expireIn)
+                        dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn).catch(function(error) {
+                            res.status(400).send("error when save cookie: ", error)
+                          });
+                        console.log("cookie saved ")
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.redirect(`https://nrfipa.com/api/index.html?user=${resultInfo[0].nickName}`);
+                        res.redirect(`https://nrfipa.com/api/index.html?user=nickName`);
                         // res.send(`Welcome to nRF Interoperability! ${resultInfo[0].nickName}`)
                     }
                 }).catch(function(error) {

@@ -23,7 +23,7 @@ function randomWithSeed(seed) {
 
 function getExpireTime(millisecond) {
     var date = new Date();
-    return date.setTime(date.getTime()+ millisecond).toGMTString();
+    return date.setTime(date.getTime() + millisecond).toGMTString();
 }
 
 function setExpire() {
