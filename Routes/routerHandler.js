@@ -79,11 +79,11 @@ module.exports = function(app, dbs) {
                         return res.send("Your application is pending. please contact admin to process.")
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
-                        var expireIn = loginService.getExpireTime(SEESION_EXPIRE) 
+                        var expireIn = loginService.getExpireTime(7200000) 
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn).catch(function(error) {
                             return res.status(400).send("Internal Error: ", error)
                           });
-                        res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: SEESION_EXPIRE });
+                        res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 7200000 });
                         return res.redirect(`/api/index.html?user=${nrfUser.nickname}`);
                     }
                 }).catch(function(error) {
