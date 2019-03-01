@@ -47,7 +47,7 @@ module.exports = function(app, dbs) {
                 console.log("db cookie: ", cookies)
                 if (cookies.length === 0) console.log("No cookie found")
                 else if (cookies.length === 1) {
-                    var cki = JSON.parse(cookie[0])
+                    var cki = JSON.parse(cookies[0])
                     console.log("db cookie: ", cki.openid)
                     dataStorageService.isUserExist(dbs, cki.openid).then((users) => {
                         if (users.length === 1) {
