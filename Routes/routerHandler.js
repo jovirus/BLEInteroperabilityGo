@@ -51,7 +51,8 @@ module.exports = function(app, dbs) {
                     console.log("db cookie: ", cki.openid)
                     dataStorageService.isUserExist(dbs, cki.openid).then((users) => {
                         if (users.length === 1) {
-                            return res.redirect(`/api/index.html?user=${users[0].nickname}`)
+                            var user = JSON.parse(users[0])
+                            return res.redirect(`/api/index.html?user=${user.nickname}`)
                         } else {
                             return res.status(400).send("Access denied.", error)
                         }
