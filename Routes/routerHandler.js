@@ -51,7 +51,7 @@ module.exports = function(app, dbs) {
                 else if (cookies.length === 1) {
                     console.log("db cookie val: ", cookies[0])
                     console.log("db cookie openid: ", cookies[0].openid)
-                    dataStorageService.isUserExist(dbs, cki.openid).then((users) => {
+                    dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
                         if (users.length === 1) {
                             var user = JSON.parse(users[0])
                             return res.redirect(`/api/index.html?user=${user.nickname}`)
