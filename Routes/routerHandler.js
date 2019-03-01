@@ -53,6 +53,14 @@ module.exports = function(app, dbs) {
         let wxCode = req.query.code
         console.log('Redirect1 Cookies: ', req.cookies)
         console.log('Redirect1 Signed Cookies: ', req.signedCookies)
+        var signedCookie = req.signedCookies 
+        if (signedCookie) {
+            dataStorageService.readCookie(dbs, signedCookie).then((isExist) => {
+                if (isExist) {
+                    res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
+                }
+            })
+        }
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
@@ -66,9 +74,10 @@ module.exports = function(app, dbs) {
                         res.send("Your application is pending. please contact admin to process.")
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
-                        // dataStorageService.saveCookie(dbs,tokenInfo.access_token, hash, tokenInfo.openid, false)
+                         var expireIn = loginService.getExpireTime(60000) // use wechat limit time for token without refresh 2h
+                        dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn)
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        res.redirect('https://nrfipa.com/api/index.html');
+                        res.redirect(`https://nrfipa.com/api/index.html?user=${resultInfo[0].nickName}`);
                         // res.send(`Welcome to nRF Interoperability! ${resultInfo[0].nickName}`)
                     }
                 }).catch(function(error) {

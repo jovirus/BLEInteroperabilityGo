@@ -21,6 +21,16 @@ function randomWithSeed(seed) {
     console.log(rng())
 }
 
+function getExpireTime(millisecond) {
+    var date = new Date();
+    return date.setTime(date.getTime()+ millisecond).toGMTString();
+}
+
+function setExpire() {
+    var date = new Date();
+    return date.setTime(date.getTime() - (1000*60*60*24)).toGMTString();
+}
+
 // function writeCookie(name,value,days) {
 //     var date, expires;
 //     if (days) {
@@ -125,7 +135,9 @@ let services = {
     getWxLoginToken: getWxLoginToken,
     getWxUserInfo: getWxUserInfo,
     generate256RandomBytes: generate256RandomBytes,
-    generateHash: generateHash
+    generateHash: generateHash,
+    getExpireTime: getExpireTime,
+    setExpire: setExpire
 }
 
 module.exports = services;

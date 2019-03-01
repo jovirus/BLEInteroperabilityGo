@@ -68,11 +68,42 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      })
  }
 
+ function deleteCookie(dbs, hash) {
+    return new Promise((resolve, reject) => { 
+        var query = {
+            hash: hash
+        }
+        let db = dbs.db(process.env.DB_WEB_NAME);
+        let result = db.collection(process.env.DB_COLLECTION_COOKIE).deleteOne(query, function(err, object){
+            if (err) reject(err)
+            else resolve(true)
+        }) 
+     })
+ }
+
+ function isExistCookie(dbs, hash) {
+    return new Promise((resolve, reject) => { 
+        var query = {
+            hash: hash
+        }
+        var supressedValue = {
+            _id: 0
+        }
+        let db = dbs.db(process.env.DB_WEB_NAME);
+        let result = db.collection(process.env.DB_COLLECTION_COOKIE).findOne(query).project(supressedValue).toArray((err, cookie) => {
+            if (cookie.length !== 1 || err) reject(false)
+            else resolve(true)
+        })
+     })
+ }
+
  let services = {
     createNrfUser: createNrfUser,
     saveNewUser: saveNewUser,
     isUserExist: isUserExist,
-    saveCookie: saveCookie
+    saveCookie: saveCookie,
+    deleteCookie: deleteCookie,
+    isExistCookie: isExistCookie
  }
 
  module.exports = services
