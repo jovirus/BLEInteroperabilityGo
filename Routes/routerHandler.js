@@ -42,22 +42,9 @@ module.exports = function(app, dbs) {
       app.get('/oauth2.0/login', (req, res) => {
         console.log('Login Cookies: ', req.cookies)
         console.log('Login Signed Cookies: ', req.signedCookies)
-        loginService.getWxLoginQRCode().then((result) => {
-            res.status(200).send(result)
-        }).catch(function(error) {
-            res.status(400).send("Error when contact WeChat server, Please try again later", error)
-        })
-      })
-
-      app.get('/login/wx', (req, res) => {
-        let wxCode = req.query.code
-        var expireIn = loginService.getExpireTime(60000)
-        console.log("expires in: ", expireIn)
-        console.log('Redirect1 Cookies: ', req.cookies)
-        console.log('Redirect1 Signed Cookies: ', req.signedCookies)
+        console.log("signed cookie... undefined",req.signedCookies.t)
         if (req.signedCookies.t !== undefined) {
-            console.log("signed cookie... undefined",req.signedCookies.t)
-            dataStorageService.isExistCookie(dbs, signedCookie).then((isExist) => {
+            dataStorageService.isExistCookie(dbs, req.signedCookies.t).then((isExist) => {
                 if (isExist) {
                     res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
                 } else {
@@ -67,6 +54,18 @@ module.exports = function(app, dbs) {
                 res.status(400).send("Unauthorized access", error)
             })
         }
+        loginService.getWxLoginQRCode().then((result) => {
+            res.status(200).send(result)
+        }).catch(function(error) {
+            res.status(400).send("Error when contact WeChat server, Please try again later", error)
+        })
+      })
+
+      app.get('/login/wx', (req, res) => {
+        let wxCode = req.query.code
+        console.log('Redirect1 Cookies: ', req.cookies)
+        console.log('Redirect1 Signed Cookies: ', req.signedCookies)
+        console.log("signed cookie... undefined",req.signedCookies.t)
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
