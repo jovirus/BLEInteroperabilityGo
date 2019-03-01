@@ -81,7 +81,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      })
  }
 
- function isExistCookie(dbs, hash = "") {
+ function isCookieExist(dbs, hash = "") {
     return new Promise((resolve, reject) => { 
         var query = {
             hash: hash
@@ -92,7 +92,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         let db = dbs.db(process.env.DB_WEB_NAME);
         let result = db.collection(process.env.DB_COLLECTION_COOKIE).find(query).project(supressedValue).toArray((err, cookie) => {
             if (cookie.length !== 1 || err) reject(err)
-            else resolve(true)
+            else resolve(cookie)
         })
      })
  }
@@ -103,7 +103,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
     isUserExist: isUserExist,
     saveCookie: saveCookie,
     deleteCookie: deleteCookie,
-    isExistCookie: isExistCookie
+    isCookieExist: isCookieExist
  }
 
  module.exports = services

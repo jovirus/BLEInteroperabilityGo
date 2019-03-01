@@ -21,6 +21,7 @@ var cookieParser = require('cookie-parser')
 
 const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
 const TEST91_DATABASE_NAME = process.env.DB_91
+const SEESION_EXPIRE = 7200000 // use wechat limit time for token without refresh 2h
 
 module.exports = function(app, dbs) {
     app.use(express.json());
@@ -41,14 +42,17 @@ module.exports = function(app, dbs) {
        */
       app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
-            dataStorageService.isExistCookie(dbs, req.signedCookies.t).then((isExist) => {
-                if (isExist) {
-                    return res.redirect('/api/index.html?user=XXXX');
-                } else {
-                    return res.status(400).send("Access denied.", error)
-                }
+            dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookie) => {
+                console.log("cookie: ", cookie.openid)
+                dataStorageService.isUserExist(dbs, cookie.openid).then((users) => {
+                    if (users.length === 1) {
+                        return res.redirect(`/api/index.html?user=${users[0].nickname}`)
+                    } else {
+                        return res.status(400).send("Access denied.", error)
+                    }
+                })
             }).catch(function(error) {
-                return res.status(400).send("Unauthorized access", error)
+                return res.status(400).send("Access denied.", error)
             })
         } else {
             loginService.getWxLoginQRCode().then((result) => {
@@ -74,13 +78,12 @@ module.exports = function(app, dbs) {
                         return res.send("Your application is pending. please contact admin to process.")
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
-                        var expireIn = loginService.getExpireTime(60000) // use wechat limit time for token without refresh 2h
+                        var expireIn = loginService.getExpireTime(SEESION_EXPIRE) 
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn).catch(function(error) {
-                            return res.status(400).send("error when save cookie: ", error)
+                            return res.status(400).send("Internal Error: ", error)
                           });
-                        res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 60000 });
-                        return res.redirect(`https://nrfipa.com/api/index.html?user=nickName`);
-                        // res.send(`Welcome to nRF Interoperability! ${resultInfo[0].nickName}`)
+                        res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: SEESION_EXPIRE });
+                        return res.redirect(`/api/index.html?user=${nrfUser.nickname}`);
                     }
                 }).catch(function(error) {
                     return res.status(400).send("Error when fetch login history from server, Please try again later: ", error)
