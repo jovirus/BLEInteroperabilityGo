@@ -46,15 +46,14 @@ module.exports = function(app, dbs) {
             dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
                 console.log("db cookie: ", cookies)
                 if (cookies.length === 0) {
-
+                    return res.status(400).send("Access denied.", error)
                 }
                 else if (cookies.length === 1) {
                     console.log("db cookie val: ", cookies[0])
                     console.log("db cookie openid: ", cookies[0].openid)
                     dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
                         if (users.length === 1) {
-                            var user = JSON.parse(users[0])
-                            return res.redirect(`/api/index.html?user=${user.nickname}`)
+                            return res.redirect(`/api/index.html?user=${users[0].nickname}`)
                         } else {
                             return res.status(400).send("Access denied.", error)
                         }
