@@ -42,9 +42,10 @@ module.exports = function(app, dbs) {
        */
       app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
+            console.log("cached cookie: ", req.signedCookies.t)
             dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookie) => {
                 var cki = JSON.parse(cookie)
-                console.log("cookie: ", cki.openid)
+                console.log("db cookie: ", cki.openid)
                 dataStorageService.isUserExist(dbs, cki.openid).then((users) => {
                     if (users.length === 1) {
                         return res.redirect(`/api/index.html?user=${users[0].nickname}`)
@@ -53,7 +54,7 @@ module.exports = function(app, dbs) {
                     }
                 })
             }).catch(function(error) {
-                return res.status(400).send("Access denied.", error)
+                return res.status(400).send("Unauthorized access", error)
             })
         } else {
             loginService.getWxLoginQRCode().then((result) => {
