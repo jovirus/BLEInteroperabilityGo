@@ -53,13 +53,8 @@ module.exports = function(app, dbs) {
         let wxCode = req.query.code
         console.log('Redirect1 Cookies: ', req.cookies)
         console.log('Redirect1 Signed Cookies: ', req.signedCookies)
-        console.log("type of cookie",typeof(req.signedCookies))
-        if (req.signedCookies.t === undefined) {
+        if (req.signedCookies.t !== undefined) {
             console.log("signed cookie... undefined",req.signedCookies.t)
-        }
-        if (req.signedCookies.t !== {}) {
-            console.log("signed cookie... {}",req.signedCookies.t)
-
             dataStorageService.isExistCookie(dbs, signedCookie).then((isExist) => {
                 if (isExist) {
                     res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
