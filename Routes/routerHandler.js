@@ -43,19 +43,20 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) {
             dataStorageService.isExistCookie(dbs, req.signedCookies.t).then((isExist) => {
                 if (isExist) {
-                    return res.redirect(`https://nrfipa.com/api/index.html?user=XXXX`);
+                    return res.redirect('/api/index.html?user=XXXX');
                 } else {
                     return res.status(400).send("Access denied.", error)
                 }
             }).catch(function(error) {
                 return res.status(400).send("Unauthorized access", error)
             })
+        } else {
+            loginService.getWxLoginQRCode().then((result) => {
+                return res.status(200).send(result)
+            }).catch(function(error) {
+                return res.status(400).send("Error when contact WeChat server, Please try again later", error)
+            })
         }
-        loginService.getWxLoginQRCode().then((result) => {
-            return res.status(200).send(result)
-        }).catch(function(error) {
-            return res.status(400).send("Error when contact WeChat server, Please try again later", error)
-        })
       })
 
       app.get('/login/wx', (req, res) => {
