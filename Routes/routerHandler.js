@@ -64,6 +64,7 @@ module.exports = function(app, dbs) {
       })
 
       app.get('/login/wx', (req, res) => {
+          console.log("body",req.body)
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
