@@ -28,6 +28,11 @@ module.exports = function(app, dbs) {
     app.use(cookieParser(process.env.COOKIE_SECRET));
     app.all('/api/*', requireAuthentication);
 
+    app.all('/api/*', function (req, res, next) {
+        console.log('Doing authen check and Accessing the secret section ...')
+        next() // pass control to the next handler
+      });
+
 
        /**  Tencent Mini-app verfication file sUVEnOBdTo.txt.
         *   To satisfy Mini-app publish process, the web server shall able to retrieve the file
