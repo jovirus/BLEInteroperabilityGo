@@ -28,10 +28,18 @@ module.exports = function(app, dbs) {
     app.use(cookieParser(process.env.COOKIE_SECRET));
 
        app.all('/api/*', function (req, res, next) {
-            console.log('Doing authen check and Accessing the secret section ...')
-            next() // pass control to the next handler
+        loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
+            if (userCookie.length === 0) {
+                return res.status(400).send("Not authorized", error)
+            } else if (userCookie.length === 1) {
+                return next() // pass control to the next handler
+            } else {
+                return res.status(400).send("Access denied.", error)
+            }
+        }).catch(function(error) {
+            return res.status(400).send("Internal Error", error)
+        })            
        });
-
 
        /**  Tencent Mini-app verfication file sUVEnOBdTo.txt.
         *   To satisfy Mini-app publish process, the web server shall able to retrieve the file
@@ -42,25 +50,6 @@ module.exports = function(app, dbs) {
         var jsonPath = path.join(__dirname, '../.crc/sUVEnOBdTo.txt');
         res.status(200).sendFile(jsonPath)
       });
-
-    //   function verifyDBCookie (dbs, token) {
-    //     dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
-    //         if (cookies.length === 0) return res.status(400).send("User not authenticated.", error)
-    //         else if (cookies.length === 1) {
-    //             dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
-    //                 if (users.length === 1) {
-    //                     return res.redirect(`/api/index.html?user=${users[0].nickname}`)
-    //                 } else {
-    //                     return res.status(400).send("Access denied.", error)
-    //                 }
-    //             })
-    //         } else {
-    //             return res.status(400).send("Access denied.", error)
-    //         }
-    //     }).catch(function(error) {
-    //         return res.status(400).send("Unauthorized access", error)
-    //     })
-    //   }
 
       /** Login oauth2 with WeChat
        *  Redirect URL
