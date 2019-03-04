@@ -31,6 +31,60 @@ function setToExpire() {
     return date.setTime(date.getTime() - (1000*60*60*24));
 }
 
+function verifyCookie(dbs, hash="") {
+    return new Promise((resolve, reject) => { 
+        let db = dbs.db(process.env.DB_WEB_NAME);
+        let result = db.collection(process.env.DB_COLLECTION_USERINFO).aggregate([
+            {
+                $lookup:
+                   {
+                     from: process.env.DB_COLLECTION_COOKIE,
+                     let: { userInfo_openid: "$openid", cookie_hash: hash },
+                     pipeline: [
+                        { $match:
+                           { $expr:
+                              { $and:
+                                 [ {$eq: ["$hash", "$$cookie_hash"] },
+                                   { $eq: [ "$openid", "$$userInfo_openid" ] },
+                                   { $gte: [ "$expire", new Date() ] }
+                                 ]
+                              }
+                           }
+                        },
+                        { $project: { openid: 0, _id: 0 } }
+                     ],
+                     as: "user_cookie"
+                   }
+              },
+             {
+               $unwind:
+                 {
+                   path : "$user_cookie",
+                   preserveNullAndEmptyArrays: false
+                 }
+             },
+             {
+               $limit: 20
+             },
+             {
+               $project: 
+                  {
+                    _id: 0,
+                    sex: 0,
+                    language: 0,
+                    city: 0,
+                    province: 0,
+                    headimgurl: 0,
+                    privilege: 0
+                  } 
+             }
+        ]).toArray((err, user_cookie) => {
+            if (err) reject(err)
+            else resolve(user_cookie)
+        })
+     })
+}
+
 // function writeCookie(name,value,days) {
 //     var date, expires;
 //     if (days) {
@@ -138,7 +192,8 @@ let services = {
     generate256RandomBytes: generate256RandomBytes,
     generateHash: generateHash,
     getExpireTime: getExpireTime,
-    setToExpire: setToExpire
+    setToExpire: setToExpire,
+    verifyCookie: verifyCookie
 }
 
 module.exports = services;

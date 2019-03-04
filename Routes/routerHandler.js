@@ -43,47 +43,40 @@ module.exports = function(app, dbs) {
         res.status(200).sendFile(jsonPath)
       });
 
-      function verifyDBCookie (dbs, token) {
-        dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
-            if (cookies.length === 0) return res.status(400).send("User not authenticated.", error)
-            else if (cookies.length === 1) {
-                dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
-                    if (users.length === 1) {
-                        return res.redirect(`/api/index.html?user=${users[0].nickname}`)
-                    } else {
-                        return res.status(400).send("Access denied.", error)
-                    }
-                })
-            } else {
-                return res.status(400).send("Access denied.", error)
-            }
-        }).catch(function(error) {
-            return res.status(400).send("Unauthorized access", error)
-        })
-      }
+    //   function verifyDBCookie (dbs, token) {
+    //     dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
+    //         if (cookies.length === 0) return res.status(400).send("User not authenticated.", error)
+    //         else if (cookies.length === 1) {
+    //             dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
+    //                 if (users.length === 1) {
+    //                     return res.redirect(`/api/index.html?user=${users[0].nickname}`)
+    //                 } else {
+    //                     return res.status(400).send("Access denied.", error)
+    //                 }
+    //             })
+    //         } else {
+    //             return res.status(400).send("Access denied.", error)
+    //         }
+    //     }).catch(function(error) {
+    //         return res.status(400).send("Unauthorized access", error)
+    //     })
+    //   }
 
       /** Login oauth2 with WeChat
        *  Redirect URL
        */
       app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
-            dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
-                if (cookies.length === 0) {
-                    return res.status(400).send("Access denied.", error)
-                }
-                else if (cookies.length === 1) {
-                    dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
-                        if (users.length === 1) {
-                            return res.redirect(`/api/index.html?user=${users[0].nickname}`)
-                        } else {
-                            return res.status(400).send("Access denied.", error)
-                        }
-                    })
+            loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
+                if (userCookie.length === 0) {
+                    return res.status(400).send("Not authorized", error)
+                } else if (userCookie.length === 1) {
+                    return res.redirect(`/api/index.html?user=${userCookie[0].nickname}`)
                 } else {
                     return res.status(400).send("Access denied.", error)
                 }
             }).catch(function(error) {
-                return res.status(400).send("Unauthorized access", error)
+                return res.status(400).send("Internal Error", error)
             })
         } else {
             loginService.getWxLoginQRCode().then((result) => {
