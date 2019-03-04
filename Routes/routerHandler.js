@@ -44,14 +44,14 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) {
             loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.status(400).send("Not authorized", error)
+                    return res.status(401).send("Not authorized. Please login.")
                 } else if (userCookie.length === 1) {
                     return res.redirect(`/api/index.html?user=${userCookie[0].nickname}`)
                 } else {
-                    return res.status(400).send("Access denied.", error)
+                    return res.status(409).send("Access denied.")
                 }
             }).catch(function(error) {
-                return res.status(400).send("Internal Error", error)
+                return res.status(500).send("Internal Error", error)
             })
         } else {
             loginService.getWxLoginQRCode().then((result) => {
@@ -80,19 +80,19 @@ module.exports = function(app, dbs) {
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         var expireIn = loginService.getExpireTime(7200000) 
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, new Date(expireIn)).catch(function(error) {
-                            return res.status(400).send("Internal Error: ", error)
+                            return res.status(500).send("Internal Error: ", error)
                           });
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 7200000 });
                         return res.redirect(`/api/index.html?user=${userInfo.nickname}`);
                     }
                 }).catch(function(error) {
-                    return res.status(400).send("Error when fetch login history from server, Please try again later: ", error)
+                    return res.status(500).send("Error when fetch login history from server, Please try again later: ", error)
                   });
             }).catch(function(error) {
-                return res.status(400).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
+                return res.status(500).send("Error fetching userinfo from WeChat server, Please try again later: ", error)
             })
         }).catch(function(error) {
-            return res.status(400).send("Error when authorizing with WeChat server, Please try again later: ", error)
+            return res.status(500).send("Error when authorizing with WeChat server, Please try again later: ", error)
         })
       });
 
@@ -100,17 +100,17 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) { 
             loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.status(400).send("Not authorized", error)
+                    return res.status(401).send("Not authorized. Please login.")
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
-                    return res.status(400).send("Access denied.", error)
+                    return res.status(409).send("Multipule login detected.")
                 }
             }).catch(function(error) {
-                return res.status(400).send("Internal Error", error)
+                return res.status(503).send("Internal Error", error)
             })            
         } else {
-            return res.status(400).send("Not authorized", error)
+            return res.status(401).send("Not authorized. Please login.")
         }
     });
 
