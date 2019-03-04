@@ -138,7 +138,7 @@ let services = {
     generate256RandomBytes: generate256RandomBytes,
     generateHash: generateHash,
     getExpireTime: getExpireTime,
-    setExpire: setExpire
+    setToExpire: setToExpire
 }
 
 module.exports = services;
