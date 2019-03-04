@@ -26,6 +26,8 @@ const SEESION_EXPIRE = 7200000 // use wechat limit time for token without refres
 module.exports = function(app, dbs) {
     app.use(express.json());
     app.use(cookieParser(process.env.COOKIE_SECRET));
+    app.all('/api/*', requireAuthentication);
+
 
        /**  Tencent Mini-app verfication file sUVEnOBdTo.txt.
         *   To satisfy Mini-app publish process, the web server shall able to retrieve the file
@@ -374,12 +376,6 @@ module.exports = function(app, dbs) {
             return res.status(200).send('succeed')
         })
     })
-
-    app.all('/api/*', requireAuthentication) {
-        console.log('We are doing authentification check. Only applied for routes that begin with /api')
-        next()
-    }
-
 
     /**
      * RESPONSE TO UNUSED SERVICES
