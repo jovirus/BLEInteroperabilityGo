@@ -26,7 +26,6 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
  }
 
  function isUserExist(dbs, opendId = "") {
-    console.log("Requested userInfo: ", opendId)
      return new Promise((resolve, reject) => { 
         let db = dbs.db(process.env.DB_WEB_NAME);
         var query = {

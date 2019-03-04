@@ -375,11 +375,17 @@ module.exports = function(app, dbs) {
         })
     })
 
+    app.all('/api/*', requireAuthentication) {
+        console.log('We are doing authentification check. Only applied for routes that begin with /api')
+        next()
+    }
+
+
     /**
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
-        return res.send('***This is a private portal used for nrf devices interoperability test.\n ***Any unauthorized access will be blocked and shall leave this portal.');
+        return res.send('***This is a private portal used for nrf devices interoperability test.\n***Any unauthorized access will be blocked and shall leave this portal.');
     });
 
      /***************************************************************************************** NOT IN USED ***************************************************************************************************************
