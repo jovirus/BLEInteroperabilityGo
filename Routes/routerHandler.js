@@ -27,10 +27,10 @@ module.exports = function(app, dbs) {
     app.use(express.json());
     app.use(cookieParser(process.env.COOKIE_SECRET));
 
-    app.all('/api/*', function (req, res, next) {
-        console.log('Doing authen check and Accessing the secret section ...')
-        next() // pass control to the next handler
-      });
+       app.all('/api/*', function (req, res, next) {
+            console.log('Doing authen check and Accessing the secret section ...')
+            next() // pass control to the next handler
+       });
 
 
        /**  Tencent Mini-app verfication file sUVEnOBdTo.txt.
@@ -42,6 +42,25 @@ module.exports = function(app, dbs) {
         var jsonPath = path.join(__dirname, '../.crc/sUVEnOBdTo.txt');
         res.status(200).sendFile(jsonPath)
       });
+
+      function verifyDBCookie (dbs, token) {
+        dataStorageService.isCookieExist(dbs, req.signedCookies.t).then((cookies) => {
+            if (cookies.length === 0) return res.status(400).send("User not authenticated.", error)
+            else if (cookies.length === 1) {
+                dataStorageService.isUserExist(dbs, cookies[0].openid).then((users) => {
+                    if (users.length === 1) {
+                        return res.redirect(`/api/index.html?user=${users[0].nickname}`)
+                    } else {
+                        return res.status(400).send("Access denied.", error)
+                    }
+                })
+            } else {
+                return res.status(400).send("Access denied.", error)
+            }
+        }).catch(function(error) {
+            return res.status(400).send("Unauthorized access", error)
+        })
+      }
 
       /** Login oauth2 with WeChat
        *  Redirect URL
@@ -92,7 +111,7 @@ module.exports = function(app, dbs) {
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         var expireIn = loginService.getExpireTime(7200000) 
-                        dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, expireIn).catch(function(error) {
+                        dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, new Date(expireIn)).catch(function(error) {
                             return res.status(400).send("Internal Error: ", error)
                           });
                         res.cookie('t', hash, { httpOnly: true, signed: true, secure: true, maxAge: 7200000 });
