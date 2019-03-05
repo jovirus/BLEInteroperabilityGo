@@ -88,10 +88,12 @@ function verifyCookie(dbs, hash="") {
 function setCookieToExpire(dbs, hash="") {
     return new Promise((resolve, reject) => { 
         try {
+            var expireTime = setToExpire()
+            console.log("expireTime: ", expireTime)
             let db = dbs.db(process.env.DB_WEB_NAME);
             var result = db.cookie.updateOne(
                 { hash: { $eq: hash } },
-                { $set: { expire: new Date(setToExpire()) } }
+                { $set: { expire: new Date(expireTime) } }
              )
             console.log("modified count: ", result.modifiedCount)
             if (result.modifiedCount === 1) resolve(true)
