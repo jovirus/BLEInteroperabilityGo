@@ -44,7 +44,7 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) {
             loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return wxLogin()
+                    return wxLogin(req, res)
                 } else if (userCookie.length === 1) {
                     return res.redirect(`/api/index.html?user=${userCookie[0].nickname}`)
                 } else {
@@ -54,11 +54,11 @@ module.exports = function(app, dbs) {
                 return res.status(500).send("Internal Error", error)
             })
         } else {
-            wxLogin()
+            wxLogin(req, res)
         }
       })
 
-      function wxLogin() {
+      function wxLogin(req, res) {
         loginService.getWxLoginQRCode().then((result) => {
             return res.status(200).send(result)
         }).catch(function(error) {
