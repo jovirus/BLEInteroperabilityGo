@@ -64,7 +64,7 @@ module.exports = function(app, dbs) {
 
       app.get('/logoff', (req, res) => {
         if (req.signedCookies.t !== undefined) { 
-            loginService.setCookieToExpire(dbs, req.signedCookies.t).then((reuslt) => { 
+            loginService.setCookieToExpire(dbs, req.signedCookies.t).then((result) => { 
                 if (result) return res.status(200).send("Logged out")
                 else return res.status(200).send("Please login first")
             }).catch(function(error) {
