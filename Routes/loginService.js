@@ -93,14 +93,13 @@ function setCookieToExpire(dbs, hash="") {
             let db = dbs.db(process.env.DB_WEB_NAME);
             db.cookie.updateOne(
                 { hash: { $eq: hash } },
-                { $set: { expire: new Date(expireTime) } },
-                function(err, result) {
-                    console.log("modified count: ", result.modifiedCount)
-                    if (err) reject(err)
-                    else if (result.modifiedCount === 1) resolve(true)
-                    else resolve(false)
-                }
-             )
+                { $set: { expire: new Date(expireTime) } }
+             ).then((result) => {
+                console.log("result: ", result)
+                console.log("modified count: ", result.modifiedCount)
+                if (result.modifiedCount === 1) resolve(true)
+                else resolve(false)
+             })
         } catch (e) {
             reject(e)
         }
