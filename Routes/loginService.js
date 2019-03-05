@@ -91,7 +91,7 @@ function setCookieToExpire(dbs, hash="") {
             var expireTime = setToExpire()
             console.log("expireTime: ", expireTime)
             let db = dbs.db(process.env.DB_WEB_NAME);
-            db.cookie.updateOne(
+            db.collection(process.env.DB_COLLECTION_COOKIE).updateOne(
                 { hash: { $eq: hash } },
                 { $set: { expire: new Date(expireTime) } }
              ).then((result) => {
