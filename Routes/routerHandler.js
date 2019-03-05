@@ -62,8 +62,20 @@ module.exports = function(app, dbs) {
         }
       })
 
+      app.get('/logoff', (req, res) => {
+        if (req.signedCookies.t !== undefined) { 
+            loginService.setCookieToExpire(dbs, req.signedCookies.t).then((reuslt) => { 
+                if (result) return res.status(200).send("Logged out")
+                else return res.status(200).send("Please login first")
+            }).catch(function(error) {
+                return res.status(503).send("Internal Error", error)
+            })
+        } else {
+            return res.status(400).send("You havn't login.")
+        }
+      });
+
       app.get('/login/wx', (req, res) => {
-          console.log("body",req.body)
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
@@ -78,7 +90,7 @@ module.exports = function(app, dbs) {
                         return res.send("Your application is pending. please contact admin to process.")
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
-                        var expireIn = loginService.getExpireTime(7200000) 
+                        var expireIn = loginService.getExpireTime(7200000) // match the wechat token expire Time
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, new Date(expireIn)).catch(function(error) {
                             return res.status(500).send("Internal Error: ", error)
                           });
@@ -96,7 +108,7 @@ module.exports = function(app, dbs) {
         })
       });
 
-      app.all('/api/*', function (req, res, next) {
+      app.all('/ui/*', function (req, res, next) {
         if (req.signedCookies.t !== undefined) { 
             loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
                 if (userCookie.length === 0) {
@@ -117,12 +129,17 @@ module.exports = function(app, dbs) {
       /** API documentation
        *  Present API for client use
        */
-      app.get('/api/index.html', (req, res) => {
+      app.get('/ui/index.html', (req, res) => {
         var docPath = path.join(__dirname, '../index.html')
         return res.status(200).sendFile(docPath)
       });
 
-      app.get('/api/doc/testcases.html', (req, res) => {
+      app.get('/ui/doc/miniapp/index.html', (req, res) => {
+        var docPath = path.join(__dirname, '../index.html') // shall be under doc
+        return res.status(200).sendFile(docPath)
+      });
+
+      app.get('/ui/doc/miniprog/testcases.html', (req, res) => {
         var docPath = path.join(__dirname, '../doc/testcases.html')
         return res.status(200).sendFile(docPath)
       });
@@ -142,7 +159,7 @@ module.exports = function(app, dbs) {
     /**  GET ALL TEST REPORTS
      *   Pop up all reports
      */
-    app.get('/api/miniapp/find/report/', (req, res) => {
+    app.get('/ui/miniapp/find/report/', (req, res) => {
         let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
         var supressedValue = {
             _id: 0,

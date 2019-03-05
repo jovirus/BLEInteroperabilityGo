@@ -85,6 +85,23 @@ function verifyCookie(dbs, hash="") {
      })
 }
 
+function setCookieToExpire(dbs, hash="") {
+    return new Promise((resolve, reject) => { 
+        try {
+            let db = dbs.db(process.env.DB_WEB_NAME);
+            var result = db.cookie.updateOne(
+                { hash: { $eq: hash } },
+                { $set: { expire: new Date(setToExpire()) } }
+             )
+            console.log("modified count: ", result.modifiedCount)
+            if (result.modifiedCount === 1) resolve(true)
+            else resolve(false)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+        
 // function writeCookie(name,value,days) {
 //     var date, expires;
 //     if (days) {
@@ -172,14 +189,12 @@ function getWxUserInfo(token, openId) {
 
 function generate256RandomBytes() {
     const buf = crypto.randomBytes(256);
-    console.log(`${buf.length} bytes of random data: ${buf.toString('hex')}`);
 }
 
 function generateHash(token) {
     const hash = crypto.createHash('sha256')
     hash.update(token)
     var digi = hash.digest('hex')
-    console.log(digi)
     return digi
 }
 
@@ -193,7 +208,8 @@ let services = {
     generateHash: generateHash,
     getExpireTime: getExpireTime,
     setToExpire: setToExpire,
-    verifyCookie: verifyCookie
+    verifyCookie: verifyCookie,
+    setCookieToExpire, setCookieToExpire
 }
 
 module.exports = services;
