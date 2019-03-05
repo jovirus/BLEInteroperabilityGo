@@ -44,7 +44,7 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) {
             loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.status(401).send("Not authorized. Please login.")
+                    return wxLogin()
                 } else if (userCookie.length === 1) {
                     return res.redirect(`/api/index.html?user=${userCookie[0].nickname}`)
                 } else {
@@ -54,13 +54,17 @@ module.exports = function(app, dbs) {
                 return res.status(500).send("Internal Error", error)
             })
         } else {
-            loginService.getWxLoginQRCode().then((result) => {
-                return res.status(200).send(result)
-            }).catch(function(error) {
-                return res.status(400).send("Error when contact WeChat server, Please try again later", error)
-            })
+            wxLogin()
         }
       })
+
+      function wxLogin() {
+        loginService.getWxLoginQRCode().then((result) => {
+            return res.status(200).send(result)
+        }).catch(function(error) {
+            return res.status(400).send("Error when contact WeChat server, Please try again later", error)
+        })
+      }
 
       app.get('/logoff', (req, res) => {
         if (req.signedCookies.t !== undefined) { 
@@ -87,7 +91,7 @@ module.exports = function(app, dbs) {
                             return res.send("Application has received. please contact admin to process.")
                         })
                     } else if (resultInfo[0].usergroup === userGroup.UserGroupEnum.unauthorized) {
-                        return res.send("Your application is pending. please contact admin to process.")
+                        return res.send("You don't have the right to access the portal. please contact admin to process.")
                     } else {
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         var expireIn = loginService.getExpireTime(7200000) // match the wechat token expire Time
