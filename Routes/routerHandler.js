@@ -162,7 +162,12 @@ module.exports = function(app, dbs) {
     app.get('/resource/nordic_logo.png', (req, res) => {
         var docPath = path.join(__dirname, '../resource/nordic_logo.png')
         return res.status(200).sendFile(docPath)
-        });
+    });
+
+    app.get('/resource/nordic_logo_horiz.png', (req, res) => {
+        var docPath = path.join(__dirname, '../resource/nordic_logo_horiz.png')
+        return res.status(200).sendFile(docPath)
+    });
 
     /**  GET ALL TEST REPORTS
      *   Pop up all reports
