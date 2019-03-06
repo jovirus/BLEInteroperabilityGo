@@ -1,0 +1,21 @@
+<h1><strong>Interoperability test API for nRF91</strong></h1>
+<h2>Breif</h2>
+<p><span style="background-color: #d3d3d3;">APIs in this section are used for nRF91 devkit internet connection test.</span></p>
+<h3>GET</h3>
+<div>
+<div><em>/nrf91/test/find/{boardnr}</em></div>
+<p>Description: Return switch status of the given board number</p>
+<p>Example:&nbsp;<em>/nrf91/test/find/***</em></p>
+<div><hr /></div>
+</div>
+<h3>POST</h3>
+<div>
+<div><em>/nrf91/test/push/{boardnr}/{status}/{switchnr}</em></div>
+<p><em><em>Description:</em></em>Push DK(nRF91) swtich status</p>
+<div>
+<p>Type: text/html: charset=utf-8</p>
+<p>Parameters: "/boardnr/switchnr/status"</p>
+<p>Example: "/1/2/0" means we send the switch number 1 with status is off on board 1</p>
+<div><hr /></div>
+</div>
+</div>

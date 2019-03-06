@@ -134,17 +134,22 @@ module.exports = function(app, dbs) {
        *  Present API for client use
        */
       app.get('/ui/index.html', (req, res) => {
-        var docPath = path.join(__dirname, '../index.html')
+        var docPath = path.join(__dirname, '../doc/index.html')
         return res.status(200).sendFile(docPath)
       });
 
-      app.get('/ui/doc/miniapp/index.html', (req, res) => {
-        var docPath = path.join(__dirname, '../index.html') // shall be under doc
+      app.get('/ui/doc/miniapp/miniapp.html', (req, res) => {
+        var docPath = path.join(__dirname, '../miniapp.html') // shall be under doc
         return res.status(200).sendFile(docPath)
       });
 
-      app.get('/ui/doc/miniprog/testcases.html', (req, res) => {
+      app.get('/ui/doc/miniapp/testcases.html', (req, res) => {
         var docPath = path.join(__dirname, '../doc/testcases.html')
+        return res.status(200).sendFile(docPath)
+      });
+
+      app.get('/ui/doc/nrf91/index.html', (req, res) => {
+        var docPath = path.join(__dirname, '../doc/nrf91/index.html')
         return res.status(200).sendFile(docPath)
       });
 

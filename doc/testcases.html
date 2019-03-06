@@ -1,3 +1,145 @@
 <h1>Test Cases</h1>
-<p>Information is currently unavailable, for more information please send email to <a href="mailto:jiajun.qiu@nordicsemi.no">jiajun.qiu@nordicsemi.no</a></p>
-<p></p>
+<p>The following information are maintained by Bernard Lee @Nordic Semiconductor 2018.</p>
+<p>Contact:&nbsp;<a href="mailto:Bernard.Lee@nordicsemi.no">Bernard.Lee@nordicsemi.no</a></p>
+<p><strong>Version: 1.0</strong></p>
+<p><strong>Last updated:&nbsp;2019-01-18</strong></p>
+<h2>Inbound Message</h2>
+<p>Test Number is the linear sequence 1, 2, 3, &hellip; for debugging purpose.</p>
+<h2>Out<strong>bound Message</strong></h2>
+<p>The Thingy BLE interoperability tester has a 5-byte response message formatted as follows:</p>
+<table border="2">
+<tbody>
+<tr>
+<td width="64">
+<p>Test Number</p>
+</td>
+<td width="64">
+<p>Test Result</p>
+</td>
+<td width="64">
+<p>Data[0]</p>
+</td>
+<td width="64">
+<p>Data[1]</p>
+</td>
+<td width="64">
+<p>Test ID</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><br />Test Result has the following notation.</p>
+<ul>
+<li>1 passed</li>
+<li>0 failed</li>
+</ul>
+<hr />
+<p>The tests description are listed in following table.</p>
+<table border="2">
+<tbody>
+<tr>
+<td width="64">
+<p>Test ID</p>
+</td>
+<td width="129">
+<p>Data[0]</p>
+</td>
+<td width="128">
+<p>Data[1]</p>
+</td>
+<td width="329">
+<p>Description</p>
+</td>
+</tr>
+<tr>
+<td width="64">
+<p>1</p>
+</td>
+<td width="129">
+<p>Application version</p>
+</td>
+<td width="128">
+<p>Application version</p>
+</td>
+<td width="329">
+<p>Returns the application version</p>
+</td>
+</tr>
+<tr>
+<td width="64">
+<p>2</p>
+</td>
+<td width="129">
+<p>SoftDevice FWID</p>
+</td>
+<td width="128">
+<p>SoftDevice FWID</p>
+</td>
+<td width="329">
+<p>Returns the SoftDevice FWID</p>
+</td>
+</tr>
+<tr>
+<td width="64">
+<p>3</p>
+</td>
+<td width="129">
+<p>TX PHY</p>
+</td>
+<td width="128">
+<p>RX PHY</p>
+</td>
+<td width="329">
+<p>Request a PHY of 1Mbps or 2Mbps</p>
+</td>
+</tr>
+<tr>
+<td width="64">
+<p>4</p>
+</td>
+<td width="129">
+<p>MTU</p>
+</td>
+<td width="128">
+<p>0</p>
+</td>
+<td width="329">
+<p>Request a MTU of 247 bytes</p>
+</td>
+</tr>
+<tr>
+<td width="64">
+<p>5</p>
+</td>
+<td width="129">
+<p>Data length</p>
+</td>
+<td width="128">
+<p>0</p>
+</td>
+<td width="329">
+<p>Request a data length of 251 bytes</p>
+</td>
+</tr>
+<tr>
+<td width="64">
+<p>6</p>
+</td>
+<td width="129">
+<p>Connection Interval</p>
+</td>
+<td width="128">
+<p>Connection Interval</p>
+</td>
+<td width="329">
+<p>Request a connection interval of 10ms - 30ms</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>When a data field returned is 16-bit, it is put to Data[0] and Data[1] in Little Endian format.</p>
+<p>TX PHY and RX PHY have the following notation.</p>
+<ul>
+<li>1 1Mbps</li>
+<li>2 2Mbps</li>
+</ul>

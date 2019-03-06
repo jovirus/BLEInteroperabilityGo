@@ -1,0 +1,41 @@
+<h1><strong>nRF Interoperability API</strong></h1>
+<div>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Usage: The web services are used for nrf devices interoperability test. No other purpose allowed.</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Protocol: The web service support both https and http request</span></span></p>
+<p><span style="text-decoration: underline;"><span style="color: #000000; text-decoration: underline;">Created by Jiajun Qiu @Nordic Semiconductor ASA 2018</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Email: jiajun.qiu@nordicsemi.no</span></span></p>
+<p><span style="text-decoration: underline;"><span style="background-color: #ffffff; color: #000000; text-decoration: underline;">Lisence: GPL3.0</span></span></p>
+<p><strong><u>Version 1.0.0</u></strong></p>
+<p><strong><u> Last updated: 2019-01-16</u></strong></p>
+<h2>Mini Program</h2>
+<p><span style="background-color: #d3d3d3;">The following APIs are used to retrieve data collected by app "nRF Interoperability" on WeChat</span></p>
+<p><span style="background-color: #d3d3d3;">The information about the interoperability test cases is <a href="http://nrfipa.com/api/doc/testcases.html" target="_blank" rel="noopener">here</a>.</span></p>
+<h3>GET</h3>
+<p><em>/ui/miniapp/find/report/</em></p>
+Description: Return all reports<hr />
+<p><em>/ui/miniapp/find/report/brand/</em></p>
+Description: Return all mobile brand<hr /></div>
+<p><em>/ui/miniapp/find/report/brand/{parameter}</em></p>
+<p>Description: Return reports related to the given brand name.</p>
+<p>Example: /api/miniapp/find/report/brand?pm=***</p>
+<hr />
+<div>
+<div><em>/ui/miniapp/find/report/platform/android/</em></div>
+</div>
+<p>Description: Return all android device report</p>
+<div><hr /></div>
+<div><em>/ui/miniapp/find/report/platform/ios/</em></div>
+<p>Description: Return all iOS device report</p>
+<hr />
+<div>
+<div><em>/ui/miniapp/find/report/sessionid/</em></div>
+<div>
+<p>Description: Return reports related to the given sessionid.</p>
+<p>Example: /api/miniapp/find/report/sessionid?pm=***</p>
+</div>
+</div>
+<div>
+<div>
+<div><hr /></div>
+</div>
+</div>
