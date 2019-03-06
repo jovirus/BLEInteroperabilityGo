@@ -116,7 +116,7 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) { 
             loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.redirect("https://nrfipa.com")
+                    return res.redirect("https://nrfipa.com/")
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
@@ -421,11 +421,8 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES /ui/index.html
      */  
     app.use((req, res) => {
-        if (req.signedCookies.t !== undefined) return res.redirect('/ui/index.html')
-        else {
-            var docPath = path.join(__dirname, '../login.html') // shall be under doc
-            return res.status(200).sendFile(docPath) 
-        }
+        var docPath = path.join(__dirname, '../frontpage.html') // shall be under doc
+        return res.status(200).sendFile(docPath) 
     });
 
      /***************************************************************************************** NOT IN USED ***************************************************************************************************************
