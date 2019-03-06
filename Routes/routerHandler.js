@@ -149,7 +149,7 @@ module.exports = function(app, dbs) {
       });
 
       app.get('/ui/doc/nrf91/nrf91.html', (req, res) => {
-        var docPath = path.join(__dirname, '../doc/nrf91/nrf91.html')
+        var docPath = path.join(__dirname, '../doc/nrf91.html')
         return res.status(200).sendFile(docPath)
       });
 
