@@ -22,6 +22,7 @@ var cookieParser = require('cookie-parser')
 const MINIAPP_PROD_DATABASE_NAME = process.env.DATABASE_NAME
 const TEST91_DATABASE_NAME = process.env.DB_91
 const SEESION_EXPIRE = 7200000 // use wechat limit time for token without refresh 2h
+const OWN_DOMAIN = "https://nrfipa.com/" 
 
 module.exports = function(app, dbs) {
     app.use(express.json());
@@ -58,27 +59,6 @@ module.exports = function(app, dbs) {
         }
       })
 
-    function wxLogin(req, res) {
-        loginService.getWxLoginQRCode().then((result) => {
-            return res.status(200).send(result)
-        }).catch(function(error) {
-            return res.status(400).send("Error when contact WeChat server, Please try again later", error)
-        })
-      }
-
-    app.get('/logoff', (req, res) => {
-        if (req.signedCookies.t !== undefined) { 
-            loginService.setCookieToExpire(dbs, req.signedCookies.t).then((result) => { 
-                if (result) return res.status(200).send("Logged out")
-                else return res.status(200).send("Please login first")
-            }).catch(function(error) {
-                return res.status(503).send("Internal Error", error)
-            })
-        } else {
-            return res.status(400).send("You havn't login.")
-        }
-      });
-
     app.get('/login/wx', (req, res) => {
         let wxCode = req.query.code
         loginService.getWxLoginToken(wxCode).then((result) => {
@@ -110,13 +90,34 @@ module.exports = function(app, dbs) {
         }).catch(function(error) {
             return res.status(500).send("Error when authorizing with WeChat server, Please try again later: ", error)
         })
-      });
+    });
+
+    function wxLogin(req, res) {
+        loginService.getWxLoginQRCode().then((result) => {
+            return res.status(200).send(result)
+        }).catch(function(error) {
+            return res.status(400).send("Error when contact WeChat server, Please try again later", error)
+        })
+      }
+
+    app.get('/logoff', (req, res) => {
+        if (req.signedCookies.t !== undefined) { 
+            loginService.setCookieToExpire(dbs, req.signedCookies.t).then((result) => { 
+                if (result) return res.status(200).send("Logged out")
+                else return res.redirect(OWN_DOMAIN)
+            }).catch(function(error) {
+                return res.status(503).send("Internal Error", error)
+            })
+        } else {
+            return res.redirect(OWN_DOMAIN)
+        }
+    });
 
     app.all('/ui/*', function (req, res, next) {
         if (req.signedCookies.t !== undefined) { 
             loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.redirect("https://nrfipa.com/")
+                    return res.redirect(OWN_DOMAIN)
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
@@ -126,7 +127,7 @@ module.exports = function(app, dbs) {
                 return res.status(503).send("Internal Error", error)
             })            
         } else {
-            return res.redirect("https://nrfipa.com")
+            return res.redirect(OWN_DOMAIN)
         }
     });
 
@@ -339,21 +340,13 @@ module.exports = function(app, dbs) {
      *   This method shall preventing malicious request.
      *   FOR NOW, ONLY TESTREPORT TABLE IS IN USE! MOBILEINFO, TESTINFO, PERIPHERALINFO(OPTION) IS INCLUDED IN THE TESTREPORT. 
      */
-    app.get('/api/miniapp/initialize', (req, res) => {
-        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-        let collection = db.createCollection(process.env.DB_COLLECTION_TESTREPORT, (err, collection) => {
-            if (err) return res.status(400).send(err)
-            return res.status(200).send('succeed')
-        })
-    });
-
-    app.get('/api/miniapp/initialize', (req, res) => {
-        let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
-        let collection = db.createCollection(process.env.DB_COLLECTION_TESTREPORT, (err, collection) => {
-            if (err) return res.status(400).send(err)
-            return res.status(200).send('succeed')
-        })
-    });
+    // app.get('/api/miniapp/initialize', (req, res) => {
+    //     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME);
+    //     let collection = db.createCollection(process.env.DB_COLLECTION_TESTREPORT, (err, collection) => {
+    //         if (err) return res.status(400).send(err)
+    //         return res.status(200).send('succeed')
+    //     })
+    // });
 
     /************************************************************************** NRF 91 **********************************************************************
      * *****************************************************************************************************************************************************/
@@ -409,13 +402,13 @@ module.exports = function(app, dbs) {
      *  ---switchNr
      *  ---status
      */
-    app.get('/nrf91/test/init', (req, res) => {
-        let db = dbs.db(TEST91_DATABASE_NAME);
-        let resultTestCasesdb = db.createCollection(process.env.DB_TEST_COLLECTION_NRF91, (err, collection) => {
-            if (err) return res.status(400).send(err)
-            return res.status(200).send('succeed')
-        })
-    })
+    // app.get('/nrf91/test/init', (req, res) => {
+    //     let db = dbs.db(TEST91_DATABASE_NAME);
+    //     let resultTestCasesdb = db.createCollection(process.env.DB_TEST_COLLECTION_NRF91, (err, collection) => {
+    //         if (err) return res.status(400).send(err)
+    //         return res.status(200).send('succeed')
+    //     })
+    // })
 
     /**
      * RESPONSE TO UNUSED SERVICES /ui/index.html
