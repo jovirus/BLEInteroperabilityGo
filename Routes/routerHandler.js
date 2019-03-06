@@ -416,7 +416,7 @@ module.exports = function(app, dbs) {
      * RESPONSE TO UNUSED SERVICES
      */  
     app.use((req, res) => {
-        var docPath = path.join(__dirname, './index.html') // shall be under doc
+        var docPath = path.join(__dirname, '../index.html') // shall be under doc
         return res.status(200).sendFile(docPath) 
     });
 
