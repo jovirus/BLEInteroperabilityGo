@@ -40,7 +40,7 @@ module.exports = function(app, dbs) {
 
     //Index page of the domain
     app.get('/index', (req, res) => {
-        var docPath = path.join(__dirname, './frontpage.html')
+        var docPath = path.join(__dirname, "../frontpage.html")
         return res.status(200).sendFile(docPath)
     });
 
