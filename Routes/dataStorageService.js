@@ -9,6 +9,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
 
  function createNrfUser(wxUserInfo, nrfUserGroup) {
     var info = wxUserInfo
+    var ref = createRefNr()
     var newInfo = {
         openid: info.openid,
         nickname: info.nickname,
@@ -20,7 +21,8 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         headimgurl: info.headimgurl,
         privilege: info.privilege,
         unionid: info.unionid,
-        usergroup: nrfUserGroup
+        usergroup: nrfUserGroup,
+        indexMark: ref
     }
     return newInfo
  }
@@ -49,6 +51,23 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
             else resolve(true)
         }) 
      })
+ }
+
+ function authorizeAUser(dbs, refnr) {
+    return new Promise((resolve, reject) => { 
+        try {
+            let db = dbs.db(process.env.DB_WEB_NAME);
+            db.collection(process.env.DB_COLLECTION_USERINFO).updateOne(
+                { hash: { $eq: hash } },
+                { $set: { expire: new Date(expireTime) } }
+             ).then((result) => {
+                if (result.modifiedCount === 1) resolve(true)
+                else resolve(false)
+             })
+        } catch (e) {
+            reject(e)
+        }
+    })
  }
 
  function saveCookie(dbs, hash, token, openid, expire) {
@@ -96,13 +115,18 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      })
  }
 
+ function createRefNr() {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+ }
+
  let services = {
     createNrfUser: createNrfUser,
     saveNewUser: saveNewUser,
     isUserExist: isUserExist,
     saveCookie: saveCookie,
     deleteCookie: deleteCookie,
-    isCookieExist: isCookieExist
+    isCookieExist: isCookieExist,
+    createRefNr: createRefNr
  }
 
  module.exports = services

@@ -72,9 +72,9 @@ module.exports = function(app, dbs) {
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 dataStorageService.isUserExist(dbs, tokenInfo.openid).then((resultInfo) => {
                     if (resultInfo.length === 0) {
-                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.admin)
+                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
-                            return res.send("Application has received. please contact admin to process.")
+                            return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.indexMark}`)
                         })
                     } else if (resultInfo[0].usergroup === userGroup.UserGroupEnum.unauthorized) {
                         return res.send("You don't have the right to access the portal. please contact admin to process.")
