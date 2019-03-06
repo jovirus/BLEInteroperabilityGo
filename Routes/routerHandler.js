@@ -153,6 +153,11 @@ module.exports = function(app, dbs) {
         return res.status(200).sendFile(docPath)
       });
 
+      app.get('/resource/icon64_appwx_logo.png', (req, res) => {
+        var docPath = path.join(__dirname, '../resource/icon64_appwx_logo.png')
+        return res.status(200).sendFile(docPath)
+      });
+
     /**  INSERT TESTCASE
      *   Return insertedid
      */
