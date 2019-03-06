@@ -185,7 +185,7 @@ module.exports = function(app, dbs) {
     let brand = req.query.pm
     let db = dbs.db(MINIAPP_PROD_DATABASE_NAME)
 
-    if (originalUrl === '/api/miniapp/find/report/brand/') {
+    if (originalUrl === '/ui/miniapp/find/report/brand/') {
         await db.collection(process.env.DB_COLLECTION_TESTREPORT).distinct(field, {}, (err, docs) => {
             if (err) return res.status(400).send(err)
                 const result = {
@@ -197,7 +197,7 @@ module.exports = function(app, dbs) {
         return
     }
     if (brand === undefined || brand === "") {
-        return res.status(404).send("The requested URL was not found on this server.")
+        return res.status(400).send("Bad request.")
     } 
         var query = {
             "mobileInfo.brand": brand 
