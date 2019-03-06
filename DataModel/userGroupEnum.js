@@ -10,9 +10,9 @@
   module.exports = {
     UserGroupEnum: {
       unauthorized: 0,
-      admin: 1,
-      sales: 2,
-      developer: 3,
-      marketing: 4
+      sales: 1,
+      marketing: 2,
+      developer: 5,
+      admin: 9,
     }
   }

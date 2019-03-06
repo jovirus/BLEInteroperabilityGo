@@ -22,7 +22,8 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         privilege: info.privilege,
         unionid: info.unionid,
         usergroup: nrfUserGroup,
-        indexMark: ref
+        indexMark: ref,
+        dateCreated: new date()
     }
     return newInfo
  }
@@ -53,13 +54,13 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
      })
  }
 
- function authorizeAUser(dbs, refnr) {
+ function authorizeAUser(dbs, indexMark, userGroup) {
     return new Promise((resolve, reject) => { 
         try {
             let db = dbs.db(process.env.DB_WEB_NAME);
             db.collection(process.env.DB_COLLECTION_USERINFO).updateOne(
-                { hash: { $eq: hash } },
-                { $set: { expire: new Date(expireTime) } }
+                { indexMark: { $eq: indexMark } },
+                { $set: { usergroup: userGroup } }
              ).then((result) => {
                 if (result.modifiedCount === 1) resolve(true)
                 else resolve(false)
@@ -68,6 +69,30 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
             reject(e)
         }
     })
+ }
+
+ function getAllUnauthorizedUser(dbs) {
+    return new Promise((resolve, reject) => { 
+        var query = {
+            usergroup: userGroupEnum.UserGroupEnum.unauthorized
+        }
+        var supressedValue = {
+            _id: 0,
+            openid: 0,
+            sex: 0,
+            language: 0,
+            city: 0,
+            province: 0,
+            headimgurl: 0,
+            privilege: 0,
+            unionid: 0
+        }
+        let db = dbs.db(process.env.DB_WEB_NAME);
+        let result = db.collection(process.env.DB_COLLECTION_COOKIE).find(query).project(supressedValue).toArray((err, users) => {
+            if (err) reject(err)
+            else resolve(users)
+        })
+     })
  }
 
  function saveCookie(dbs, hash, token, openid, expire) {
@@ -126,7 +151,8 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
     saveCookie: saveCookie,
     deleteCookie: deleteCookie,
     isCookieExist: isCookieExist,
-    createRefNr: createRefNr
+    getAllUnauthorizedUser: getAllUnauthorizedUser,
+    authorizeAUser, authorizeAUser
  }
 
  module.exports = services

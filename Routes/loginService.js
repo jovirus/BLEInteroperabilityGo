@@ -31,7 +31,7 @@ function setToExpire() {
     return date.setTime(date.getTime() - (1000*60*60*24));
 }
 
-function verifyCookie(dbs, hash="") {
+function verifyCookie(dbs, hash="", groupRange) {
     return new Promise((resolve, reject) => { 
         let db = dbs.db(process.env.DB_WEB_NAME);
         let result = db.collection(process.env.DB_COLLECTION_USERINFO).aggregate([
@@ -39,13 +39,14 @@ function verifyCookie(dbs, hash="") {
                 $lookup:
                    {
                      from: process.env.DB_COLLECTION_COOKIE,
-                     let: { userInfo_openid: "$openid", cookie_hash: hash },
+                     let: { userInfo_openid: "$openid", cookie_hash: hash, group_range: groupRange },
                      pipeline: [
                         { $match:
                            { $expr:
                               { $and:
-                                 [ {$eq: ["$hash", "$$cookie_hash"] },
-                                   { $eq: [ "$openid", "$$userInfo_openid" ] },
+                                 [ { $eq: [ "$hash", "$$cookie_hash"] },
+                                   { $eq: [ "$openid", "$$userInfo_openid"] },
+                                   { $in: [ "$usergroup", "$$group_range"] },
                                    { $gte: [ "$expire", new Date() ] }
                                  ]
                               }

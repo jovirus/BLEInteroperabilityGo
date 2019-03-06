@@ -49,7 +49,8 @@ module.exports = function(app, dbs) {
      */
     app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
-            loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
+            var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.developer, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
+            loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
                     return wxLogin(req, res)
                 } else if (userCookie.length === 1) {
@@ -119,9 +120,10 @@ module.exports = function(app, dbs) {
         }
     });
 
-    app.all('/ui/*', function (req, res, next) {
+    app.all('/admin/*', function (req, res, next) { 
         if (req.signedCookies.t !== undefined) { 
-            loginService.verifyCookie(dbs,req.signedCookies.t).then((userCookie) => { 
+            var allowedUserGroup = [userGroup.UserGroupEnum.admin]
+            loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
                     return res.redirect(OWN_DOMAIN)
                 } else if (userCookie.length === 1) {
@@ -132,6 +134,37 @@ module.exports = function(app, dbs) {
             }).catch(function(error) {
                 return res.status(503).send("Internal Error", error)
             })            
+        } else {
+            return res.redirect(OWN_DOMAIN)
+        }
+    })
+
+    app.get('/admin/manage/unauthorized', (req, res) => {
+        dataStorageService.getAllUnauthorizedUser(dbs).then((UnauthorizedUsers) => {
+            const result = {
+                matchedResults: UnauthorizedUsers.length,
+                contents: UnauthorizedUsers
+            }
+            res.status(200).send(result) 
+        })
+    });
+
+/******************************************************** UI interface ****************************************************/
+
+    app.all('/ui/*', function (req, res, next) {
+        if (req.signedCookies.t !== undefined) { 
+            var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
+            loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
+                if (userCookie.length === 0) {
+                    return res.redirect(OWN_DOMAIN)
+                } else if (userCookie.length === 1) {
+                    next() // pass control to the next handler
+                } else {
+                    return res.status(409).send("Multipule login detected.")
+                }
+            }).catch(function(error) {
+                return res.status(503).send("Internal Error", error)
+            })
         } else {
             return res.redirect(OWN_DOMAIN)
         }
