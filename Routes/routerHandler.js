@@ -75,6 +75,7 @@ module.exports = function(app, dbs) {
                     console.log("tokenInfo.opendid: ", tokenInfo.openid)
                     console.log("resultInfo: ", resultInfo)
                     if (resultInfo.length === 0) {
+                        console.log("flag 1: ")
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         console.log("new user:", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
@@ -84,8 +85,10 @@ module.exports = function(app, dbs) {
                             return res.status(500).send("Error when register new user, Please try again later: ", error)
                           });
                     } else if (resultInfo[0].usergroup === userGroup.UserGroupEnum.unauthorized) {
+                        console.log("flag 2: ")
                         return res.send("You don't have the right to access the portal. please contact admin to process.")
                     } else {
+                        console.log("flag 3: ")
                         var hash = loginService.generateHash(tokenInfo.access_token)
                         var expireIn = loginService.getExpireTime(7200000) // match the wechat token expire Time
                         dataStorageService.saveCookie(dbs, hash, tokenInfo.access_token, tokenInfo.openid, new Date(expireIn)).catch(function(error) {
