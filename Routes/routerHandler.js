@@ -77,8 +77,11 @@ module.exports = function(app, dbs) {
                     if (resultInfo.length === 0) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
-                            return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.indexMark}`)
-                        })
+                            console.log("save user result:", result)
+                            if (result) return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.indexMark}`)
+                        }).catch(function(error) {
+                            return res.status(500).send("Error when register new user, Please try again later: ", error)
+                          });
                     } else if (resultInfo[0].usergroup === userGroup.UserGroupEnum.unauthorized) {
                         return res.send("You don't have the right to access the portal. please contact admin to process.")
                     } else {
