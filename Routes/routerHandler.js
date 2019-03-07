@@ -128,7 +128,7 @@ module.exports = function(app, dbs) {
             var allowedUserGroup = [userGroup.UserGroupEnum.admin]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    var docPath = path.join(__dirname, '../doc/resufe.html')
+                    var docPath = path.join(__dirname, '../doc/refuse.html')
                     return res.send(docPath)
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
