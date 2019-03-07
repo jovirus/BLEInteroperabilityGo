@@ -39,14 +39,13 @@ function verifyCookie(dbs, hash="", groupRange) {
                 $lookup:
                    {
                      from: process.env.DB_COLLECTION_COOKIE,
-                     let: { userInfo_openid: "$openid", cookie_hash: hash, group_range: groupRange },
+                     let: { userInfo_openid: "$openid", cookie_hash: hash },
                      pipeline: [
                         { $match:
                            { $expr:
                               { $and:
                                  [ { $eq: [ "$hash", "$$cookie_hash"] },
                                    { $eq: [ "$openid", "$$userInfo_openid"] },
-                                   { $in: [ "$usergroup", "$$group_range"] },
                                    { $gte: [ "$expire", new Date() ] }
                                  ]
                               }
@@ -77,8 +76,9 @@ function verifyCookie(dbs, hash="", groupRange) {
                     province: 0,
                     headimgurl: 0,
                     privilege: 0
-                  } 
-             }
+                  }
+             },
+             { $match: { "usergroup": { $in: groupRange } } }
         ]).toArray((err, user_cookie) => {
             if (err) reject(err)
             else resolve(user_cookie)
