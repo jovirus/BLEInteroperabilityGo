@@ -74,7 +74,7 @@ module.exports = function(app, dbs) {
                 dataStorageService.isUserExist(dbs, tokenInfo.openid).then((resultInfo) => {
                     if (resultInfo.length === 0) {
                         console.log("flag 1: ")
-                        var nrfUser = {test: "test user"}
+                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         console.log("new user:", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             console.log("save user result:", result)
