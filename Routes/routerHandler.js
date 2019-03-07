@@ -72,17 +72,13 @@ module.exports = function(app, dbs) {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 dataStorageService.isUserExist(dbs, tokenInfo.openid).then((resultInfo) => {
-                    console.log("tokenInfo.opendid: ", tokenInfo.openid)
-                    console.log("resultInfo: ", resultInfo)
                     if (resultInfo.length === 0) {
                         console.log("flag 1: ")
-                        console.log("userinfo: ", userInfo)
-                        console.log("group: ", userGroup.UserGroupEnum.unauthorized)
-                        var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
+                        var nrfUser = dataStorageService.createNrfUser(userInfo, 0)
                         console.log("new user:", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             console.log("save user result:", result)
-                            if (result) return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.indexMark}`)
+                            if (result) return res.send(`Application has received. please contact admin with the receipt number: xxxx`)
                         }).catch(function(error) {
                             return res.status(500).send("Error when register new user, Please try again later: ", error)
                           });

@@ -8,12 +8,8 @@
 const userGroupEnum = require('../DataModel/userGroupEnum') 
 
  function createNrfUser(wxUserInfo, nrfUserGroup) {
-    console("group request", nrfUserGroup)
-    console("flag create new user", wxUserInfo)
-
     var info = wxUserInfo
     var ref = createNrfUser()
-    console("ref number", ref)
     var newInfo = {
         openid: info.openid,
         nickname: info.nickname,
@@ -29,7 +25,6 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         indexMark: ref,
         dateCreated: new date()
     }
-    console.log("nrf user created: ", newInfo)
     return newInfo
  }
 
@@ -51,11 +46,16 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
 
  function saveNewUser(dbs, nRFUserInfo) {
     return new Promise((resolve, reject) => { 
-        let db = dbs.db(process.env.DB_WEB_NAME);
-        let result = db.collection(process.env.DB_COLLECTION_USERINFO).insertOne(nRFUserInfo, function(err, object){
-            if (err) reject(err)
-            else resolve(true)
-        }) 
+        try {
+            let db = dbs.db(process.env.DB_WEB_NAME);
+            db.collection(process.env.DB_COLLECTION_USERINFO).insertOne(nRFUserInfo, function(err, object){
+                console.log(object);
+                if (err) reject(err)
+                else resolve(true)
+            })
+        } catch (e) {
+            reject(e)
+        } 
      })
  }
 
