@@ -179,7 +179,7 @@ module.exports = function(app, dbs) {
             var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.redirect(OWN_DOMAIN)
+                    return res.send("You do not have the right to access the portal.")
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
