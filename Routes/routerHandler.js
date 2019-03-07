@@ -176,7 +176,7 @@ module.exports = function(app, dbs) {
             var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.render('You do not have the right to access the portal.')
+                    res.render('You do not have the right to access the portal.', {message : 'byebye'})
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
@@ -360,30 +360,6 @@ module.exports = function(app, dbs) {
             if (err) return res.status(400).send(err)
             return res.status(200).send(object.insertedId) 
         }) 
-      });
-
-    /* REQUEST SESSIONID FROM WECHAT
-     *  The request shall include wxAppID, wxAppSecret, wxtoken as parameters
-     *  The method return a encrypted data contains sensative information.
-     *  see more on https://developers.weixin.qq.com/miniprogram/dev/api/open-api/login/code2Session.html
-     */
-    app.post('/api/wechat/code2session', (req, res) => {
-        const inqueries = { wxtoken } = req.query
-        https.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${process.env.WX_APP_ID}&secret=${process.env.WX_APP_SECRET}&js_code=${wxtoken}&grant_type=authorization_code`, (resp) => {
-        let data = ''
-        resp.on('data', (chunk) => {
-            data += chunk;
-            });
-            // The whole response has been received. Print out the result.
-            resp.on('end', () => {
-            const edata = JSON.parse(data)
-            console.log(edata);
-            res.status(200).send(edata)
-            });
-        }).on("error", (err) => {
-            console.log("Error when fetching session info from wechat server: " + err.message)
-            res.status(400).send(err)
-          });
       });
 
     /* INITIALIZE DATABASE
