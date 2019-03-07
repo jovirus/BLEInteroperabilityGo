@@ -124,9 +124,11 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) { 
             var allowedUserGroup = [userGroup.UserGroupEnum.admin]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
+                console.log("admin: ", userCookie)
                 if (userCookie.length === 0) {
-                    return res.redirect(OWN_DOMAIN)
+                    return res.status(400).send("Access denied, administrator only.")
                 } else if (userCookie.length === 1) {
+                    console.log("admin acknowledged: ", next())
                     next() // pass control to the next handler
                 } else {
                     return res.status(409).send("Multipule login detected.")
