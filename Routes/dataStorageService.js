@@ -49,7 +49,6 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         try {
             let db = dbs.db(process.env.DB_WEB_NAME);
             db.collection(process.env.DB_COLLECTION_USERINFO).insertOne(nRFUserInfo, function(err, object){
-                console.log(object);
                 if (err) reject(err)
                 else resolve(true)
             })

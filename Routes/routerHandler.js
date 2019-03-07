@@ -78,7 +78,7 @@ module.exports = function(app, dbs) {
                         console.log("new user:", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             console.log("save user result:", result)
-                            if (result) return res.send(`Application has received. please contact admin with the receipt number: xxxx`)
+                            if (result) return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.ref}`)
                         }).catch(function(error) {
                             return res.status(500).send("Error when register new user, Please try again later: ", error)
                           });
@@ -181,7 +181,7 @@ module.exports = function(app, dbs) {
             var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.redirect(OWN_DOMAIN)
+                    return res.render('You do not have the right to access the portal.')
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
