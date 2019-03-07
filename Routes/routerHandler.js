@@ -124,7 +124,6 @@ module.exports = function(app, dbs) {
         if (req.signedCookies.t !== undefined) { 
             var allowedUserGroup = [userGroup.UserGroupEnum.admin]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
-                console.log("admin: ", userCookie)
                 if (userCookie.length === 0) {
                     return res.status(400).send("Access denied, administrator only.")
                 } else if (userCookie.length === 1) {
@@ -141,9 +140,7 @@ module.exports = function(app, dbs) {
     })
 
     app.get('/admin/manage/unauthorized', (req, res) => {
-        console.log("fecth unauthorized users: ")
         dataStorageService.getAllUnauthorizedUser(dbs).then((unauthorizedUsers) => {
-            console.log("unau users:", unauthorizedUsers)
             const result = {
                 matchedResults: unauthorizedUsers.length,
                 contents: unauthorizedUsers
@@ -153,6 +150,17 @@ module.exports = function(app, dbs) {
             return res.status(503).send("Internal Error", error)
         })
     });
+
+    app.get('/admin/manage/authorize/', (req, res) => {
+        let ref = req.query.ref
+        let group = req.query.group
+        dataStorageService.authorizeAUser(dbs, ref, group).then((result) => {
+            if (result) return res.status(200).send("succeed")
+            else return res.status(200).send("Faild, please try again")
+        }).catch(function(error) {
+            return res.status(503).send("Internal Error", error)
+        })
+    })
 
 /******************************************************** UI interface ****************************************************/
 
