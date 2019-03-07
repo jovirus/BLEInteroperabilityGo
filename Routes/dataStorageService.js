@@ -25,6 +25,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
         indexMark: ref,
         dateCreated: new date()
     }
+    console.log("nrf user created: ", newInfo)
     return newInfo
  }
 
