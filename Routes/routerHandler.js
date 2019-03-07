@@ -49,6 +49,7 @@ module.exports = function(app, dbs) {
      */
     app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
+            console.log("flag login")
             var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.developer, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
@@ -62,6 +63,7 @@ module.exports = function(app, dbs) {
                 return res.status(500).send("Internal Error", error)
             })
         } else {
+            console.log("flag login")
             wxLogin(req, res)
         }
       })
@@ -103,6 +105,7 @@ module.exports = function(app, dbs) {
 
     function wxLogin(req, res) {
         loginService.getWxLoginQRCode().then((result) => {
+            console.log("flag wxlogin", result)
             return res.status(200).send(result)
         }).catch(function(error) {
             return res.status(400).send("Error when contact WeChat server, Please try again later", error)
