@@ -71,6 +71,7 @@ module.exports = function(app, dbs) {
         loginService.getWxLoginToken(wxCode).then((result) => {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
+                console.log(userInfo)
                 var guardian = JSON.parse(userInfo)
                 if (guardian.errcode === 40001) res.status(400).send("Authorization faild") 
                 dataStorageService.isUserExist(dbs, tokenInfo.openid).then((resultInfo) => {
