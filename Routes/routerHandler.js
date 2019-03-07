@@ -179,7 +179,7 @@ module.exports = function(app, dbs) {
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
                     var docPath = path.join(__dirname, '../doc/refuse.html')
-                    return res.send(docPath)
+                    return res.status(400).sendFile(docPath)
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
