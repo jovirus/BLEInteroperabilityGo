@@ -49,7 +49,6 @@ module.exports = function(app, dbs) {
      */
     app.get('/oauth2.0/login', (req, res) => {
         if (req.signedCookies.t !== undefined) {
-            console.log("flag login")
             var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.developer, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
@@ -63,7 +62,6 @@ module.exports = function(app, dbs) {
                 return res.status(500).send("Internal Error", error)
             })
         } else {
-            console.log("flag login")
             wxLogin(req, res)
         }
       })
@@ -130,7 +128,8 @@ module.exports = function(app, dbs) {
             var allowedUserGroup = [userGroup.UserGroupEnum.admin]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.status(400).send("Access denied, administrator only.")
+                    var docPath = path.join(__dirname, '../doc/index.html')
+                    return res.send(docPath)
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
@@ -179,7 +178,8 @@ module.exports = function(app, dbs) {
             var allowedUserGroup = [userGroup.UserGroupEnum.admin, userGroup.UserGroupEnum.sales, userGroup.UserGroupEnum.marketing]
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
-                    return res.send("You do not have the right to access the portal.")
+                    var docPath = path.join(__dirname, '../doc/refuse.html')
+                    return res.send(docPath)
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
