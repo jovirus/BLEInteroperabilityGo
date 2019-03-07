@@ -139,6 +139,11 @@ module.exports = function(app, dbs) {
         }
     })
 
+    app.get('/admin/manage', (req, res) => {
+        var docPath = path.join(__dirname, '../webform/authorizeuser.html')
+        return res.status(200).sendFile(docPath)
+    })
+
     app.get('/admin/manage/unauthorized', (req, res) => {
         dataStorageService.getAllUnauthorizedUser(dbs).then((unauthorizedUsers) => {
             const result = {
@@ -151,9 +156,9 @@ module.exports = function(app, dbs) {
         })
     });
 
-    app.get('/admin/manage/authorize/', (req, res) => {
+    app.get('/admin/manage/authorize', (req, res) => {
         let ref = req.query.ref
-        let group = req.query.group
+        let group = parseInt(req.query.group)
         dataStorageService.authorizeAUser(dbs, ref, group).then((result) => {
             if (result) return res.status(200).send("succeed")
             else return res.status(200).send("Faild, please try again")
