@@ -76,6 +76,8 @@ module.exports = function(app, dbs) {
                     console.log("resultInfo: ", resultInfo)
                     if (resultInfo.length === 0) {
                         console.log("flag 1: ")
+                        console.log("userinfo: ", userInfo)
+                        console.log("group: ", userGroup.UserGroupEnum.unauthorized)
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         console.log("new user:", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
