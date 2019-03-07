@@ -76,6 +76,7 @@ module.exports = function(app, dbs) {
                     console.log("resultInfo: ", resultInfo)
                     if (resultInfo.length === 0) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
+                        console.log("new user:", nrfUser)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
                             console.log("save user result:", result)
                             if (result) return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.indexMark}`)

@@ -9,7 +9,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
 
  function createNrfUser(wxUserInfo, nrfUserGroup) {
     var info = wxUserInfo
-    var ref = createRefNr()
+    var ref = self.createNrfUser()
     var newInfo = {
         openid: info.openid,
         nickname: info.nickname,
