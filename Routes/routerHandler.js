@@ -72,6 +72,7 @@ module.exports = function(app, dbs) {
             var tokenInfo = JSON.parse(result)
             loginService.getWxUserInfo(tokenInfo.access_token, tokenInfo.openid).then((userInfo) => {
                 dataStorageService.isUserExist(dbs, tokenInfo.openid).then((resultInfo) => {
+                    console.log("tokenInfo.opendid: ", tokenInfo.openid)
                     console.log("resultInfo: ", resultInfo)
                     if (resultInfo.length === 0) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
