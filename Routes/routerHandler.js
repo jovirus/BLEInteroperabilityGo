@@ -103,7 +103,6 @@ module.exports = function(app, dbs) {
 
     function wxLogin(req, res) {
         loginService.getWxLoginQRCode().then((result) => {
-            console.log("flag wxlogin", result)
             return res.status(200).send(result)
         }).catch(function(error) {
             return res.status(400).send("Error when contact WeChat server, Please try again later", error)
@@ -129,7 +128,7 @@ module.exports = function(app, dbs) {
             loginService.verifyCookie(dbs,req.signedCookies.t, allowedUserGroup).then((userCookie) => { 
                 if (userCookie.length === 0) {
                     var docPath = path.join(__dirname, '../doc/refuse.html')
-                    return res.send(docPath)
+                    return res.status(200).sendFile(docPath)
                 } else if (userCookie.length === 1) {
                     next() // pass control to the next handler
                 } else {
