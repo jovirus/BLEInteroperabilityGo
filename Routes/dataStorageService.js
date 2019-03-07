@@ -9,7 +9,7 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
 
  function createNrfUser(wxUserInfo, nrfUserGroup) {
     var info = wxUserInfo
-    var ref = self.createNrfUser()
+    var ref = createNrfUser()
     var newInfo = {
         openid: info.openid,
         nickname: info.nickname,
@@ -153,7 +153,8 @@ const userGroupEnum = require('../DataModel/userGroupEnum')
     deleteCookie: deleteCookie,
     isCookieExist: isCookieExist,
     getAllUnauthorizedUser: getAllUnauthorizedUser,
-    authorizeAUser, authorizeAUser
+    authorizeAUser, authorizeAUser,
+    createRefNr: createRefNr
  }
 
  module.exports = services
