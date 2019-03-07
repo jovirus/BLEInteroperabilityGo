@@ -128,7 +128,6 @@ module.exports = function(app, dbs) {
                 if (userCookie.length === 0) {
                     return res.status(400).send("Access denied, administrator only.")
                 } else if (userCookie.length === 1) {
-                    console.log("admin acknowledged: ", next())
                     next() // pass control to the next handler
                 } else {
                     return res.status(409).send("Multipule login detected.")
@@ -142,12 +141,16 @@ module.exports = function(app, dbs) {
     })
 
     app.get('/admin/manage/unauthorized', (req, res) => {
-        dataStorageService.getAllUnauthorizedUser(dbs).then((UnauthorizedUsers) => {
+        console.log("fecth unauthorized users: ")
+        dataStorageService.getAllUnauthorizedUser(dbs).then((unauthorizedUsers) => {
+            console.log("unau users:", unauthorizedUsers)
             const result = {
-                matchedResults: UnauthorizedUsers.length,
-                contents: UnauthorizedUsers
+                matchedResults: unauthorizedUsers.length,
+                contents: unauthorizedUsers
             }
-            res.status(200).send(result) 
+            res.status(200).send(result)
+        }).catch(function(error) {
+            return res.status(503).send("Internal Error", error)
         })
     });
 
