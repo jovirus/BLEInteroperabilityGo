@@ -75,7 +75,7 @@ module.exports = function(app, dbs) {
                     if (resultInfo.length === 0) {
                         var nrfUser = dataStorageService.createNrfUser(userInfo, userGroup.UserGroupEnum.unauthorized)
                         dataStorageService.saveNewUser(dbs, nrfUser).then((result) => {
-                            if (result) return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.ref}`)
+                            if (result) return res.send(`Application has received. please contact admin with the receipt number: ${nrfUser.indexMark}`)
                         }).catch(function(error) {
                             return res.status(500).send("Error when register new user, Please try again later: ", error)
                           });
