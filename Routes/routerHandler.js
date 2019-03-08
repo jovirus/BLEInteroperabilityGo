@@ -240,6 +240,7 @@ module.exports = function(app, dbs) {
         }
         db.collection(process.env.DB_COLLECTION_TESTREPORT).find({}).project(supressedValue).toArray((err, docs) => {
             if (err) return res.status(400).send(err)
+            console.log("all doc length: ",docs.length)
                 const result = {
                     matchedResults: docs.length,
                     contents: docs
