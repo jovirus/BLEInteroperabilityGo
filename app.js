@@ -19,8 +19,8 @@ const app = express()
 const initializeDatabases = require('./Database/dbConnnector')
 const routes = require('./Routes/routerHandler')
 
-var privateKey  = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.key');
-var certificate = fs.readFileSync('/usr/ssl/1564395_www.nrfipa.com.pem');
+var privateKey  = fs.readFileSync('/usr/ssl/2239387_www.nrfapaccloud.com.key');
+var certificate = fs.readFileSync('/usr/ssl/2239387_www.nrfapaccloud.com.pem');
 
 var credentials = {key: privateKey, cert: certificate};
 
